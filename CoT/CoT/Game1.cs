@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    //Detta är en testkommentar
-    //Detta är en test att pusha från viual studio
-    //Försök till att stasha via GitHUB
     //test1
     public class Game1 : Game
     {
