@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    //Detta är en testkommentar
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
