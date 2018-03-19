@@ -7,7 +7,7 @@ namespace CoT
     //test1
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        GraphicsDeviceManager graphics;// hej alla barn nu är det barnprogram
         SpriteBatch spriteBatch;
 
         public Game1()
