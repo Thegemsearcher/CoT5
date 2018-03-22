@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace CoT {
-    public class PhysicsObject : GameObject {
-        public PhysicsObject(Vector2 position) : base(position) {
-        }
-        public virtual void Update(GameTime gameTime) {
-
+    public class EventTerrain : Terrain {
+        public EventTerrain(Vector2 position) : base(position) {
         }
     }
 }

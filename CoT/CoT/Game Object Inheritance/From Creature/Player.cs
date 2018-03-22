@@ -12,6 +12,8 @@ namespace CoT {
         }
         public Player(Vector2 position) : base(position) {
         }
-        
+        public override void Update(GameTime gameTime) {
+
+        }
     }
 }

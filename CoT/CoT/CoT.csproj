@@ -41,7 +41,17 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Game Object Inheritance\From Creature\Boss.cs" />
+    <Compile Include="Game Object Inheritance\From Creature\Enemy.cs" />
+    <Compile Include="Game Object Inheritance\Creature.cs" />
+    <Compile Include="Game Object Inheritance\Physics\Particle.cs" />
+    <Compile Include="Game Object Inheritance\Physics\Projectile.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Game Object Inheritance\GameObject.cs" />
+    <Compile Include="Game Object Inheritance\From Creature\Player.cs" />
+    <Compile Include="Game Object Inheritance\From Creature\Imp.cs" />
+    <Compile Include="Game Object Inheritance\Physics\PhysicsObject.cs" />
+    <Compile Include="Game Object Inheritance\Item.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

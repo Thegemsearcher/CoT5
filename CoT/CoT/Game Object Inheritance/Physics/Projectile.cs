@@ -9,5 +9,8 @@ namespace CoT {
     public class Projectile : PhysicsObject {
         public Projectile(Vector2 position) : base(position) {
         }
+        public override void Update(GameTime gameTime) {
+
+        }
     }
 }
