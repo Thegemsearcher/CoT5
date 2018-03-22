@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    //test1
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;// hej alla barn nu är det barnprogram
+        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         public Game1()
