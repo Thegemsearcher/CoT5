@@ -14,7 +14,7 @@ namespace CoT
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Map map = new Map();
+        public Map map = new Map();
 
         public Game1()
         {

@@ -8,8 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CoT
 {
-    class Map
+    public class Map
     {
+        public int tileHeight = 80;
+
         public Map()
         {
         }
@@ -20,19 +22,23 @@ namespace CoT
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            Vector2 cartesianTileWorldPos =
+                new Vector2(Camera.ScreenToWorld(Input.CurrentMousePosition).X / Game1.Game.map.tileHeight,
+                    Camera.ScreenToWorld(Input.CurrentMousePosition).Y / Game1.Game.map.tileHeight);
+
+            Point isometricScreenTile = (cartesianTileWorldPos.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+
             for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j < 100; j++)
                 {
-                    if (new Vector2(
-                            Convert.ToInt32(Vector2.Divide(Camera.ScreenToWorld(Input.CurrentMousePosition), new Vector2(80, 80)).ToScreen().X - 1),
-                            Convert.ToInt32(Vector2.Divide(Camera.ScreenToWorld(Input.CurrentMousePosition), new Vector2(80, 80)).ToScreen().Y - 0)) == new Vector2(i, j))
+                    if (isometricScreenTile == new Point(i, j))
                     {
-                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * 80, j * 80).ToWorld(), Color.Red);
+                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.Red);
                     }
                     else
                     {
-                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * 80, j * 80).ToWorld(), Color.White);
+                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.White);
                     }
                 }
             }
