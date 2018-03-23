@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Game Object Inheritance\All Terrain\EventTerrain.cs" />
     <Compile Include="Game Object Inheritance\From Creature\Boss.cs" />
     <Compile Include="Game Object Inheritance\From Creature\Enemy.cs" />
     <Compile Include="Game Object Inheritance\Creature.cs" />
@@ -51,9 +52,10 @@
     <Compile Include="Game Object Inheritance\From Creature\Player.cs" />
     <Compile Include="Game Object Inheritance\From Creature\Imp.cs" />
     <Compile Include="Game Object Inheritance\Physics\PhysicsObject.cs" />
-    <Compile Include="Game Object Inheritance\Item.cs" />
+    <Compile Include="Game Object Inheritance\Item Classes\Item.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Game Object Inheritance\All Terrain\Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -69,6 +71,7 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
