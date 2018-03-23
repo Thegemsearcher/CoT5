@@ -54,6 +54,9 @@
     <Compile Include="Game Object Inheritance\From Creature\Imp.cs" />
     <Compile Include="Game Object Inheritance\Physics\PhysicsObject.cs" />
     <Compile Include="Game Object Inheritance\Item.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Input.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceManager.cs" />
