@@ -13,6 +13,7 @@ namespace Astar {
 
         static public void SearchInit(int countX, int countY) {
             MapOfNodes.CreateNodes(countX, countY, 4, 440);
+            //Siffrorna bestämmer vilken nod som är startpositionen och vilken nod som är slutdestinationen.
             Start = MapOfNodes.StartNode;
             End = MapOfNodes.EndNode;
             foreach (var node in MapOfNodes.Nodes)

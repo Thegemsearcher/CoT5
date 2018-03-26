@@ -8,7 +8,7 @@ namespace Astar {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        List<Node> path= new List<Node>();
+        List<Node> path = new List<Node>();
         Texture2D ball;
         Texture2D redBall;
         public Game1() {
@@ -26,6 +26,7 @@ namespace Astar {
             IsMouseVisible = true;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Search.SearchInit(30,30);
+            //Siffrorna bestämmer storlek i X och Y led för nätet av noder //DS
             path = Search.Pathing();
             ball = Content.Load<Texture2D>("BlackBall");
             redBall = Content.Load<Texture2D>("RedBall");
