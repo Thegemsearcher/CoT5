@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Astar {
-    public class Map {
+namespace Astar
+{
+    public class Map
+    {
         public List<Node> Nodes { get; set; } = new List<Node>();
 
         public Node StartNode { get; set; }
@@ -14,9 +16,12 @@ namespace Astar {
 
         public List<Node> ShortestPath { get; set; } = new List<Node>();
 
-        public void CreateNodes(int nodeCountX, int nodeCountY, int start, int end) {
-            for (int i = 0; i < nodeCountX; i++) {
-                for (int j = 0; j < nodeCountY; j++) {
+        public void CreateNodes(int nodeCountX, int nodeCountY, int start, int end)
+        {
+            for (int i = 0; i < nodeCountX; i++)
+            {
+                for (int j = 0; j < nodeCountY; j++)
+                {
                     var newNode = new Node(i, j);
                     Nodes.Add(newNode);
                 }

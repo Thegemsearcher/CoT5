@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Astar {
+namespace Astar
+{
 #if WINDOWS || LINUX
     /// <summary>
     /// The main class.

@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Astar {
-    static public class Search {
+namespace Astar
+{
+    static public class Search
+    {
         static public Map MapOfNodes { get; set; } = new Map();
         static public Node Start { get; set; }
         static public Node End { get; set; }
         static public double ShortestPathLength { get; set; }
 
-        static public void SearchInit(int countX, int countY) {
-            MapOfNodes.CreateNodes(countX, countY, 4, 440);
+        static public void SearchInit(int countX, int countY)
+        {
+            MapOfNodes.CreateNodes(countX, countY, 4, 320);
             //Siffrorna bestämmer vilken nod som är startpositionen och vilken nod som är slutdestinationen.
             Start = MapOfNodes.StartNode;
             End = MapOfNodes.EndNode;
             foreach (var node in MapOfNodes.Nodes)
                 node.StraightLineDistanceToEnd = node.StraightLineDistanceTo(End);
         }
-        static public List<Node> Pathing() {
+        static public List<Node> Pathing()
+        {
             AstarSearch();
             var shortestPath = new List<Node>();
             shortestPath.Add(End);
@@ -27,20 +31,24 @@ namespace Astar {
             shortestPath.Reverse();
             return shortestPath;
         }
-        static private void AstarSearch() {
+        static private void AstarSearch()
+        {
             Start.MinCostToStart = 0;
             var prioQueue = new List<Node>();
             prioQueue.Add(Start);
-            do {
+            do
+            {
                 prioQueue = prioQueue.OrderBy(x => x.MinCostToStart + x.StraightLineDistanceToEnd).ToList();
                 var node = prioQueue.First();
                 prioQueue.Remove(node);
-                
-                foreach (var cnn in node.Connections.OrderBy(x => x.Length)) {
+
+                foreach (var cnn in node.Connections.OrderBy(x => x.Length))
+                {
                     var childNode = cnn.ConnectedNode;
                     if (childNode.Visited)
                         continue;
-                    if (childNode.MinCostToStart == null) {
+                    if (childNode.MinCostToStart == null)
+                    {
 
                         childNode.MinCostToStart = node.MinCostToStart;
                         childNode.NearestToStart = node;
@@ -53,7 +61,8 @@ namespace Astar {
                     return;
             } while (prioQueue.Any());
         }
-        static private void BuildShortestPath(List<Node> list, Node node) {
+        static private void BuildShortestPath(List<Node> list, Node node)
+        {
             if (node.NearestToStart == null)
                 return;
             list.Add(node.NearestToStart);
