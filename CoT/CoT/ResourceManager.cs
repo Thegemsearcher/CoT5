@@ -24,6 +24,7 @@ namespace CoT
             RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
             RegisterResource(Helper.CreateCircleTexture(30), "circle");
             RegisterResource(Helper.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            RegisterResource<Texture2D>(content.Load<Texture2D>("PlayerCharacter1"), "Dude");
         }
 
         public static void RegisterResource<T>(T t, string name)

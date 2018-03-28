@@ -16,7 +16,7 @@ namespace CoT {
         public void DetectPlayer() {
 
         }
-        public override void Update(GameTime gameTime) {
+        public override void Update() {
 
         }
     }

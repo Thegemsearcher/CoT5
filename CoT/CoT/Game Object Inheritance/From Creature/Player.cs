@@ -12,22 +12,31 @@ namespace CoT {
         enum heroClass {
 
         }
-        public Texture2D pC;
-        MouseState mS;
-        Vector2 mousePosition;
-        Vector2 position;
+        
+        
+        
+        
 
 
         public Player(Vector2 position) : base(position) {
-            this.position = position;
+            Position = position;
+
         }
-        public override void Update(GameTime gameTime) {
+        public override void Update() {
 
-
-            if (mS.LeftButton == ButtonState.Pressed && mS.LeftButton != ButtonState.Released && mousePosition != position)
+            
+            if (Input.IsLeftClickPressed())
             {
-                position = mousePosition;
+                Position = Camera.ScreenToWorld(Input.CurrentMousePosition) ;
+
+                Console.WriteLine(Input.CurrentMousePosition);
+                Console.WriteLine(Position);
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(ResourceManager.Get<Texture2D>("Dude"), Position, Color.White);
         }
     }
 }

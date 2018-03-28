@@ -13,6 +13,8 @@ namespace CoT
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Player player = new Player(new Vector2(1000,1000));
+
 
         public Map map = new Map();
 
@@ -28,6 +30,7 @@ namespace CoT
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
         }
 
@@ -43,6 +46,7 @@ namespace CoT
         protected override void Update(GameTime gameTime)
         {
             map.Update();
+            player.Update();
             Camera.Update();
             Input.Update();
             Time.Update(gameTime);
@@ -53,9 +57,9 @@ namespace CoT
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
-
+            
             map.Draw(spriteBatch);
-
+            player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

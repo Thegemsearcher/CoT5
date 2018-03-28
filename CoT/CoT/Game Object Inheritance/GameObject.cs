@@ -16,5 +16,6 @@ namespace CoT {
         public GameObject(Vector2 position) {
             Position = position;
         }
+        
     }
 }
