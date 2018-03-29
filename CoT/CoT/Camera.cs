@@ -26,18 +26,18 @@ namespace CoT
 
         public static void Update()
         {
-            if (Input.IsScrollMvdUp())
+            if (Input.IsScrollMvdUp)
             {
                 ScaleInput = Scale * 1.3f;
             }
-            if (Input.IsScrollMvdDown())
+            if (Input.IsScrollMvdDown)
             {
                 ScaleInput = Scale / 1.3f;
             }
 
             if (Input.CurrentMouse.RightButton == ButtonState.Pressed)
             {
-                Position -= Vector2.TransformNormal(Input.MouseMovement(), Matrix.Invert(Transform));
+                Position -= Vector2.TransformNormal(Input.MouseMovement, Matrix.Invert(Transform));
             }
 
             if (Focus != null) Position = Vector2.Lerp(Position, Focus.Value, FocusSpeed * Time.DeltaTime);

@@ -10,13 +10,15 @@ namespace CoT
 {
     public class Creature : GameObject
     {
-        public Creature(Vector2 position) : base(position)
+        public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
         }
-        public virtual void Update()
+
+        public override void OnRemove()
         {
-            Move();
+            throw new NotImplementedException();
         }
+
         public virtual void Move()
         {
 
@@ -34,9 +36,15 @@ namespace CoT
 
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public override void Update()
         {
+            base.Update();
+            Move();
+        }
 
+        public override void Draw()
+        {
+            base.Draw();
         }
     }
 }

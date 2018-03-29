@@ -20,7 +20,7 @@ namespace CoT
         {
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
             Vector2 cartesianTileWorldPos =
                 new Vector2(Camera.ScreenToWorld(Input.CurrentMousePosition).X / Game1.Game.map.tileHeight,
@@ -34,11 +34,11 @@ namespace CoT
                 {
                     if (isometricScreenTile == new Point(i, j))
                     {
-                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.Red);
+                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.Red);
                     }
                     else
                     {
-                        spriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.White);
+                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(i * tileHeight, j * tileHeight).ToWorld(), Color.White);
                     }
                 }
             }

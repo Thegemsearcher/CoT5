@@ -10,35 +10,33 @@ namespace CoT
     public class Game1 : Game
     {
         public static Game1 Game { get; set; }
+        public GraphicsDeviceManager Graphics { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Player player = new Player(new Vector2(1000,1000));
-
-
+        Player player = new Player("Dude", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, 383, 862));
         public Map map = new Map();
 
         public Game1()
         {
             Game = this;
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
             IsMouseVisible = true;
             IsFixedTimeStep = false;
-            graphics.SynchronizeWithVerticalRetrace = true;
-            graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
+            Graphics.SynchronizeWithVerticalRetrace = true;
+            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            Graphics.PreferredBackBufferWidth = 1920;
+            Graphics.PreferredBackBufferHeight = 1080;
+            Graphics.IsFullScreen = false;
+            Graphics.ApplyChanges();
         }
 
         protected override void Initialize() { base.Initialize(); }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             ResourceManager.LoadContent(Content);
         }
         protected override void UnloadContent() { }
@@ -47,6 +45,7 @@ namespace CoT
         {
             map.Update();
             player.Update();
+
             Camera.Update();
             Input.Update();
             Time.Update(gameTime);
@@ -56,11 +55,12 @@ namespace CoT
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
             
-            map.Draw(spriteBatch);
-            player.Draw(spriteBatch);
-            spriteBatch.End();
+            map.Draw();
+            player.Draw();
+
+            SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

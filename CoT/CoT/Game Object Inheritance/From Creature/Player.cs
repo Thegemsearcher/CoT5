@@ -7,36 +7,32 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace CoT {
-    class Player : Creature {
-        enum heroClass {
+namespace CoT
+{
+    class Player : Creature
+    {
+        enum heroClass
+        {
 
         }
-        
-        
-        
-        
 
-
-        public Player(Vector2 position) : base(position) {
-            Position = position;
-
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        {
         }
-        public override void Update() {
 
-            
-            if (Input.IsLeftClickPressed())
+        public override void Update()
+        {
+            base.Update();
+
+            if (Input.IsLeftClickPressed)
             {
-                Position = Camera.ScreenToWorld(Input.CurrentMousePosition) ;
-
-                Console.WriteLine(Input.CurrentMousePosition);
-                Console.WriteLine(Position);
+                Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw()
         {
-            spriteBatch.Draw(ResourceManager.Get<Texture2D>("Dude"), Position, Color.White);
+            base.Draw();
         }
     }
 }

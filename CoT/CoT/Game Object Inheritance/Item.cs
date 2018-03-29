@@ -9,8 +9,23 @@ namespace CoT
 {
     public class Item : GameObject
     {
-        public Item(Vector2 position) : base(position)
+        public Item(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
+        }
+
+        public override void OnRemove()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
         }
     }
 }
