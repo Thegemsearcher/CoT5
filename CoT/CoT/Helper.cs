@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -42,6 +44,24 @@ namespace CoT
             Texture2D texture = new Texture2D(Game1.Game.GraphicsDevice, size.X, size.Y);
             texture.SetData(Enumerable.Range(0, size.X * size.Y).Select(x => Color.White).ToArray());
             return texture;
+        }
+
+        public static void Serialize(string fileName, object obj)
+        {
+            using (var fs = new FileStream(fileName, FileMode.Create))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(fs, obj);
+            }
+        }
+
+        public static object Deserialize(string fileName)
+        {
+            using (var fs = new FileStream(fileName, FileMode.Open))
+            {
+                var formatter = new BinaryFormatter();
+                return formatter.Deserialize(fs);
+            }
         }
     }
 }
