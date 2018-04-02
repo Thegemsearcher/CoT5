@@ -12,7 +12,7 @@ namespace CoT
     {
         public static float Scale { get; set; } = 1f;
         public static float Rotation { get; set; } = 0f;
-        public static float FocusSpeed { get; set; } = 0.015f;
+        public static float FocusSpeed { get; set; } = 5f;
         public static float ScaleInput { get; set; } = 1f;
 
         public static Vector2 Position { get; set; } = new Vector2(0, 0);

@@ -136,8 +136,8 @@ namespace CoT
         {
             map.Update();
             player.Update();
-
             Camera.Update();
+            Camera.Focus = player.Position;
             Input.Update();
             Time.Update(gameTime);
             base.Update(gameTime);
