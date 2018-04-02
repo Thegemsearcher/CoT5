@@ -71,7 +71,7 @@ namespace CoT
 
             #endregion
 
-            enemy = new Enemy("treent", new Vector2(0, 0).ToWorld(), new Rectangle(0,0,1300,1500), player, map.Grid);
+            enemy = new Enemy("treent", new Vector2(200, 100).ToWorld(), new Rectangle(0,0,1300,1500), player, map.Grid);
 
 
             #region GUI

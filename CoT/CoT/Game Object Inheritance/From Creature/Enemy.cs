@@ -35,7 +35,10 @@ namespace CoT
         {
             base.Update();
             path = Pathing();
-            nextTileInPath = path[0];
+            if (path.Length < 0)
+            {
+                nextTileInPath = path[0];
+            }
         }
 
         public void Move()
@@ -45,28 +48,34 @@ namespace CoT
 
         public Position[] Pathing()
         {
-            Vector2 cartesianTileWorldPosEnemy = new Vector2(Camera.ScreenToWorld(Position).X / Game1.Game.map.TileSize.Y,
-                Camera.ScreenToWorld(Position).Y / Game1.Game.map.TileSize.Y);
+
+            Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / Game1.Game.map.TileSize.Y,
+                Position.Y / Game1.Game.map.TileSize.Y);
+
             Point isometricScreenTileEnemy = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om positionen för fienden till en position vi kan använda. 
 
-            Vector2 cartesianTileWorldPosPlayer = new Vector2(Camera.ScreenToWorld(Position).X / Game1.Game.map.TileSize.Y,
-                Camera.ScreenToWorld(Position).Y / Game1.Game.map.TileSize.Y);
+            Vector2 cartesianTileWorldPosPlayer = new Vector2(player.Position.X / Game1.Game.map.TileSize.Y,
+                player.Position.Y / Game1.Game.map.TileSize.Y);
             Point isometricScreenTilePlayer = (cartesianTileWorldPosPlayer.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om spelarens position till en position vi kan använda.
-            
+
+
+
+
             Position[] enemyPath = grid.GetPath(new Position(isometricScreenTileEnemy.X, isometricScreenTileEnemy.Y), 
                 new Position(isometricScreenTilePlayer.X, isometricScreenTilePlayer.Y), MovementPatterns.LateralOnly);
 
             return enemyPath;
         }
+
         public override void Draw()
         {
 
             for (int i = 0; i < path.Length; i++)
             {
                 Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Game1.Game.map.TileSize.Y,
-                    path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Green * 0.5f);
+                    path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Gray * 0.5f);
             }
             Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, 0.1f, SpriteEffects.None, 0f);
             //base.Draw();
