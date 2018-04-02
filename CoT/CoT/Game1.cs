@@ -16,6 +16,7 @@ namespace CoT
         public SpriteBatch SpriteBatch { get; set; }
 
         Player player = new Player("Dude", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, 383, 862));
+        Enemy enemy;
         public Map map;
 
         private Desktop host;
@@ -69,6 +70,9 @@ namespace CoT
             map.Save("Map1.dat").Load("Map1.dat");
 
             #endregion
+
+            enemy = new Enemy("treent", new Vector2(0, 0).ToWorld(), new Rectangle(), player, map.Grid);
+
 
             #region GUI
             MyraEnvironment.Game = this;

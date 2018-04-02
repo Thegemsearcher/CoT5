@@ -19,10 +19,10 @@ namespace CoT
             throw new NotImplementedException();
         }
 
-        public virtual void Move()
-        {
+        //public virtual void Move()
+        //{
 
-        }
+        //}
         public virtual void Attack()
         {
 

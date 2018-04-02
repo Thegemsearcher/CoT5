@@ -17,6 +17,8 @@ namespace CoT
     {
         Player player;
         Grid grid;
+        Position[] path;
+        Position nextTileInPath;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
@@ -31,7 +33,13 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-            
+            path = Pathing();
+            nextTileInPath = path[0];
+        }
+
+        public void Move()
+        {
+            Vector2 nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
         }
 
         public Position[] Pathing()

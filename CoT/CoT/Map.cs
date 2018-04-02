@@ -15,7 +15,7 @@ namespace CoT
         public Tile[,] TileMap { get; set; }
         public string[,] MapData { get; set; }
         public Point TileSize { get; set; }
-        private RoyT.AStar.Grid Grid { get; set; }
+        public RoyT.AStar.Grid Grid { get; private  set; }
 
         public Map(Point tileSize)
         {
