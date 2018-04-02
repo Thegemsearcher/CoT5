@@ -73,6 +73,9 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="MonoGame.Penumbra, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Penumbra.WindowsDX.1.4.0\lib\net45\MonoGame.Penumbra.dll</HintPath>
+    </Reference>
     <Reference Include="Myra, Version=0.5.6.113, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Myra.0.5.6.113\lib\net45\Myra.dll</HintPath>
     </Reference>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Penumbra;
 using RoyT.AStar;
 
 namespace CoT
@@ -71,11 +72,8 @@ namespace CoT
                 {
                     TileMap[x, y] = this[MapData[x, y]];
                     SetCell(x, y);
-                    
                 }
             }
-            Grid.SetCellCost(new Position(1,0), 5);
-            TileMap[1, 0].TileType = TileType.Water;
             return this;
         }
 

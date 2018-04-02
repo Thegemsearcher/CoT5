@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
 using Myra.Graphics2D.UI;
+using Penumbra;
 
 namespace CoT
 {
@@ -15,15 +16,18 @@ namespace CoT
         public GraphicsDeviceManager Graphics { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
 
-        Player player = new Player("Dude", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, 383, 862));
+        private Player player;
         Enemy enemy;
         public Map map;
+
+        public PenumbraComponent Penumbra { get; set; }
 
         private Desktop host;
 
         public Game1()
         {
             Game = this;
+
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -38,6 +42,10 @@ namespace CoT
             var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
             form.Location = new System.Drawing.Point(0, 0);
             Graphics.ApplyChanges();
+
+            Penumbra = new PenumbraComponent(this);
+            Penumbra.AmbientColor = new Color(10, 10, 10, 255);
+            Components.Add(Penumbra);
         }
 
         protected override void Initialize() { base.Initialize(); }
@@ -55,6 +63,7 @@ namespace CoT
             //map.Load("Map1.dat");
 
             map.Create(new Point(10, 20));
+            map.MapData[1, 0] = "tile3";
             map.MapData[3, 3] = "tile2";
             map.MapData[3, 4] = "tile2";
             map.MapData[3, 5] = "tile2";
@@ -71,6 +80,7 @@ namespace CoT
 
             #endregion
 
+            player = new Player("Dude", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, 383, 862));
             enemy = new Enemy("treent", new Vector2(400, 100).ToWorld(), new Rectangle(0,0,1300,1500), player, map.Grid);
 
 
@@ -154,8 +164,10 @@ namespace CoT
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            Penumbra.BeginDraw();
+            Penumbra.Transform = Camera.Transform;
 
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
             map.Draw();
             player.Draw();
