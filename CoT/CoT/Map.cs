@@ -70,16 +70,26 @@ namespace CoT
                 for (int y = 0; y < TileMap.GetLength(1); y++)
                 {
                     TileMap[x, y] = this[MapData[x, y]];
-
-                    if (TileMap[x, y].TileType == TileType.Wall)
-                    {
-                        Grid.BlockCell(new Position(x, y));
-                    }
+                    SetCell(x, y);
+                    
                 }
             }
+            Grid.SetCellCost(new Position(1,0), 5);
+            TileMap[1, 0].TileType = TileType.Water;
             return this;
         }
 
+        public void SetCell(int x, int y)
+        {
+            if (TileMap[x, y].TileType == TileType.Wall)
+            {
+                Grid.BlockCell(new Position(x, y));
+            } 
+            else if (TileMap[x, y].TileType == TileType.Water)
+            {
+                Grid.SetCellCost(new Position(x, y), 5);
+            }
+        }
         public void Update()
         {
         }
@@ -105,6 +115,10 @@ namespace CoT
                     else
                     {
                         Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToWorld(), Color.White);
+                    }
+                    if (TileMap[i, j].TileType == TileType.Water)
+                    {
+                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToWorld(), Color.Blue);
                     }
                 }
             }
