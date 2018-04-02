@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    class Player : Creature
+    public class Player : Creature
     {
         enum heroClass
         {
