@@ -50,6 +50,9 @@ namespace CoT
             map = new Map(new Point(160, 80));
             map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             map["tile2"] = new Tile(TileType.Wall, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            map["tile3"] = new Tile(TileType.Water, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            //map.Load("Map1.dat");
+
             map.Create(new Point(10, 20));
             map.MapData[3, 3] = "tile2";
             map.MapData[3, 4] = "tile2";
@@ -64,6 +67,7 @@ namespace CoT
             map.MapData[7, 8] = "tile2";
             map.MapData[7, 9] = "tile2";
             map.Save("Map1.dat").Load("Map1.dat");
+
             #endregion
 
             #region GUI
