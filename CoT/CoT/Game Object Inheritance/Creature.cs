@@ -39,7 +39,7 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-            Move();
+            //Move();
         }
 
         public override void Draw()

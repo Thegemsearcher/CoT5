@@ -71,7 +71,7 @@ namespace CoT
 
             #endregion
 
-            enemy = new Enemy("treent", new Vector2(0, 0).ToWorld(), new Rectangle(), player, map.Grid);
+            enemy = new Enemy("treent", new Vector2(0, 0).ToWorld(), new Rectangle(0,0,1300,1500), player, map.Grid);
 
 
             #region GUI
@@ -144,6 +144,7 @@ namespace CoT
         {
             map.Update();
             player.Update();
+            enemy.Update();
             Camera.Update();
             Camera.Focus = player.Position;
             Input.Update();
@@ -158,6 +159,8 @@ namespace CoT
             SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
             map.Draw();
             player.Draw();
+            enemy.Draw();
+            
             SpriteBatch.End();
 
             SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);

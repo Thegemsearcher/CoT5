@@ -11,7 +11,7 @@ namespace CoT
 {
     public class Player : Creature
     {
-        enum heroClass
+        enum HeroClass
         {
 
         }

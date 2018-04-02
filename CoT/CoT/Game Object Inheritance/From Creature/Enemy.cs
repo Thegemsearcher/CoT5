@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RoyT.AStar;
 
 namespace CoT
@@ -61,7 +62,14 @@ namespace CoT
         }
         public override void Draw()
         {
-            base.Draw();
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Game1.Game.map.TileSize.Y,
+                    path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Green * 0.5f);
+            }
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, 0.1f, SpriteEffects.None, 0f);
+            //base.Draw();
         }
     }
 }
