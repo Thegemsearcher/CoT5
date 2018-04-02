@@ -20,6 +20,8 @@ namespace CoT
         Grid grid;
         Position[] path;
         Position nextTileInPath;
+        float speed = 0.01f;
+        Vector2 nextPosition, direction = new Vector2(0,0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
@@ -35,15 +37,20 @@ namespace CoT
         {
             base.Update();
             path = Pathing();
-            if (path.Length < 0)
+            if (path.Length > 0)
             {
-                nextTileInPath = path[0];
+                nextTileInPath = path.First();
             }
+            nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
+            
+            Move();
         }
 
         public void Move()
         {
-            Vector2 nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
+            direction.X = (float)Math.Sqrt(Math.Pow(nextPosition.X - Position.X, 2));
+            direction.Y = (float)Math.Sqrt(Math.Pow(nextPosition.Y - Position.Y, 2));
+            Position += direction * speed;
         }
 
         public Position[] Pathing()
@@ -51,7 +58,6 @@ namespace CoT
 
             Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / Game1.Game.map.TileSize.Y,
                 Position.Y / Game1.Game.map.TileSize.Y);
-
             Point isometricScreenTileEnemy = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om positionen för fienden till en position vi kan använda. 
 
@@ -59,10 +65,7 @@ namespace CoT
                 player.Position.Y / Game1.Game.map.TileSize.Y);
             Point isometricScreenTilePlayer = (cartesianTileWorldPosPlayer.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om spelarens position till en position vi kan använda.
-
-
-
-
+            
             Position[] enemyPath = grid.GetPath(new Position(isometricScreenTileEnemy.X, isometricScreenTileEnemy.Y), 
                 new Position(isometricScreenTilePlayer.X, isometricScreenTilePlayer.Y), MovementPatterns.LateralOnly);
 
