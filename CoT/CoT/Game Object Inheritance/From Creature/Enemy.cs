@@ -17,7 +17,7 @@ namespace CoT
     public class Enemy : Creature
     {
         Player player;
-        Grid grid;
+        //Grid grid;
         Position[] path;
         Position nextTileInPath;
         float speed = 0.01f;
@@ -36,7 +36,7 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-            path = Pathing();
+            path = Pathing(player.Position);
             if (path.Length > 1)
             {
                 nextTileInPath = path[1];
@@ -55,24 +55,7 @@ namespace CoT
             Position += direction * speed;
         }
 
-        public Position[] Pathing()
-        {
-
-            Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / Game1.Game.map.TileSize.Y,
-                Position.Y / Game1.Game.map.TileSize.Y);
-            Point isometricScreenTileEnemy = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
-            //Gör om positionen för fienden till en position vi kan använda. 
-
-            Vector2 cartesianTileWorldPosPlayer = new Vector2(player.Position.X / Game1.Game.map.TileSize.Y,
-                player.Position.Y / Game1.Game.map.TileSize.Y);
-            Point isometricScreenTilePlayer = (cartesianTileWorldPosPlayer.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
-            //Gör om spelarens position till en position vi kan använda.
-
-            Position[] enemyPath = grid.GetPath(new Position(isometricScreenTileEnemy.X, isometricScreenTileEnemy.Y),
-                new Position(isometricScreenTilePlayer.X, isometricScreenTilePlayer.Y), MovementPatterns.LateralOnly);
-
-            return enemyPath;
-        }
+        
 
         public override void Draw()
         {
