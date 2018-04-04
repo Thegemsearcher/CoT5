@@ -46,6 +46,15 @@ namespace CoT
 
         }
 
+        protected Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos)
+        {
+            Vector2 travellDirection = targetPos - currentPos;
+
+            travellDirection.Normalize();
+
+            return travellDirection;
+        }
+
         public override void Draw()
         {
             base.Draw();
