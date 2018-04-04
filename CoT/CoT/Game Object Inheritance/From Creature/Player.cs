@@ -13,6 +13,8 @@ namespace CoT
 {
     public class Player : Creature
     {
+
+        float speed = 0.01f;
         enum HeroClass
         {
 
@@ -36,9 +38,18 @@ namespace CoT
             {
                 Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
             }
+
+            Move(GetDirection(Position, Input.CurrentMousePosition));
         }
 
-        protected Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos)
+        public void Move(Vector2 direction)
+        {
+            Position += direction * speed * Time.DeltaTime;
+        }
+
+
+
+        public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos)
         {
             Vector2 travellDirection = targetPos - currentPos;
 
