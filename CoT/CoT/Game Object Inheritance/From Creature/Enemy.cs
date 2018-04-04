@@ -51,7 +51,6 @@ namespace CoT
 
             direction.X = nextPosition.X - Position.X;
             direction.Y = nextPosition.Y - Position.Y;
-
             direction.Normalize();
 
             Position += direction * speed * Time.DeltaTime;

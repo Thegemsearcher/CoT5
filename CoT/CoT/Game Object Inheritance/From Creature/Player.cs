@@ -19,6 +19,7 @@ namespace CoT
         Vector2 direction;
         Vector2 targetPos;
         bool moving;
+        Map map;
 
         enum HeroClass
         {
@@ -31,8 +32,9 @@ namespace CoT
         //Position[] path;
         //Position toTheNextTile;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Map map) : base(texture, position, sourceRectangle)
         {
+            this.map = map;
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToScreen();
             light.Intensity = 0.5f;
@@ -45,7 +47,7 @@ namespace CoT
 
             base.Update();
             light.Position = Position;
-            if (Input.IsLeftClickPressed)
+            if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
                 //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
                 targetPos = Camera.ScreenToWorld(Input.CurrentMousePosition);
@@ -54,7 +56,7 @@ namespace CoT
 
             }
 
-            if (Vector2.Distance(Position, targetPos) < 10)
+            if (Vector2.Distance(Position, targetPos) < 10) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 moving = false;
             }
@@ -63,37 +65,36 @@ namespace CoT
             {
                 Move(direction);
             }
+
+            CheckForCollision();
         }
 
-        public void Move(Vector2 direction)
+        public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
             Position += direction * speed * Time.DeltaTime;
         }
 
-        //public void CheckForCollision()
-        //{
-        //    int stoppingDistance = 10;
-        //    Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
-
-        //    //if (GetTileAtPosition(newDestination).IsWall)
-        //    if (Map.TileMap[x, y].TileType == TileType.Wall)
-        //    {
-        //        moving = false;
-        //    }
-        //}
-
-        //public Tile GetTileAtPosition(Vector2 position)
-        //{
-        //    return tiles[(int)position.X / tileSize, (int)position.Y / tileSize];
-        //}
-
-        public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos)
+        public void CheckForCollision() //Detta fungerar inte
         {
-            Vector2 travellDirection = targetPos - currentPos;
+            //int stoppingDistance = 10;
+            //Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
 
-            travellDirection.Normalize();
+            //int x = (int)newDestination.X / map.TileSize.X;
+            //int y = (int)newDestination.Y / map.TileSize.Y;
 
-            return travellDirection;
+            //if (map.TileMap[x, y].TileType == TileType.Wall)
+            //{
+            //    moving = false;
+            //}
+        }
+
+        public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
+        {
+            Vector2 travelDirection = targetPos - currentPos;
+
+            travelDirection.Normalize();
+
+            return travelDirection;
         }
 
         public override void Draw()
