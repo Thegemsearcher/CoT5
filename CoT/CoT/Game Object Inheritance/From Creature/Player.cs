@@ -14,7 +14,9 @@ namespace CoT
     public class Player : Creature
     {
 
-        float speed = 0.01f;
+        float speed = 200f;
+        Vector2 direction;
+        Vector2 targetPos;
         enum HeroClass
         {
 
@@ -32,14 +34,21 @@ namespace CoT
 
         public override void Update()
         {
+
             base.Update();
             light.Position = Position;
             if (Input.IsLeftClickPressed)
             {
-                Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
+                //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
+                targetPos = Camera.ScreenToWorld(Input.CurrentMousePosition);
+                direction = GetDirection(Position, targetPos);
+
             }
 
-            //Move(GetDirection(Position, Input.CurrentMousePosition)); DETTA FÅR ALLT ATT CRASHA
+            if (Vector2.Distance(Position, targetPos) > 10)
+            {
+                Move(direction);
+            }
         }
 
         public void Move(Vector2 direction)
