@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Penumbra;
 using Console = System.Console;
+using RoyT.AStar;
 
 namespace CoT
 {
@@ -23,6 +24,10 @@ namespace CoT
         }
 
         private Penumbra.Light light;
+
+        //Grid grid;
+        //Position[] path;
+        //Position toTheNextTile;
 
         public Player(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
