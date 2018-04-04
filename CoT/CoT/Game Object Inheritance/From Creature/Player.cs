@@ -26,6 +26,7 @@ namespace CoT
             light.Scale = new Vector2(5000, 5000).ToScreen();
             light.Intensity = 0.5f;
             Game1.Game.Penumbra.Lights.Add(light);
+            Scale = 3;
         }
 
         public override void Update()
