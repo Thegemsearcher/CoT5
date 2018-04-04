@@ -81,8 +81,8 @@ namespace CoT
 
             #endregion
 
-            player = new Player("Dude", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, 383, 862));
-            enemy = new Enemy("treent", new Vector2(400, 100).ToWorld(), new Rectangle(0,0,1300,1500), player, map.Grid);
+            player = new Player("player1", new Vector2(0, 0).ToWorld(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height));
+            enemy = new Enemy("treent", new Vector2(400, 100).ToWorld(), new Rectangle(0, 0, 1300, 1500), player, map.Grid);
 
 
             #region GUI
