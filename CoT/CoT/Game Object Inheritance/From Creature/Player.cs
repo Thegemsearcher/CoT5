@@ -40,7 +40,7 @@ namespace CoT
                 Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
             }
 
-            Move(GetDirection(Position, Input.CurrentMousePosition));
+            //Move(GetDirection(Position, Input.CurrentMousePosition)); DETTA FÅR ALLT ATT CRASHA
         }
 
         public void Move(Vector2 direction)
