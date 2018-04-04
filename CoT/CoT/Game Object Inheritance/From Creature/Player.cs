@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using Penumbra;
 using Console = System.Console;
 using RoyT.AStar;
+using System.Threading;
 
 namespace CoT
 {
@@ -74,18 +75,23 @@ namespace CoT
             Position += direction * speed * Time.DeltaTime;
         }
 
-        public void CheckForCollision() //Detta fungerar inte
+        public void CheckForCollision()//Detta fungerar inte
         {
-            //int stoppingDistance = 10;
-            //Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
+            int stoppingDistance = 10;
+            Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
 
-            //int x = (int)newDestination.X / map.TileSize.X;
-            //int y = (int)newDestination.Y / map.TileSize.Y;
+            Vector2 cartesianTileWorldPos = new Vector2(Camera.ScreenToWorld(newDestination).X / map.TileSize.Y,
+            Camera.ScreenToWorld(newDestination).Y / map.TileSize.Y);
 
-            //if (map.TileMap[x, y].TileType == TileType.Wall)
-            //{
-            //    moving = false;
-            //}
+            Point isometricScreenTile = (cartesianTileWorldPos.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+
+            //int x = (int)newDestination.X / 160;
+            //int y = (int)newDestination.Y / 80;
+
+            if (map.TileMap[isometricScreenTile.X, isometricScreenTile.Y].TileType == TileType.Wall)
+            {
+                moving = false;
+            }
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
