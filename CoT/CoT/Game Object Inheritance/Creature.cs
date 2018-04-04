@@ -33,16 +33,16 @@ namespace CoT
 
             Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / Game1.Game.map.TileSize.Y,
                 Position.Y / Game1.Game.map.TileSize.Y);
-            Point isometricScreenTileEnemy = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+            Point isometricScreenTileCreature = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om positionen för fienden till en position vi kan använda. 
 
             Vector2 cartesianTileWorldPosPlayer = new Vector2(destination.X / Game1.Game.map.TileSize.Y,
                 destination.Y / Game1.Game.map.TileSize.Y);
-            Point isometricScreenTilePlayer = (cartesianTileWorldPosPlayer.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+            Point isometricScreenTileDestination = (cartesianTileWorldPosPlayer.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om spelarens position till en position vi kan använda.
 
-            Position[] chosenPath = grid.GetPath(new Position(isometricScreenTileEnemy.X, isometricScreenTileEnemy.Y),
-                new Position(isometricScreenTilePlayer.X, isometricScreenTilePlayer.Y), MovementPatterns.LateralOnly);
+            Position[] chosenPath = grid.GetPath(new Position(isometricScreenTileCreature.X, isometricScreenTileCreature.Y),
+                new Position(isometricScreenTileDestination.X, isometricScreenTileDestination.Y), MovementPatterns.LateralOnly);
 
             return chosenPath;
         }
