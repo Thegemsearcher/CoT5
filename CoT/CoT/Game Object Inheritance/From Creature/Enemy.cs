@@ -20,7 +20,7 @@ namespace CoT
         //Grid grid;
         Position[] path;
         Position nextTileInPath;
-        float speed = 0.01f;
+        float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
@@ -52,9 +52,10 @@ namespace CoT
             direction.X = nextPosition.X - Position.X;
             direction.Y = nextPosition.Y - Position.Y;
 
-            Position += direction * speed;
-        }
+            direction.Normalize();
 
+            Position += direction * speed * Time.DeltaTime;
+        }
         
 
         public override void Draw()

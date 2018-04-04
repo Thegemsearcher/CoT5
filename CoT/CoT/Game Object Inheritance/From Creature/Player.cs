@@ -18,6 +18,8 @@ namespace CoT
         float speed = 200f;
         Vector2 direction;
         Vector2 targetPos;
+        bool moving;
+
         enum HeroClass
         {
 
@@ -48,10 +50,16 @@ namespace CoT
                 //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
                 targetPos = Camera.ScreenToWorld(Input.CurrentMousePosition);
                 direction = GetDirection(Position, targetPos);
+                moving = true;
 
             }
 
-            if (Vector2.Distance(Position, targetPos) > 10)
+            if (Vector2.Distance(Position, targetPos) < 10)
+            {
+                moving = false;
+            }
+
+            if (moving)
             {
                 Move(direction);
             }
@@ -62,7 +70,22 @@ namespace CoT
             Position += direction * speed * Time.DeltaTime;
         }
 
+        //public void CheckForCollision()
+        //{
+        //    int stoppingDistance = 10;
+        //    Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
 
+        //    //if (GetTileAtPosition(newDestination).IsWall)
+        //    if (Map.TileMap[x, y].TileType == TileType.Wall)
+        //    {
+        //        moving = false;
+        //    }
+        //}
+
+        //public Tile GetTileAtPosition(Vector2 position)
+        //{
+        //    return tiles[(int)position.X / tileSize, (int)position.Y / tileSize];
+        //}
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos)
         {
