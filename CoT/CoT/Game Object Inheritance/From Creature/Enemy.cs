@@ -22,10 +22,14 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
+        float scale = 0.1f;
+        bool moving = false;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
             this.grid = grid;
+            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * scale);
+            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * scale);
         }
 
         public void DetectPlayer()
@@ -37,36 +41,39 @@ namespace CoT
         {
             base.Update();
             path = Pathing(player.Position);
+
             if (path.Length > 1)
             {
                 nextTileInPath = path[1];
             }
-            nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
-
+            
             Move();
+            destinationRectangle.X = (int)Position.X;
+            destinationRectangle.Y = (int)Position.Y;
         }
 
         public void Move()
         {
-
+            nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
+            nextPosition.X += Game1.Game.map.TileSize.X / 2;
+            nextPosition.Y += Game1.Game.map.TileSize.Y / 2;
             direction.X = nextPosition.X - Position.X;
             direction.Y = nextPosition.Y - Position.Y;
             direction.Normalize();
-
             Position += direction * speed * Time.DeltaTime;
         }
-        
+
 
         public override void Draw()
         {
-
-            for (int i = 0; i < path.Length; i++)
+            for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
                 Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Game1.Game.map.TileSize.Y,
-                    path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Gray * 0.5f);
+               path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Gray * 0.5f);
             }
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, 0.1f, SpriteEffects.None, 0f);
-            //base.Draw();
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+
+
         }
     }
 }
