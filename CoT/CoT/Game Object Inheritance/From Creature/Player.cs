@@ -67,7 +67,7 @@ namespace CoT
                 Move(direction);
             }
 
-            CheckForCollision();
+            //CheckForCollision();
         }
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid

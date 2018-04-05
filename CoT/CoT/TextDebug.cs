@@ -21,7 +21,7 @@ namespace CoT
 
         public static void Draw()
         {
-            if (Input.IsKeyPressed(Keys.F3)) showDebug = !showDebug;
+            if (Input.IsKeyPressed(Keys.F8)) showDebug = !showDebug;
 
             if (showDebug)
             {

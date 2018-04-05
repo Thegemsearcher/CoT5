@@ -159,10 +159,30 @@ namespace CoT
             player.Update();
             enemy.Update();
             Camera.Update();
-            Camera.Focus = player.Position;
+            //Camera.Focus = player.Position;
             Input.Update();
             Time.Update(gameTime);
             base.Update(gameTime);
+
+            TextDebug.WriteLine("Mouse position to Tile position: " + GetTilePosFromScreenPos(Input.CurrentMousePosition));
+            TextDebug.WriteLine("Tile position to Mouse position: " + GetScreenPosFromTilePos(GetTilePosFromScreenPos(Input.CurrentMousePosition)));
+            TextDebug.WriteLine("Mouse Position: " + Input.CurrentMousePosition);
+            TextDebug.WriteLine("Player Position: " + player.Position);
+        }
+
+        public Vector2 GetTilePosFromScreenPos(Vector2 screenPosition)
+        {
+            return (Camera.ScreenToWorld(screenPosition) / map.TileSize.Y).ToScreen() + new Vector2(-0.5f, 0.5f);
+        }
+
+        /// <summary>
+        /// OBS FUNGERAR EJ
+        /// </summary>
+        /// <param name="tilePosition"></param>
+        /// <returns></returns>
+        public Vector2 GetScreenPosFromTilePos(Vector2 tilePosition)
+        {
+            return (Camera.WorldToScreen(tilePosition) * map.TileSize.Y).ToWorld() - new Vector2(-0.5f, 0.5f);
         }
 
         protected override void Draw(GameTime gameTime)
