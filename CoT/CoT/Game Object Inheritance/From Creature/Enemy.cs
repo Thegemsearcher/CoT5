@@ -20,16 +20,18 @@ namespace CoT
         //Grid grid;
         Position[] path;
         Position nextTileInPath;
-        float speed = 100f;
+        float speed = 100f,scale = 0.1f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        float scale = 0.1f;
-        bool moving = false;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
             this.grid = grid;
+
+            attackSize = 100;
+
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * scale);
+            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height/2);
         }
 
         public void DetectPlayer()
@@ -46,12 +48,20 @@ namespace CoT
             {
                 nextTileInPath = path[1];
             }
-            
             Move();
-            destinationRectangle.X = (int)Position.X;
-            destinationRectangle.Y = (int)Position.Y;
+            //Fienden går från sina fötter istället för 0,0 på bilden.
+            destinationRectangle.X = (int)Position.X - destinationRectangle.Width / 2;
+            destinationRectangle.Y = (int)Position.Y - destinationRectangle.Height;
+            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
+            CheckAttackDistance();
         }
-
+        public void CheckAttackDistance()
+        {
+            if (Vector2.Distance(CenterMass, player.CenterMass) < attackSize)
+            {
+                Attack(player.CenterMass - CenterMass);
+            }
+        }
         public void Move()
         {
             nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
@@ -63,7 +73,6 @@ namespace CoT
             Position += direction * speed * Time.DeltaTime;
         }
 
-
         public override void Draw()
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
@@ -73,7 +82,8 @@ namespace CoT
             }
             Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
-
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture),new Rectangle((int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)/*(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)*/
+                , SourceRectangle,Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }
