@@ -13,6 +13,7 @@ namespace CoT
     public class Creature : GameObject
     {
         protected Grid grid;
+        protected Rectangle destinationRectangle = new Rectangle(0,0,0,0);
 
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
@@ -23,15 +24,8 @@ namespace CoT
             throw new NotImplementedException();
         }
 
-        //public virtual void Move()
-        //{
-
-        //}
-
         protected Position[] Pathing(Vector2 destination)
         {
-
-
             Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / Game1.Game.map.TileSize.Y,
                 Position.Y / Game1.Game.map.TileSize.Y);
             Point isometricScreenTileCreature = (cartesianTileWorldPosEnemy.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();

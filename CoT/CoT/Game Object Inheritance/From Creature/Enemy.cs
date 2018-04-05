@@ -22,10 +22,13 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
+        float scale = 0.1f;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
             this.grid = grid;
+            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * scale);
+            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * scale);
         }
 
         public void DetectPlayer()
@@ -42,13 +45,13 @@ namespace CoT
                 nextTileInPath = path[1];
             }
             nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
-
+            destinationRectangle.X = (int)Position.X;
+            destinationRectangle.Y = (int)Position.Y;
             Move();
         }
 
         public void Move()
         {
-
             direction.X = nextPosition.X - Position.X;
             direction.Y = nextPosition.Y - Position.Y;
             direction.Normalize();
@@ -59,13 +62,12 @@ namespace CoT
 
         public override void Draw()
         {
-
             for (int i = 0; i < path.Length; i++)
             {
                 Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Game1.Game.map.TileSize.Y,
                     path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Gray * 0.5f);
             }
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, 0.1f, SpriteEffects.None, 0f);
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             //base.Draw();
         }
     }
