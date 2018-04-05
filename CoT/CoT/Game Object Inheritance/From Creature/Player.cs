@@ -22,7 +22,6 @@ namespace CoT
         bool moving;
         Map map;
         FloatRectangle bottomHitBox;
-        public Vector2 CenterMass { get; private set; }
         enum HeroClass
         {
 
