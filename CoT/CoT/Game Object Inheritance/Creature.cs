@@ -14,8 +14,9 @@ namespace CoT
     {
         protected Grid grid;
         protected Rectangle destinationRectangle = new Rectangle(0,0,0,0);
-
+        public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0,0),new Vector2(0,0));
         public Vector2 CenterMass { get; protected set; }
+        protected float attackSize;
 
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
@@ -44,9 +45,11 @@ namespace CoT
             return chosenPath;
         }
 
-        public virtual void Attack()
+        public virtual void Attack(Vector2 direction)
         {
-
+            direction.Normalize();
+            AttackHitBox.Position = Position + attackSize * direction;
+            AttackHitBox.Size = new Vector2(attackSize, attackSize);
         }
         public virtual void GetHit()
         {
