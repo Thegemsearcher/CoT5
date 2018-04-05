@@ -23,16 +23,13 @@ namespace CoT
         Map map;
         FloatRectangle bottomHitBox;
         public Vector2 CenterMass { get; private set; }
+
         enum HeroClass
         {
 
         }
 
         private Penumbra.Light light;
-    
-        //Grid grid;
-        //Position[] path;
-        //Position toTheNextTile;
 
         public Player(string texture, Vector2 position, Rectangle sourceRectangle, Map map) : base(texture, position, sourceRectangle)
         {
@@ -70,6 +67,8 @@ namespace CoT
 
             }
 
+            CheckForCollision();
+
             if (Vector2.Distance(Position, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 moving = false;
@@ -80,7 +79,6 @@ namespace CoT
                 Move(direction);
             }
             CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
-            CheckForCollision();
         }
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
@@ -88,23 +86,39 @@ namespace CoT
             Position += direction * speed * Time.DeltaTime;
         }
 
-        public void CheckForCollision()//Detta fungerar inte
+        //public void CheckForCollision()//Detta fungerar inte
+        //{
+        //    //int stoppingDistance = 10;
+        //    //Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
+
+        //    //Vector2 cartesianTileWorldPos = new Vector2(Camera.ScreenToWorld(newDestination).X / map.TileSize.Y,
+        //    //Camera.ScreenToWorld(newDestination).Y / map.TileSize.Y);
+
+        //    //Point isometricScreenTile = (cartesianTileWorldPos.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+
+        //    //int x = (int)newDestination.X / 160;
+        //    //int y = (int)newDestination.Y / 80;
+
+        //    //if (map.TileMap[isometricScreenTile.X, isometricScreenTile.Y].TileType == TileType.Wall)
+        //    //{
+        //    //    moving = false;
+        //    //}
+        //}
+
+        public void CheckForCollision()
         {
-            //int stoppingDistance = 10;
-            //Vector2 newDestination = Position + direction * speed * Time.DeltaTime * stoppingDistance;
-
-            //Vector2 cartesianTileWorldPos = new Vector2(Camera.ScreenToWorld(newDestination).X / map.TileSize.Y,
-            //Camera.ScreenToWorld(newDestination).Y / map.TileSize.Y);
-
-            //Point isometricScreenTile = (cartesianTileWorldPos.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
-
-            //int x = (int)newDestination.X / 160;
-            //int y = (int)newDestination.Y / 80;
-
-            //if (map.TileMap[isometricScreenTile.X, isometricScreenTile.Y].TileType == TileType.Wall)
-            //{
-            //    moving = false;
-            //}
+            for (int x = 0; x < map.TileMap.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.TileMap.GetLength(1); y++)
+                {
+                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToScreen(),
+                        map.TileSize.ToVector2())) && map.TileMap[x, y].TileType == TileType.Wall)
+                    {
+                        Position += -direction * speed * Time.DeltaTime;
+                        moving = false;
+                    }
+                }
+            }
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
