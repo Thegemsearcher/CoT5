@@ -78,7 +78,7 @@ namespace CoT
             {
                 Move(direction);
             }
-            CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
+            CenterMass = new Vector2(Position.X, Position.Y - (SourceRectangle.Height/2) * Scale);
         }
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
