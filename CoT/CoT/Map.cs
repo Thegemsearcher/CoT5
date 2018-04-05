@@ -72,6 +72,19 @@ namespace CoT
                 {
                     TileMap[x, y] = this[MapData[x, y]];
                     SetCell(x, y);
+
+                    if (TileMap[x, y].TileType == TileType.Wall)
+                    {
+                        Hull hull = new Hull(new Vector2[]
+                        {
+                            new Vector2(0, 40),
+                            new Vector2(80, 0),
+                            new Vector2(160, 40),
+                            new Vector2(80, 80)
+                        });
+                        hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToWorld();
+                        Game1.Game.Penumbra.Hulls.Add(hull);
+                    }
                 }
             }
             return this;

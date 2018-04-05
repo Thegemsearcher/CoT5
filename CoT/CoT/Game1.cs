@@ -46,6 +46,7 @@ namespace CoT
 
             Penumbra = new PenumbraComponent(this);
             Penumbra.AmbientColor = new Color(10, 10, 10, 255);
+            
             Components.Add(Penumbra);
         }
 
