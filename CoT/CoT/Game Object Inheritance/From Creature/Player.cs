@@ -22,7 +22,7 @@ namespace CoT
         bool moving;
         Map map;
         FloatRectangle bottomHitBox;
-
+        public Vector2 CenterMass { get; private set; }
         enum HeroClass
         {
 
@@ -43,6 +43,7 @@ namespace CoT
             light.ShadowType = ShadowType.Occluded;
             Game1.Game.Penumbra.Lights.Add(light);
             Scale = 3;
+            CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
 
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
@@ -78,7 +79,7 @@ namespace CoT
             {
                 Move(direction);
             }
-
+            CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
             CheckForCollision();
         }
 
