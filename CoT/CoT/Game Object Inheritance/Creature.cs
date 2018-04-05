@@ -15,6 +15,8 @@ namespace CoT
         protected Grid grid;
         protected Rectangle destinationRectangle = new Rectangle(0,0,0,0);
 
+        public Vector2 CenterMass { get; protected set; }
+
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
         }
