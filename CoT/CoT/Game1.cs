@@ -45,9 +45,8 @@ namespace CoT
             Graphics.ApplyChanges();
 
             Penumbra = new PenumbraComponent(this);
-            Penumbra.AmbientColor = new Color(10, 10, 10, 255);
-            
-            Components.Add(Penumbra);
+            Penumbra.AmbientColor = new Color(100, 100, 100, 255);
+            Services.AddService(Penumbra);
         }
 
         protected override void Initialize() { base.Initialize(); }
@@ -149,6 +148,8 @@ namespace CoT
             host = new Desktop();
             host.Widgets.Add(grid);
             #endregion
+
+            Penumbra.Initialize();
         }
         protected override void UnloadContent() { }
 
@@ -158,10 +159,30 @@ namespace CoT
             player.Update();
             enemy.Update();
             Camera.Update();
-            Camera.Focus = player.Position;
+            //Camera.Focus = player.Position;
             Input.Update();
             Time.Update(gameTime);
             base.Update(gameTime);
+
+            TextDebug.WriteLine("Mouse position to Tile position: " + GetTilePosFromScreenPos(Input.CurrentMousePosition));
+            TextDebug.WriteLine("Tile position to Mouse position: " + GetScreenPosFromTilePos(GetTilePosFromScreenPos(Input.CurrentMousePosition)));
+            TextDebug.WriteLine("Mouse Position: " + Input.CurrentMousePosition);
+            TextDebug.WriteLine("Player Position: " + player.Position);
+        }
+
+        public Vector2 GetTilePosFromScreenPos(Vector2 screenPosition)
+        {
+            return (Camera.ScreenToWorld(screenPosition) / map.TileSize.Y).ToScreen() + new Vector2(-0.5f, 0.5f);
+        }
+
+        /// <summary>
+        /// OBS FUNGERAR EJ
+        /// </summary>
+        /// <param name="tilePosition"></param>
+        /// <returns></returns>
+        public Vector2 GetScreenPosFromTilePos(Vector2 tilePosition)
+        {
+            return (Camera.WorldToScreen(tilePosition) * map.TileSize.Y).ToWorld() - new Vector2(-0.5f, 0.5f);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -170,16 +191,21 @@ namespace CoT
             Penumbra.Transform = Camera.Transform;
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Camera.Transform);
             map.Draw();
             player.Draw();
             enemy.Draw();
-            
-            SpriteBatch.End();
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+            SpriteBatch.End();
+;
+            Penumbra.Draw(gameTime);
+
+            SpriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, null);
+
+            TextDebug.Draw();
             host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
             host.Render();
+
             SpriteBatch.End();
 
             base.Draw(gameTime);

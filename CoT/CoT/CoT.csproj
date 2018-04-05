@@ -47,6 +47,7 @@
     <Compile Include="Game Object Inheritance\From Creature\Boss.cs" />
     <Compile Include="Game Object Inheritance\From Creature\Enemy.cs" />
     <Compile Include="Game Object Inheritance\Creature.cs" />
+    <Compile Include="TextDebug.cs" />
     <Compile Include="Game Object Inheritance\Physics\Particle.cs" />
     <Compile Include="Game Object Inheritance\Physics\Projectile.cs" />
     <Compile Include="Spritesheet.cs" />
