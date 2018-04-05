@@ -53,7 +53,7 @@ namespace CoT
 
             base.Update();
             light.Position = Position;
-            Camera.Position = Position;
+            Camera.Focus = Position;
 
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
