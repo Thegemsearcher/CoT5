@@ -17,7 +17,8 @@ namespace CoT
         public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0,0),new Vector2(0,0));
         public Vector2 CenterMass { get; protected set; }
         protected float attackSize;
-
+        bool attacking = false;
+        int timer = 0;
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
         }
@@ -47,9 +48,22 @@ namespace CoT
 
         public virtual void Attack(Vector2 direction)
         {
-            direction.Normalize();
-            AttackHitBox.Position = Position + attackSize * direction;
-            AttackHitBox.Size = new Vector2(attackSize, attackSize);
+            if (!attacking)
+            {
+                attacking = true;
+                direction.Normalize();
+                direction *= -1;
+                AttackHitBox.Position = CenterMass + attackSize * direction;
+                AttackHitBox.Size = new Vector2(attackSize, attackSize);
+            } else
+            {
+                timer++;
+                if (timer == 100)
+                {
+                    timer = 0;
+                    attacking = false;
+                }
+            }
         }
         public virtual void GetHit()
         {
