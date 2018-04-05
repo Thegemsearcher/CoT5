@@ -21,6 +21,7 @@ namespace CoT
         Vector2 targetPos;
         bool moving;
         Map map;
+        FloatRectangle bottomHitBox;
 
         enum HeroClass
         {
@@ -43,6 +44,10 @@ namespace CoT
             light.ShadowType = ShadowType.Solid;
             Game1.Game.Penumbra.Lights.Add(light);
             Scale = 3;
+
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y - (int)(SourceRectangle.Height * 0.90)),
+                new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
+            Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
         }
 
         public override void Update()
@@ -50,6 +55,11 @@ namespace CoT
 
             base.Update();
             light.Position = Position;
+            Camera.Position = Position;
+
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y - (int)(SourceRectangle.Height * 0.90)),
+                new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
+
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
                 //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
@@ -107,7 +117,7 @@ namespace CoT
 
         public override void Draw()
         {
-            //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)(bottomHitBox.Size.X / 2), (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             base.Draw();
         }
     }
