@@ -16,7 +16,7 @@ namespace CoT
         public float Rotation { get; set; }
         public Rectangle SourceRectangle { get; set; }
         public float Scale { get; set; }
-        public FloatRectangle bottomHitBox { get; set; }
+        public FloatRectangle HitBox { get; set; }
         public bool Remove { get; set; }
         public Vector2 Offset { get; set; }
         public float Transparency { get; set; }
@@ -33,7 +33,7 @@ namespace CoT
             IsActive = true;
 
             Color = Color.White;
-            bottomHitBox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
+            HitBox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
         }
 
@@ -41,15 +41,17 @@ namespace CoT
 
         public virtual void Update()
         {
-            bottomHitBox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
+            HitBox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
         }
 
         public virtual void Draw()
         {
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Vector2 (Position.X - ((SourceRectangle.Width * Scale)/2), Position.Y - (SourceRectangle.Height * Scale)), SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Vector2 (Position.X - ((SourceRectangle.Width * Scale)/2), Position.Y - (SourceRectangle.Height * Scale)),
+                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0f);
 
             // Debug
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2), (int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.1f);
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)HitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+                (int)HitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)HitBox.Size.X, (int)HitBox.Size.Y), Color.Red * 0.1f);
         }
     }
 }
