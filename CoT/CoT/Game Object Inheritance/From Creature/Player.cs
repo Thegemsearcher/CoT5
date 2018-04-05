@@ -29,8 +29,7 @@ namespace CoT
         }
 
         private Penumbra.Light light;
-
-       
+    
         //Grid grid;
         //Position[] path;
         //Position toTheNextTile;
@@ -40,13 +39,14 @@ namespace CoT
             this.map = map;
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToScreen();
-            light.Intensity = 0.5f;
-            light.ShadowType = ShadowType.Solid;
+            light.Intensity = 0.2f;
+            light.ShadowType = ShadowType.Occluded;
             Game1.Game.Penumbra.Lights.Add(light);
             Scale = 3;
 
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y - (int)(SourceRectangle.Height * 0.90)),
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
+
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
         }
 
@@ -57,7 +57,7 @@ namespace CoT
             light.Position = Position;
             Camera.Position = Position;
 
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y - (int)(SourceRectangle.Height * 0.90)),
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
 
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
@@ -117,7 +117,9 @@ namespace CoT
 
         public override void Draw()
         {
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)(bottomHitBox.Size.X / 2), (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            //Debug 
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+                (int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             base.Draw();
         }
     }
