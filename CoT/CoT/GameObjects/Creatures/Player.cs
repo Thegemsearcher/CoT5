@@ -40,6 +40,7 @@ namespace CoT
             light.ShadowType = ShadowType.Occluded;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+
             CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
@@ -65,14 +66,14 @@ namespace CoT
             {
                 //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
-                direction = GetDirection(Position, targetPos);
+                direction = GetDirection(PositionOfFeet, targetPos);
                 moving = true;
 
             }
 
             CheckForCollision();
 
-            if (Vector2.Distance(Position, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            if (Vector2.Distance(PositionOfFeet, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 moving = false;
             }
@@ -88,14 +89,17 @@ namespace CoT
 
         public void UpdateVariables()
         {
-            CenterMass = new Vector2(Position.X, Position.Y - (SourceRectangle.Height / 2) * Scale);
-            destinationRectangle.X = (int)Position.X - (int)(destinationRectangle.Width / 2);
-            destinationRectangle.Y = (int)Position.Y - (int)(destinationRectangle.Height);
+            CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
+            destinationRectangle.X = (int)Position.X;
+            destinationRectangle.Y = (int)Position.Y;
+
+            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
+                PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
-            Position += direction * speed * Time.DeltaTime;
+            PositionOfFeet += direction * speed * Time.DeltaTime;
         }
 
         //public void CheckForCollision()//Detta fungerar inte
@@ -153,13 +157,15 @@ namespace CoT
 
             //Debug
             //FullHitbox
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-               (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
-            //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+               //(int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
 
             //BottomHitox 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-                (int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+            //(int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             base.Draw(sb);
 
         }
