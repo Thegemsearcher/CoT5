@@ -41,6 +41,7 @@
     <ApplicationManifest>Game\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\Inventory.cs" />
     <Compile Include="Managers\IManager.cs" />
     <Compile Include="WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
