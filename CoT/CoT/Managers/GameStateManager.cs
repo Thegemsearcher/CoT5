@@ -53,5 +53,9 @@ namespace CoT
         {
             Map.Draw(sb);
         }
+
+        public void DrawUserInterface(SpriteBatch spriteBatch)
+        {
+        }
     }
 }

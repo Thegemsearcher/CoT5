@@ -13,5 +13,6 @@ namespace CoT
         void LoadContent();
         void Update();
         void Draw(SpriteBatch spriteBatch);
+        void DrawUserInterface(SpriteBatch spriteBatch);
     }
 }

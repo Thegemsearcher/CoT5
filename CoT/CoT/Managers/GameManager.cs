@@ -107,6 +107,7 @@ namespace CoT
 
         public void DrawUserInterface()
         {
+            Managers.ForEach(x => x.DrawUserInterface(SpriteBatch));
             GameDebugger.DrawToScreen(SpriteBatch);
         }
     }
