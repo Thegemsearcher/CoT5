@@ -27,6 +27,7 @@ namespace CoT
             RegisterResource(Helper.CreateRectangleTexture(new Point(160, 80)), "rectangle");
             RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
             RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
+            RegisterResource(content.Load<SpriteFont>("font1"), "font1");
         }
 
         public static void RegisterResource<T>(T t, string name)
