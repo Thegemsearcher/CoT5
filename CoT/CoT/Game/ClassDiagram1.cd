@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CoT.Game1" Collapsed="true">
+    <Position X="21.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQAEAAAAEAAAwAAAAAAAAAACAhAAAABQAgBAABAQAY=</HashCode>
+      <FileName>Game\Game1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Program" Collapsed="true">
+    <Position X="17.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Game\Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Creature" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAABAAIgAgAgQAEAAAEACIAAAAAAAAAAAAACAAQ=</HashCode>
+      <FileName>GameObjects\Creature.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Boss" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Creatures\Boss.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Enemy" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAIACIAAIgAAAAACAAACCAAAAQABAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Creatures\Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Imp" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Creatures\Imp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Player" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgEAAAAIAIIgAAAAAAAAEAABIAAQABAAAQAAAAAAA=</HashCode>
+      <FileName>GameObjects\Creatures\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.GameObject" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAEAoAgEAMABAAAAACABAAAAAIAgAAAgAA=</HashCode>
+      <FileName>GameObjects\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Item" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Particle" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Physics\Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.PhysicsObject" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Physics\PhysicsObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Projectile" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Physics\Projectile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.ExtensionMethods" Collapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAASAAACAAAAAAAAAAACAAAAAAAAAARAAAIAAAAAAA=</HashCode>
+      <FileName>Helpers\ExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.FloatRectangle" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAgAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Helpers\FloatRectangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Helper" Collapsed="true">
+    <Position X="17.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAEAAAAAAAAAAAQA=</HashCode>
+      <FileName>Helpers\Helper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Input" Collapsed="true">
+    <Position X="19.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYTCgAQAAAAAAAAAgAAQgAAAAAiAAAAAgCAAAAIAAAA=</HashCode>
+      <FileName>Helpers\Input.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.ResourceManager" Collapsed="true">
+    <Position X="21.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAEAAAARAAAAAAAAEAAAAAAAAAAAAAAQAAAQ=</HashCode>
+      <FileName>Helpers\ResourceManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Spritesheet" Collapsed="true">
+    <Position X="16" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgSAAAACAAAACAEAgIAAAAAhAACABAAAAAIBAAAAgAE=</HashCode>
+      <FileName>Helpers\Spritesheet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.TextDebug" Collapsed="true">
+    <Position X="17.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAoAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\TextDebug.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Time" Collapsed="true">
+    <Position X="21.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAABAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\Time.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Camera" Collapsed="true">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAQAAAAAAAAIAgAgIECAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Map" Collapsed="true">
+    <Position X="14.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEgoAAAAAAAgEACAAAAAAAAAAAAEIAAAAAAEACAAA=</HashCode>
+      <FileName>World\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.Tile" Collapsed="true">
+    <Position X="19.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>World\Tile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.CreatureManager" Collapsed="true">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAgAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Managers\CreatureManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CoT.ItemManager" Collapsed="true">
+    <Position X="21.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Managers\ItemManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.ParticleManager" Collapsed="true">
+    <Position X="16" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Managers\ParticleManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CoT.ProjectileManager" Collapsed="true">
+    <Position X="19.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Managers\ProjectileManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CoT.SoundManager" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Managers\SoundManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CoT.GameManager" Collapsed="true">
+    <Position X="14.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAA4AAAIAgAAAAAAAAACAAAAAAAAAQAEQ=</HashCode>
+      <FileName>Managers\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoT.GameStateManager" Collapsed="true">
+    <Position X="16" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Managers\GameStateManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="CoT.BehaveState" Collapsed="true">
+    <Position X="14.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Creatures\Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CoT.TileType" Collapsed="true">
+    <Position X="16" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAQAAAAAAAAAEAA=</HashCode>
+      <FileName>World\TileType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

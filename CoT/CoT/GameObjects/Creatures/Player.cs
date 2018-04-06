@@ -35,11 +35,12 @@ namespace CoT
         {
             this.map = map;
             light = new PointLight();
-            light.Scale = new Vector2(5000, 5000).ToScreen();
+            light.Scale = new Vector2(5000, 5000).ToCartesian();
             light.Intensity = 0.2f;
             light.ShadowType = ShadowType.Occluded;
-            Game1.Game.Penumbra.Lights.Add(light);
+            GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+
             CenterMass = new Vector2(Position.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
@@ -55,24 +56,22 @@ namespace CoT
         {
 
             base.Update();
-            light.Position = Position;
-            Camera.Focus = Position;
+            light.Position = PositionOfFeet;
+            Camera.Focus = PositionOfFeet;
 
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
 
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
-                //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
-                targetPos = Camera.ScreenToWorld(Input.CurrentMousePosition);
-                direction = GetDirection(Position, targetPos);
+                targetPos = Input.CurrentMousePosition.ScreenToWorld();
+                direction = GetDirection(PositionOfFeet, targetPos);
                 moving = true;
-
             }
 
             CheckForCollision();
 
-            if (Vector2.Distance(Position, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            if (Vector2.Distance(PositionOfFeet, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 moving = false;
             }
@@ -83,19 +82,21 @@ namespace CoT
             }
             UpdateVariables();
 
-
         }
 
         public void UpdateVariables()
         {
-            CenterMass = new Vector2(Position.X, Position.Y - (SourceRectangle.Height / 2) * Scale);
-            destinationRectangle.X = (int)Position.X - (int)(destinationRectangle.Width / 2);
-            destinationRectangle.Y = (int)Position.Y - (int)(destinationRectangle.Height);
+            CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
+            destinationRectangle.X = (int)Position.X;
+            destinationRectangle.Y = (int)Position.Y;
+
+            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
+                PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
-            Position += direction * speed * Time.DeltaTime;
+            PositionOfFeet += direction * speed * Time.DeltaTime;
         }
 
         //public void CheckForCollision()//Detta fungerar inte
@@ -123,10 +124,10 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToScreen(),
+                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToIsometric(),
                         map.TileSize.ToVector2())) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        Position += -direction * speed * Time.DeltaTime;
+                        PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
                         moving = false;
                     }
                 }
@@ -142,25 +143,27 @@ namespace CoT
             return travelDirection;
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch sb)
         {
             //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0f);
             //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
             //   (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.White);
 
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, 
+            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle,
                 SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
             //Debug
             //FullHitbox
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-               (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
-            //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+               //(int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
 
             //BottomHitox 
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-                (int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
-            base.Draw();
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+            //(int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            base.Draw(sb);
 
         }
     }

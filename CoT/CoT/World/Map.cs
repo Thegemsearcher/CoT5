@@ -17,7 +17,7 @@ namespace CoT
         public string[,] MapData { get; set; }
         public Point TileSize { get; set; }
         public RoyT.AStar.Grid Grid { get; private  set; }
-
+        
         public Map(Point tileSize)
         {
             TileSize = tileSize;
@@ -31,6 +31,16 @@ namespace CoT
         {
             get { if (Tiles.ContainsKey(index)) return Tiles[index].Clone(); else return null; }
             set { if (!Tiles.ContainsKey(index)) Tiles.Add(index, value); }
+        }
+
+        public Vector2 GetTileIndex(Vector2 position)
+        {
+            return (position / TileSize.Y).ToCartesian() + Game1.TileOffset;
+        }
+
+        public Vector2 GetTilePosition(Vector2 index)
+        {
+            return ((index - Game1.TileOffset) * TileSize.Y).ToIsometric();
         }
 
         public Map Create(Point size)
@@ -88,9 +98,9 @@ namespace CoT
                             new Vector2(160, 40),
                             new Vector2(80, 80),
                         });
-
-                        hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToWorld();
-                        Game1.Game.Penumbra.Hulls.Add(hull);
+                        
+                        hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
+                        GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }
                 }
             }
@@ -112,13 +122,14 @@ namespace CoT
         {
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch sb)
         {
             Vector2 cartesianTileWorldPos =
-                new Vector2(Camera.ScreenToWorld(Input.CurrentMousePosition).X / TileSize.Y,
-                    Camera.ScreenToWorld(Input.CurrentMousePosition).Y / TileSize.Y);
+                new Vector2(
+                    Input.CurrentMousePosition.ScreenToWorld().X / TileSize.Y,
+                    Input.CurrentMousePosition.ScreenToWorld().Y / TileSize.Y);
 
-            Point isometricScreenTile = (cartesianTileWorldPos.ToScreen() + new Vector2(-0.5f, 0.5f)).ToPoint();
+            Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
 
             for (int i = 0; i < TileMap.GetLength(0); i++)
             {
@@ -128,15 +139,15 @@ namespace CoT
 
                     if (isometricScreenTile == new Point(i, j))
                     {
-                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToWorld(), Color.Red);
+                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Red);
                     }
                     else
                     {
-                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToWorld(), Color.White);
+                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.White);
                     }
                     if (TileMap[i, j].TileType == TileType.Water)
                     {
-                        Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToWorld(), Color.Blue);
+                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Blue);
                     }
                 }
             }
@@ -146,7 +157,7 @@ namespace CoT
 
             for (int i = 0; i < testPath.Length; i++)
             {
-                Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(testPath[i].X * TileSize.Y, testPath[i].Y * TileSize.Y).ToWorld(), Color.Green * 0.5f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(testPath[i].X * TileSize.Y, testPath[i].Y * TileSize.Y).ToIsometric(), Color.Green * 0.5f);
             }
             #endregion
         }
