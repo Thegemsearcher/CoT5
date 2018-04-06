@@ -24,6 +24,8 @@ namespace CoT
         public ProjectileManager ProjectileManager { get; set; }
         public PenumbraComponent Penumbra { get; set; }
 
+        public Inventory Inventory { get; set; }
+
         private SpriteBatch SpriteBatch { get; set; }
 
         public GameManager(Game game) : base(game)
@@ -46,6 +48,8 @@ namespace CoT
             CreatureManager = new CreatureManager();
             ProjectileManager = new ProjectileManager();
 
+            Inventory = new Inventory();
+
             Managers = new List<IManager>
             {
                 GameStateManager, ParticleManager, SoundManager, ItemManager, CreatureManager, ProjectileManager
@@ -66,6 +70,7 @@ namespace CoT
         public override void Update(GameTime gameTime)
         {
             Managers.ForEach(x => x.Update());
+            Inventory.Update();
             Camera.Update();
             Input.Update();
             Time.Update(gameTime);
@@ -110,6 +115,7 @@ namespace CoT
         {
             Managers.ForEach(x => x.DrawUserInterface(SpriteBatch));
             GameDebugger.DrawToScreen(SpriteBatch);
+            Inventory.Draw(SpriteBatch);
         }
     }
 }
