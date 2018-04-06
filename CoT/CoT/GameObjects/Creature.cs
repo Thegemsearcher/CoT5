@@ -32,8 +32,8 @@ namespace CoT
 
         protected Position[] Pathing(Vector2 destination)
         {
-            Vector2 cartesianTileWorldPosEnemy = new Vector2(Position.X / GameStateManager.Instance.Map.TileSize.Y,
-                Position.Y / GameStateManager.Instance.Map.TileSize.Y);
+            Vector2 cartesianTileWorldPosEnemy = new Vector2(PositionOfFeet.X / GameStateManager.Instance.Map.TileSize.Y,
+                PositionOfFeet.Y / GameStateManager.Instance.Map.TileSize.Y);
             Point isometricScreenTileCreature = (cartesianTileWorldPosEnemy.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
             //Gör om positionen för fienden till en position vi kan använda. 
 

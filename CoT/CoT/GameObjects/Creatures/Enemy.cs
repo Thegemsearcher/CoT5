@@ -44,7 +44,7 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-            path = Pathing(player.Position);
+            path = Pathing(player.PositionOfFeet);
 
             if (path.Length > 1)
             {
@@ -52,9 +52,9 @@ namespace CoT
             }
             Move();
             //Fienden går från sina fötter istället för 0,0 på bilden.
-            destinationRectangle.X = (int)Position.X - destinationRectangle.Width / 2;
-            destinationRectangle.Y = (int)Position.Y - destinationRectangle.Height;
-            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
+            destinationRectangle.X = (int)Position.X;
+            destinationRectangle.Y = (int)Position.Y;
+            CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - destinationRectangle.Height / 2);
             CheckAttackDistance();
         }
         public void CheckAttackDistance()
@@ -69,10 +69,11 @@ namespace CoT
             nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
             nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
             nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
-            direction.X = nextPosition.X - Position.X;
-            direction.Y = nextPosition.Y - Position.Y;
+            direction.X = nextPosition.X - PositionOfFeet.X;
+            direction.Y = nextPosition.Y - PositionOfFeet.Y;
             direction.Normalize();
-            Position += direction * speed * Time.DeltaTime;
+            PositionOfFeet += direction * speed * Time.DeltaTime;
+            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public override void Draw(SpriteBatch sb)
@@ -84,8 +85,8 @@ namespace CoT
             }
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-              (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+            //  (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
 
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
             //, SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
