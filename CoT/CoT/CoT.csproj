@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Managers\IManager.cs" />
+    <Compile Include="WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\FloatRectangle.cs" />
