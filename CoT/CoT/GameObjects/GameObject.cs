@@ -44,7 +44,7 @@ namespace CoT
             Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
         }
 
-        public virtual void Draw()
+        public virtual void Draw(SpriteBatch sb)
         {
            
         }

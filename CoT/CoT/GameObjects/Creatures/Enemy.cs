@@ -64,23 +64,23 @@ namespace CoT
         }
         public void Move()
         {
-            nextPosition = new Vector2(nextTileInPath.X * Game1.Game.map.TileSize.Y, nextTileInPath.Y * Game1.Game.map.TileSize.Y).ToWorld();
-            nextPosition.X += Game1.Game.map.TileSize.X / 2;
-            nextPosition.Y += Game1.Game.map.TileSize.Y / 2;
+            nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
+            nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
+            nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
             direction.X = nextPosition.X - Position.X;
             direction.Y = nextPosition.Y - Position.Y;
             direction.Normalize();
             Position += direction * speed * Time.DeltaTime;
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch sb)
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-                Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Game1.Game.map.TileSize.Y,
-               path[i].Y * Game1.Game.map.TileSize.Y).ToWorld(), Color.Gray * 0.5f);
+               sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * GameStateManager.Instance.Map.TileSize.Y,
+               path[i].Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
             }
-            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
             //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
             //    , SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);

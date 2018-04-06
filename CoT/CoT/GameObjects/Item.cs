@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CoT
 {
@@ -15,7 +16,6 @@ namespace CoT
 
         public override void OnRemove()
         {
-            throw new NotImplementedException();
         }
 
         public override void Update()
@@ -23,9 +23,9 @@ namespace CoT
             base.Update();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch sb)
         {
-            base.Draw();
+            base.Draw(sb);
         }
     }
 }

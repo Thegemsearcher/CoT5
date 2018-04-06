@@ -9,14 +9,24 @@ namespace CoT
 {
     public static class ExtensionMethods
     {
-        public static Vector2 ToWorld(this Vector2 v1)
+        public static Vector2 ToIsometric(this Vector2 v1)
         {
             return new Vector2(v1.X - v1.Y, (v1.X + v1.Y) / 2);
         }
 
-        public static Vector2 ToScreen(this Vector2 v1)
+        public static Vector2 ToCartesian(this Vector2 v1)
         {
             return new Vector2((2 * v1.Y + v1.X) / 2, (2 * v1.Y - v1.X) / 2);
+        }
+
+        public static Vector2 ScreenToWorld(this Vector2 v1)
+        {
+            return Vector2.Transform(v1, Matrix.Invert(Camera.Transform));
+        }
+
+        public static Vector2 WorldToScreen(this Vector2 v1)
+        {
+            return Vector2.Transform(v1, Camera.Transform);
         }
 
         public static T ConvertValue<T>(this object value)

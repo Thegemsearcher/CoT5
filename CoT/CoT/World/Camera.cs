@@ -44,12 +44,12 @@ namespace CoT
             Scale = MathHelper.Lerp(Scale, ScaleInput, Time.DeltaTime * 5);
         }
 
-        public static Vector2 ScreenToWorld(Vector2 position)
+        private static Vector2 ScreenToWorld(Vector2 position)
         {
             return Vector2.Transform(position, Matrix.Invert(Transform));
         }
 
-        public static Vector2 WorldToScreen(Vector2 position)
+        private static Vector2 WorldToScreen(Vector2 position)
         {
             return Vector2.Transform(position, Transform);
         }
