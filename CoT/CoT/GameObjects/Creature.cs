@@ -22,7 +22,7 @@ namespace CoT
         public Vector2 PositionOfFeet { get; protected set; }
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
-            PositionOfFeet = new Vector2((ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2, (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            PositionOfFeet = new Vector2(Position.X + (ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2, Position.Y + (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public override void OnRemove()
