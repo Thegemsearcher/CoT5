@@ -57,7 +57,7 @@ namespace CoT
 
             base.Update();
             light.Position = PositionOfFeet;
-            Camera.Focus = PositionOfFeet;
+            //Camera.Focus = PositionOfFeet;
 
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
@@ -124,12 +124,23 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToIsometric(),
-                        map.TileSize.ToVector2())) && map.TileMap[x, y].TileType == TileType.Wall)
+                    Vector2 pos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
+
+                    Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
+                    FloatRectangle hitbox = new FloatRectangle(hitboxPos, bottomHitBox.Size);
+
+                    if (hitbox.Intersects(new FloatRectangle(pos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
-                        moving = false;
+                        //PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
+                        //moving = false;
                     }
+
+                    //if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToIsometric(),
+                    //    map.TileSize.ToVector2())) && map.TileMap[x, y].TileType == TileType.Wall)
+                    //{
+                    //    PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
+                    //    moving = false;
+                    //}
                 }
             }
         }
@@ -161,6 +172,24 @@ namespace CoT
             //BottomHitox 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
+
+
+            for (int i = 0; i < GameStateManager.Instance.Map.TileMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < GameStateManager.Instance.Map.TileMap.GetLength(1); j++)
+                {
+                    Tile t = GameStateManager.Instance.Map.TileMap[i, j];
+
+                    Vector2 pos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(i, j)).ToCartesian();
+
+                    if (t.TileType == TileType.Wall)
+                        sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)pos.X, (int)pos.Y, 80, 80), Color.Purple * 0.3f);
+                }
+            }
+
+            Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
+            FloatRectangle hitbox = new FloatRectangle(hitboxPos, bottomHitBox.Size);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)hitbox.Position.X, (int)hitbox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
             //(int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             base.Draw(sb);

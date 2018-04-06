@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -34,7 +35,7 @@ namespace CoT
         {
             Penumbra = new PenumbraComponent(Game1.Game)
             {
-                AmbientColor = new Color(100, 100, 100, 255)
+                AmbientColor = new Color(255, 255, 255, 255)
             };
             Game1.Game.Services.AddService(Penumbra);
 

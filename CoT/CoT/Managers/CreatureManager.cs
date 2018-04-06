@@ -31,7 +31,7 @@ namespace CoT
             Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), GameStateManager.Instance.Map);
 
             Creatures.Add(Player);
-            Creatures.Add(new Enemy("treent", new Vector2(400, 100).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, GameStateManager.Instance.Map.Grid));
+            //Creatures.Add(new Enemy("treent", new Vector2(400, 100).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, GameStateManager.Instance.Map.Grid));
         }
 
         public void Update()
