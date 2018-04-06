@@ -59,8 +59,8 @@ namespace CoT
             light.Position = PositionOfFeet;
             //Camera.Focus = PositionOfFeet;
 
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
-                new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X + 20, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
+                new Vector2(SourceRectangle.Width * Scale / 5, (SourceRectangle.Height * Scale) / 10));
 
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
@@ -131,8 +131,8 @@ namespace CoT
 
                     if (hitbox.Intersects(new FloatRectangle(pos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        //PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
-                        //moving = false;
+                        PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
+                        moving = false;
                     }
 
                     //if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToIsometric(),
@@ -183,7 +183,7 @@ namespace CoT
                     Vector2 pos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(i, j)).ToCartesian();
 
                     if (t.TileType == TileType.Wall)
-                        sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)pos.X, (int)pos.Y, 80, 80), Color.Purple * 0.3f);
+                        sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)pos.X, (int)pos.Y, map.TileSize.Y, map.TileSize.Y), Color.Purple * 0.3f);
                 }
             }
 
