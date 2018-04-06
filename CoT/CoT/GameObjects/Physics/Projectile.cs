@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using RoyT.AStar;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CoT
 {
-    public class Imp : Enemy
+    public class Projectile : PhysicsObject
     {
-        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle, player, grid)
+        public Projectile(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
         }
 
@@ -19,9 +19,9 @@ namespace CoT
             base.Update();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch sb)
         {
-            base.Draw();
+            base.Draw(sb);
         }
     }
 }
