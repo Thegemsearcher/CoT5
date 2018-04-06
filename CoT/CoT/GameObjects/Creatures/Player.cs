@@ -59,8 +59,9 @@ namespace CoT
             light.Position = PositionOfFeet;
             //Camera.Focus = PositionOfFeet;
 
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X + 20, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
-                new Vector2(SourceRectangle.Width * Scale / 5, (SourceRectangle.Height * Scale) / 10));
+            float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2 ) - ((float)bottomHitBoxWidth / 2), Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
+                new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
 
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
@@ -71,7 +72,7 @@ namespace CoT
 
             CheckForCollision();
 
-            if (Vector2.Distance(PositionOfFeet, targetPos) < 5) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 moving = false;
             }
