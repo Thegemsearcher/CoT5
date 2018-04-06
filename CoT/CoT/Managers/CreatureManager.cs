@@ -43,5 +43,9 @@ namespace CoT
         {
             Creatures.ForEach(x => x.Draw(sb));
         }
+
+        public void DrawUserInterface(SpriteBatch spriteBatch)
+        {
+        }
     }
 }
