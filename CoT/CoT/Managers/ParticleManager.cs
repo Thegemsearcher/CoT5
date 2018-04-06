@@ -32,5 +32,9 @@ namespace CoT
         public void Draw(SpriteBatch sb)
         {
         }
+
+        public void DrawUserInterface(SpriteBatch spriteBatch)
+        {
+        }
     }
 }
