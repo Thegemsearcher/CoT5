@@ -56,19 +56,17 @@ namespace CoT
         {
 
             base.Update();
-            light.Position = Position;
-            Camera.Focus = Position;
+            light.Position = PositionOfFeet;
+            Camera.Focus = PositionOfFeet;
 
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
 
             if (Input.IsLeftClickPressed) //Vid musklick får spelaren en ny måldestination och börjar röra sig
             {
-                //Position = Camera.ScreenToWorld(Input.CurrentMousePosition);
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
                 direction = GetDirection(PositionOfFeet, targetPos);
                 moving = true;
-
             }
 
             CheckForCollision();
@@ -83,7 +81,6 @@ namespace CoT
                 Move(direction);
             }
             UpdateVariables();
-
 
         }
 
@@ -127,10 +124,10 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToCartesian(),
+                    if (bottomHitBox.Intersects(new FloatRectangle(new Vector2(x * map.TileSize.Y, y * map.TileSize.Y).ToIsometric(),
                         map.TileSize.ToVector2())) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        Position += -direction * speed * Time.DeltaTime;
+                        PositionOfFeet += -(direction * 2) * speed * Time.DeltaTime;
                         moving = false;
                     }
                 }
