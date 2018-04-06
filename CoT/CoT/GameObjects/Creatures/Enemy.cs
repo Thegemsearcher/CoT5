@@ -20,7 +20,7 @@ namespace CoT
         //Grid grid;
         Position[] path;
         Position nextTileInPath;
-        float speed = 100f,scale = 0.1f;
+        float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
@@ -28,10 +28,12 @@ namespace CoT
             this.grid = grid;
 
             attackSize = 100;
-
-            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * scale);
-            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * scale);
-            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height/2);
+            this.Scale = 0.1f;
+            
+            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
+            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
+            Hitbox.Size *= Scale;
+            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
         }
 
         public void DetectPlayer()
@@ -77,13 +79,16 @@ namespace CoT
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-               sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * GameStateManager.Instance.Map.TileSize.Y,
-               path[i].Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * GameStateManager.Instance.Map.TileSize.Y,
+                path[i].Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
             }
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
+              (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
-            //    , SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            //, SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }

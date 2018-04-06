@@ -19,8 +19,10 @@ namespace CoT
         protected float attackSize;
         bool attacking = false;
         int timer = 0;
+        public Vector2 PositionOfFeet { get; protected set; }
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
+            PositionOfFeet = new Vector2((ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2, (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public override void OnRemove()
@@ -53,7 +55,7 @@ namespace CoT
                 attacking = true;
                 direction.Normalize();
                 direction *= -1;
-                AttackHitBox.Position = CenterMass + attackSize * direction;
+                AttackHitBox.Position = CenterMass +  direction;
                 AttackHitBox.Size = new Vector2(attackSize, attackSize);
             } else
             {
