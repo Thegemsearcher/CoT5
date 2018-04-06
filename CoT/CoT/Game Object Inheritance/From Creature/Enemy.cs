@@ -57,7 +57,7 @@ namespace CoT
         }
         public void CheckAttackDistance()
         {
-            if (Vector2.Distance(CenterMass, player.CenterMass) < attackSize)
+            if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
             {
                 Attack(CenterMass - player.CenterMass);
             }
@@ -82,8 +82,8 @@ namespace CoT
             }
             Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
-            //Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
-            //    , SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            Game1.Game.SpriteBatch.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
+                , SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }
