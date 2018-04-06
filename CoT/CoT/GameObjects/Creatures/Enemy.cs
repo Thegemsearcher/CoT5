@@ -26,7 +26,6 @@ namespace CoT
         {
             this.player = player;
             this.grid = grid;
-
             attackSize = 100;
             this.Scale = 0.1f;
             
