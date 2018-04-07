@@ -17,11 +17,10 @@ namespace CoT
     {
 
         float speed = 200f;
-        Vector2 direction, nextPosition;
+        Vector2 direction, nextPosition, currentTilePos, previousTilePos;
         Vector2 targetPos;
         Position[] path;
         Position nextTileInPath;
-        Position previousWalkedTile;
         bool normalMoving, pathMoving;
         Map map;
         FloatRectangle bottomHitBox;
@@ -89,6 +88,7 @@ namespace CoT
 
             if (pathMoving)
             {
+                //path = Pathing(currentTilePos);
                 path = Pathing(targetPos);
                 if (path.Length > 1)
                 {
@@ -120,6 +120,12 @@ namespace CoT
 
         public void UpdateVariables()
         {
+            if (previousTilePos != currentTilePos)
+            {
+
+            }
+            previousTilePos = currentTilePos;
+            currentTilePos = GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(PositionOfFeet)).ToCartesian();
             float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
                 Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
@@ -137,18 +143,19 @@ namespace CoT
 
         public void CheckForCollision() //Kollision med väggtile-check
         {
+            int stoppingDistance = map.TileSize.Y / 16;
             for (int x = 0; x < map.TileMap.GetLength(0); x++)
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
                     Vector2 tilePos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
-
-                    Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
-                    FloatRectangle hitbox = new FloatRectangle(hitboxPos, bottomHitBox.Size);
+                    Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
+                    //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
+                    FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
 
                     if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        PositionOfFeet += -(direction * 3) * speed * Time.DeltaTime;
+                        //PositionOfFeet += -(direction * 3) * speed * Time.DeltaTime;
                         normalMoving = false;
                         pathMoving = true;
                     }
