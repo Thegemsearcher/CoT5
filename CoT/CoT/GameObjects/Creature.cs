@@ -17,14 +17,14 @@ namespace CoT
         public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0,0),new Vector2(0,0));
         public Vector2 CenterMass { get; protected set; }
         protected float attackSize;
-        protected bool attacking = false;
-        int timer = 0;
+        protected bool attacking = false, dealtDamage = false;
+        protected int attackTimer = 0;
         public Vector2 PositionOfFeet { get; protected set; }
-        Vector2 offsetAttackPosition;
+        protected Vector2 offsetAttackPosition;
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
             PositionOfFeet = new Vector2(position.X , position.Y );
-            offsetAttackPosition = new Vector2(0,-30);
+            
         }
 
         public override void OnRemove()
@@ -54,6 +54,7 @@ namespace CoT
         {
             if (!attacking)
             {
+                dealtDamage = false;
                 attacking = true;
                 direction.Normalize();
                 direction *= -1;
@@ -61,6 +62,7 @@ namespace CoT
                 AttackHitBox.Size = new Vector2(attackSize, attackSize);
             }
         }
+        
         public virtual void GetHit()
         {
 

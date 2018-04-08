@@ -22,7 +22,6 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        int attackTimer = 0;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
@@ -34,6 +33,8 @@ namespace CoT
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
             Hitbox.Size *= Scale;
             CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
+            //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
+            offsetAttackPosition = new Vector2(-destinationRectangle.Width/4, -destinationRectangle.Height / 4);
         }
 
         public void DetectPlayer()
@@ -50,7 +51,14 @@ namespace CoT
             {
                 nextTileInPath = path[1];
             }
-            Move();
+            //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
+            if (!attacking)
+            {
+                Move();
+            }
+
+            //Move();
+            
             //Fienden går från sina fötter istället för 0,0 på bilden.
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -73,6 +81,14 @@ namespace CoT
                     attackTimer = 0;
                     attacking = false;
                 }
+            }
+        }
+        public virtual void DamageToPlayer()
+        {
+            if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
+            {
+                dealtDamage = true;
+                //Player tar damage.
             }
         }
         public void Move()
