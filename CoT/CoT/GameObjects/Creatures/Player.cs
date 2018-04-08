@@ -17,8 +17,7 @@ namespace CoT
     {
 
         float speed = 200f;
-        Vector2 direction, nextPosition, currentTilePos, previousTilePos;
-        Vector2 targetPos;
+        Vector2 direction, nextPosition, targetPos;
         Position[] path;
         Position nextTileInPath;
         bool normalMoving, pathMoving;
@@ -75,20 +74,19 @@ namespace CoT
                 CheckForCollision();
             }
 
-            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16 && normalMoving) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 normalMoving = false;
+                pathMoving = false;
             }
 
             if (normalMoving)
             {
                 Move(direction);
             }
-            UpdateVariables();
 
             if (pathMoving)
             {
-                //path = Pathing(currentTilePos);
                 path = Pathing(targetPos);
                 if (path.Length > 1)
                 {
@@ -97,12 +95,14 @@ namespace CoT
                 else
                 {
                     pathMoving = false;
+                    normalMoving = true;
+                    direction = GetDirection(PositionOfFeet, targetPos);
                 }
                 PathMove();
             }
 
             //InputAttack();
-
+             UpdateVariables();
         }
 
         public void InputAttack()
@@ -114,18 +114,11 @@ namespace CoT
                 {
                     Attack(e.CenterMass - CenterMass);
                 }
-            }
-            
+            }         
         }
 
-        public void UpdateVariables()
+        public void UpdateVariables() //Smalar uppdatering av variabler
         {
-            if (previousTilePos != currentTilePos)
-            {
-
-            }
-            previousTilePos = currentTilePos;
-            currentTilePos = GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(PositionOfFeet)).ToCartesian();
             float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
                 Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
@@ -134,7 +127,7 @@ namespace CoT
             destinationRectangle.Y = (int)Position.Y;
             Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
                 PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
-        } //Uppdatera variabler
+        } 
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
@@ -155,26 +148,28 @@ namespace CoT
 
                     if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Wall)
                     {
-                        //PositionOfFeet += -(direction * 3) * speed * Time.DeltaTime;
                         normalMoving = false;
                         pathMoving = true;
                     }
                 }
             }
         } 
-
-        public void PathMove()
+        public void PathMove() //Rörelse via Pathfinding
         {
-            nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
-            nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
-            nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
-            direction.X = nextPosition.X - PositionOfFeet.X;
-            direction.Y = nextPosition.Y - PositionOfFeet.Y;
-            direction.Normalize();
-            PositionOfFeet += direction * speed * Time.DeltaTime;
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            if (pathMoving)
+            {
+                nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, 
+                    nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
+                nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
+                nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
+                direction.X = nextPosition.X - PositionOfFeet.X;
+                direction.Y = nextPosition.Y - PositionOfFeet.Y;
+                direction.Normalize();
+                PositionOfFeet += direction * speed * Time.DeltaTime;
+                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, 
+                    PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            }         
         }
-
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
         {
             Vector2 travelDirection = targetPos - currentPos;
@@ -212,8 +207,6 @@ namespace CoT
             Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
             FloatRectangle hitbox = new FloatRectangle(hitboxPos, bottomHitBox.Size);
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)hitbox.Position.X, (int)hitbox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-            //(int)bottomHitBox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
             base.Draw(sb);
 
         }
