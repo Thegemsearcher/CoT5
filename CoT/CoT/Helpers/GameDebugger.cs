@@ -22,18 +22,18 @@ namespace CoT
         public static void Update()
         {
             if (Input.IsKeyPressed(Keys.F8)) Debug = !Debug;
-
-            WriteLine("Mouse position to Tile Index: " + GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
-            WriteLine("Tile Index to Mouse position: " + GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld())));
-            WriteLine("Mouse Position: " + Input.CurrentMousePosition);
-            WriteLine("Player Position: " + CreatureManager.Instance.Player.Position);
         }
 
         public static void DrawToScreen(SpriteBatch sb)
         {
             if (!Debug) return;
 
-            Point posWorldToScreen = CreatureManager.Instance.Player.Position.WorldToScreen().ToPoint();
+            WriteLine("Mouse position to Tile Index: " + GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
+            WriteLine("Tile Index to Mouse position: " + GameplayScreen.Instance.Map.GetTilePosition(GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld())));
+            WriteLine("Mouse Position: " + Input.CurrentMousePosition);
+            WriteLine("Player Position: " + GameplayScreen.Instance.Player.Position);
+
+            Point posWorldToScreen = GameplayScreen.Instance.Player.Position.WorldToScreen().ToPoint();
             Rectangle tempRec2 = new Rectangle(100, 100, posWorldToScreen.X - 100, posWorldToScreen.Y - 100);
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), tempRec2, Color.LightGreen * 0.4f);
             WriteLine("Lightgreen Rectangle: " + tempRec2);
@@ -56,7 +56,7 @@ namespace CoT
 
             Point pos = Input.CurrentMousePosition.ToPoint();
             Point posScreenToWorld = Input.CurrentMousePosition.ScreenToWorld().ToPoint();
-            Point posWorldToScreen = CreatureManager.Instance.Player.Position.WorldToScreen().ToPoint();
+            Point posWorldToScreen = GameplayScreen.Instance.Player.Position.WorldToScreen().ToPoint();
 
 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.Red * 0.2f);
@@ -64,7 +64,7 @@ namespace CoT
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(posScreenToWorld.X - 5, posScreenToWorld.Y - 5, 10, 10), Color.LightGreen * 0.3f);
 
 
-            Vector2 tempPos = GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
+            Vector2 tempPos = GameplayScreen.Instance.Map.GetTilePosition(GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"),
                 new Rectangle((int)tempPos.X, (int)tempPos.Y, 10, 10),Color.Black * 0.2f);
 

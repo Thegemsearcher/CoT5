@@ -22,7 +22,6 @@ namespace CoT
         Position[] path;
         Position nextTileInPath;
         bool normalMoving, pathMoving;
-        Map map;
         FloatRectangle bottomHitBox;
         List<Enemy> enemies;
 
@@ -33,10 +32,9 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Map map, Grid grid /*,List<Enemy> enemies*/) : base(texture, position, sourceRectangle)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map /*,List<Enemy> enemies*/) : base(texture, position, sourceRectangle, map)
         {
             //this.enemies = enemies;
-            this.map = map;
             this.grid = grid;
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
@@ -57,7 +55,6 @@ namespace CoT
 
         public override void Update()
         {
-
             base.Update();
             light.Position = PositionOfFeet;
             //Camera.Focus = PositionOfFeet;
@@ -125,7 +122,7 @@ namespace CoT
 
             }
             previousTilePos = currentTilePos;
-            currentTilePos = GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(PositionOfFeet)).ToCartesian();
+            currentTilePos = map.GetTilePosition(map.GetTileIndex(PositionOfFeet)).ToCartesian();
             float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
                 Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
@@ -148,7 +145,7 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    Vector2 tilePos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
+                    Vector2 tilePos = map.GetTilePosition(new Vector2(x, y)).ToCartesian();
                     Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
                     //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
                     FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
@@ -165,9 +162,9 @@ namespace CoT
 
         public void PathMove()
         {
-            nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
-            nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
-            nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
+            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+            nextPosition.X += map.TileSize.X / 2;
+            nextPosition.Y += map.TileSize.Y / 2;
             direction.X = nextPosition.X - PositionOfFeet.X;
             direction.Y = nextPosition.Y - PositionOfFeet.Y;
             direction.Normalize();
@@ -196,13 +193,13 @@ namespace CoT
             //BottomHitox 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
-            for (int i = 0; i < GameStateManager.Instance.Map.TileMap.GetLength(0); i++)
+            for (int i = 0; i < map.TileMap.GetLength(0); i++)
             {
-                for (int j = 0; j < GameStateManager.Instance.Map.TileMap.GetLength(1); j++)
+                for (int j = 0; j < map.TileMap.GetLength(1); j++)
                 {
-                    Tile t = GameStateManager.Instance.Map.TileMap[i, j];
+                    Tile t = map.TileMap[i, j];
 
-                    Vector2 pos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(i, j)).ToCartesian();
+                    Vector2 pos = map.GetTilePosition(new Vector2(i, j)).ToCartesian();
 
                     if (t.TileType == TileType.Wall)
                         sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)pos.X, (int)pos.Y, map.TileSize.Y, map.TileSize.Y), Color.Purple * 0.3f);
