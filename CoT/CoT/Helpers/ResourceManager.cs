@@ -19,6 +19,17 @@ namespace CoT
         private static Dictionary<string, Effect> effects = new Dictionary<string, Effect>();
         private static Dictionary<string, Song> songs = new Dictionary<string, Song>();
 
+        public static void LoadContent(ContentManager content)
+        {
+            RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
+            RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
+            RegisterResource(Helper.CreateCircleTexture(30), "circle");
+            RegisterResource(Helper.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
+            RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
+            RegisterResource(content.Load<SpriteFont>("font1"), "font1");
+        }
+
         public static void RegisterResource<T>(T t, string name)
         {
             if (t is Effect)

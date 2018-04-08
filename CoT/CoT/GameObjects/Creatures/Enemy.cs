@@ -22,7 +22,7 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map) : base(texture, position, sourceRectangle, map)
+        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
             this.grid = grid;
@@ -93,9 +93,9 @@ namespace CoT
         }
         public void Move()
         {
-            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
-            nextPosition.X += map.TileSize.X / 2;
-            nextPosition.Y += map.TileSize.Y / 2;
+            nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
+            nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
+            nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
             direction.X = nextPosition.X - PositionOfFeet.X;
             direction.Y = nextPosition.Y - PositionOfFeet.Y;
             direction.Normalize();
@@ -107,8 +107,8 @@ namespace CoT
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * map.TileSize.Y,
-                path[i].Y * map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * GameStateManager.Instance.Map.TileSize.Y,
+                path[i].Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
             }
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
