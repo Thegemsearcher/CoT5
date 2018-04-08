@@ -21,6 +21,7 @@ namespace CoT
         public Vector2 Offset { get; set; }
         public float Transparency { get; set; }
         public bool IsActive { get; set; }
+        public float LayerDepth { get; set; }
 
         protected GameObject(string texture, Vector2 position, Rectangle sourceRectangle)
         {

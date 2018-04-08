@@ -16,7 +16,6 @@ namespace CoT
         public static GameManager Instance { get; set; }
 
         public List<IManager> Managers { get; set; }
-        public GameStateManager GameStateManager { get; set; }
         public ParticleManager ParticleManager { get; set; }
         public SoundManager SoundManager { get; set; }
         public ItemManager ItemManager { get; set; }
@@ -47,7 +46,6 @@ namespace CoT
                 AmbientColor = new Color(255, 255, 255, 255)
             };
 
-            GameStateManager = new GameStateManager();
             ParticleManager = new ParticleManager();
             SoundManager = new SoundManager();
             ItemManager = new ItemManager();
@@ -57,7 +55,6 @@ namespace CoT
 
             Managers = new List<IManager>
             {
-                GameStateManager,
                 ParticleManager,
                 SoundManager,
                 ItemManager,
@@ -75,7 +72,9 @@ namespace CoT
             Console.WriteLine("GameManager - LoadContent");
 
             SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            ResourceManager.LoadContent(Game1.Game.Content);
+            ResourceManager.RegisterResource(Helper.CreateCircleTexture(30), "circle");
+            ResourceManager.RegisterResource(Helper.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("font1"), "font1");
             Managers.ForEach(x => x.LoadContent());
         }
 
@@ -98,17 +97,17 @@ namespace CoT
             Penumbra.Transform = Camera.Transform;
             Game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
             DrawToWorld();
             SpriteBatch.End();
 
             Penumbra.Draw(gameTime);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
             DrawToWorldWithoutShader();
             SpriteBatch.End();
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, null);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, null);
             DrawUserInterface();
             SpriteBatch.End();
         }

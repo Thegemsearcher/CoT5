@@ -11,41 +11,14 @@ namespace CoT
 {
     public class OptionsMenuScreen : GameScreen
     {
-        private Button playButton;
-        private Grid grid;
-
         public OptionsMenuScreen()
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
 
-        public override void Activate()
+        public override void Load()
         {
-            grid = new Grid()
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                RowSpacing = 10,
-                ColumnSpacing = 10
-            };
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-
-            Button buttonOption1 = new Button
-            {
-                Text = "Option 1",
-                TextColor = Color.Red,
-                PaddingLeft = 20,
-                PaddingRight = 20,
-                PaddingBottom = 10,
-                PaddingTop = 10,
-                GridPositionX = 0,
-                GridPositionY = 0
-            };
-
             Button buttonReturn = new Button
             {
                 Text = "Return",
@@ -58,10 +31,8 @@ namespace CoT
                 GridPositionY = 1
             };
 
-            grid.Widgets.Add(buttonOption1);
-            grid.Widgets.Add(buttonReturn);
-            Game1.Game.host.Widgets.Add(grid);
-            base.Activate();
+            Grid.Widgets.Add(buttonReturn);
+            base.Load();
         }
 
         public override void Update()

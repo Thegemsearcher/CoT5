@@ -59,7 +59,6 @@
     <Compile Include="Managers\CreatureManager.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\ItemManager.cs" />
-    <Compile Include="Managers\GameStateManager.cs" />
     <Compile Include="Helpers\GameDebugger.cs" />
     <Compile Include="GameObjects\Physics\Particle.cs" />
     <Compile Include="GameObjects\Physics\Projectile.cs" />

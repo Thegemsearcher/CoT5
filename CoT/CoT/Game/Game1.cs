@@ -81,85 +81,13 @@ namespace CoT
         protected override void LoadContent()
         {
             Console.WriteLine("Game1 - LoadContent");
-
             GameManager.LoadContent();
-
             base.LoadContent();
-            #region GUI
-            //var grid = new Grid
-            //{
-            //    RowSpacing = 8,
-            //    ColumnSpacing = 8
-            //};
-
-            //Myra.Graphics2D.UI.GridBased g;
-            //g = new GridBased();
-            //g.GridPositionX = 3;
-            //g.GridPositionY = 3;
-            //g.TotalColumnsPart = 10;
-            //g.TotalRowsPart = 10;
-            //g.Enabled = true;
-
-            //grid.Widgets.Add(g);
-            //grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            //grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            //grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            //grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-
-            // TextBlock
-            //var helloWorld = new TextBlock
-            //{
-            //    Text = "Hello, World!"
-            //};
-            //grid.Widgets.Add(helloWorld);
-
-            //// ComboBox
-            //var combo = new ComboBox
-            //{
-            //    GridPositionX = 1,
-            //    GridPositionY = 0
-            //};
-
-            //combo.Items.Add(new ListItem("Red", Color.Red));
-            //combo.Items.Add(new ListItem("Green", Color.Green));
-            //combo.Items.Add(new ListItem("Blue", Color.Blue));
-            //grid.Widgets.Add(combo);
-
-            // Button
-            //var button = new Button
-            //{
-            //    GridPositionX = 2,
-            //    GridPositionY = 0,
-            //    Text = "Show"
-            //};
-            //button.Down += (s, a) =>
-            //{
-            //    var messageBox = Dialog.CreateMessageBox("Message", "Some message!");
-            //    messageBox.ShowModal(host);
-            //};
-
-            //grid.Widgets.Add(button);
-
-            //// Spin button
-            //var spinButton = new SpinButton
-            //{
-            //    GridPositionX = 3,
-            //    GridPositionY = 0,
-            //    WidthHint = 100,
-            //    Nullable = true
-            //};
-            //grid.Widgets.Add(spinButton);
-
-            // Add it to the desktop
-            //host.Widgets.Add(grid);
-            #endregion
         }
         protected override void UnloadContent()
         {
             Console.WriteLine("Game1 - UnloadContent");
-
             GameManager.UnloadContent();
-
             base.UnloadContent();
         }
 
@@ -171,9 +99,7 @@ namespace CoT
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-
             GameManager.Draw(gameTime);
-
             host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
             host.Render();
         }

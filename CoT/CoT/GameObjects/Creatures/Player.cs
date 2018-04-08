@@ -42,6 +42,7 @@ namespace CoT
             light.ShadowType = ShadowType.Occluded;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+            LayerDepth = 1f;
 
             CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
@@ -184,7 +185,7 @@ namespace CoT
         public override void Draw(SpriteBatch sb)
         {
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle,
-                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, LayerDepth);
 
             //Debug
             //FullHitbox

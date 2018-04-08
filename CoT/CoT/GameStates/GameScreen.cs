@@ -36,11 +36,15 @@ namespace CoT
 
         public bool IsExiting { get; set; }
 
-        public virtual void Activate() { }
-        public virtual void Deactivate() { }
+        public bool FadeInTransitionOn;
+        public bool FadeOutTransitionOn;
+
+        public bool FadeInTransitionOff;
+        public bool FadeOutTransitionOff;
 
         protected GameScreen()
         {
+            Console.WriteLine("GameScreen - Constructor");
             ScreenManager = GameManager.Instance.ScreenManager;
             ScreenState = ScreenState.TransitionOn;
             TransitionOffTime = TimeSpan.FromSeconds(1);
@@ -73,7 +77,24 @@ namespace CoT
             }
         }
 
-        public virtual void Unload() { }
+        public virtual void Load()
+        {
+            try
+            {
+                Game1.Game?.ResetElapsedTime();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            Game1.Game.host.Widgets.Add(Grid);
+        }
+
+        public virtual void Unload()
+        {
+            Game1.Game.host.Widgets.Remove(Grid); 
+        }
 
         public virtual void Update()
         {
@@ -86,6 +107,7 @@ namespace CoT
                     break;
 
                 case ScreenState.TransitionOn:
+
                     if (!UpdateTransition(TransitionOnTime))
                     {
                         ScreenState = ScreenState.Active;
@@ -113,7 +135,7 @@ namespace CoT
 
         private bool UpdateTransition(TimeSpan time)
         {
-            TransitionAlpha += Time.DeltaTime / time.Seconds;
+            TransitionAlpha += Time.DeltaTime / (float)time.TotalSeconds;
 
             if (TransitionAlpha < 0 || TransitionAlpha > 1)
             {
@@ -124,6 +146,19 @@ namespace CoT
         }
 
         public virtual void Draw(SpriteBatch spriteBatch) { }
-        public virtual void DrawUserInterface(SpriteBatch spriteBatch) { }
+
+        public virtual void DrawUserInterface(SpriteBatch spriteBatch)
+        {
+            if (FadeOutTransitionOn && ScreenState == ScreenState.TransitionOn ||
+                FadeInTransitionOff && ScreenState == ScreenState.TransitionOff)
+            {
+                ScreenManager.DrawBlackRectangle(spriteBatch, TransitionAlpha * -1 + 1);
+            }
+            else if (FadeInTransitionOn && ScreenState == ScreenState.TransitionOn ||
+                     FadeOutTransitionOff && ScreenState == ScreenState.TransitionOff)
+            {
+                ScreenManager.DrawBlackRectangle(spriteBatch, TransitionAlpha);
+            }
+        }
     }
 }

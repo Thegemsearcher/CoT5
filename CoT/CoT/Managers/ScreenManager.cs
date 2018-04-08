@@ -19,7 +19,7 @@ namespace CoT
 
         public void AddScreen(GameScreen screen)
         {
-            screen.Activate();
+            screen.Load();
             Screens.Add(screen);
         }
 
@@ -67,9 +67,7 @@ namespace CoT
 
         public void DrawBlackRectangle(SpriteBatch spriteBatch, float alpha)
         {
-            spriteBatch.Begin();
             spriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), GameManager.Instance.Game.GraphicsDevice.Viewport.Bounds, Color.Black * alpha);
-            spriteBatch.End();
         }
     }
 }

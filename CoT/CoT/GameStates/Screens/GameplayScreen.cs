@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CoT
@@ -18,13 +19,21 @@ namespace CoT
 
         public GameplayScreen()
         {
+            FadeOutTransitionOn = true;
             Instance = this;
+            TransitionOnTime = TimeSpan.FromSeconds(0.5f);
+        }
+
+        public override void Load()
+        {
+            ContentManager content = Game1.Game.Content;
+            ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
+            ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
 
             Inventory = new Inventory();
             Map = new Map(new Point(160, 80));
-            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height),Map.Grid, Map);
-            CreatureManager.Instance.Creatures.Add(Player);
-
             Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             Map["tile2"] = new Tile(TileType.Wall, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             Map["tile3"] = new Tile(TileType.Water, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
@@ -45,7 +54,9 @@ namespace CoT
             Map.MapData[7, 8] = "tile2";
             Map.MapData[7, 9] = "tile2";
             Map.Save("Map1.dat").Load("Map1.dat");
-
+            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map);
+            CreatureManager.Instance.Creatures.Add(Player);
+            base.Load();
         }
 
         public override void Update()
