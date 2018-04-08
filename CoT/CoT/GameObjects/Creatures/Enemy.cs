@@ -22,13 +22,14 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
+        int attackTimer = 0;
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
         {
             this.player = player;
             this.grid = grid;
             attackSize = 100;
             this.Scale = 0.1f;
-            
+
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
             Hitbox.Size *= Scale;
@@ -58,9 +59,20 @@ namespace CoT
         }
         public void CheckAttackDistance()
         {
-            if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
+            if (!attacking)
             {
-                Attack(CenterMass - player.CenterMass);
+                if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
+                {
+                    Attack(CenterMass - player.CenterMass);
+                }
+            } else
+            {
+                attackTimer++;
+                if (attackTimer == 100)
+                {
+                    attackTimer = 0;
+                    attacking = false;
+                }
             }
         }
         public void Move()
@@ -86,9 +98,15 @@ namespace CoT
 
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
             //  (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
-
-            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle(/*(int)player.CenterMass.X,(int)player.CenterMass.Y,10,10)*/(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
+            
+            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, 10, 10)/*(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)*/
             //, SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+
+            if (attacking)
+            {
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
+                , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            }
         }
     }
 }

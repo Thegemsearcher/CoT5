@@ -17,12 +17,12 @@ namespace CoT
         public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0,0),new Vector2(0,0));
         public Vector2 CenterMass { get; protected set; }
         protected float attackSize;
-        bool attacking = false;
+        protected bool attacking = false;
         int timer = 0;
         public Vector2 PositionOfFeet { get; protected set; }
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
-            PositionOfFeet = new Vector2(position.X /*+ (ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2*/, position.Y /*+ (ResourceManager.Get<Texture2D>(Texture).Height * Scale)*/);
+            PositionOfFeet = new Vector2(position.X , position.Y );
         }
 
         public override void OnRemove()
@@ -55,16 +55,8 @@ namespace CoT
                 attacking = true;
                 direction.Normalize();
                 direction *= -1;
-                AttackHitBox.Position = CenterMass +  direction;
+                AttackHitBox.Position = CenterMass + (direction * attackSize);
                 AttackHitBox.Size = new Vector2(attackSize, attackSize);
-            } else
-            {
-                timer++;
-                if (timer == 100)
-                {
-                    timer = 0;
-                    attacking = false;
-                }
             }
         }
         public virtual void GetHit()
