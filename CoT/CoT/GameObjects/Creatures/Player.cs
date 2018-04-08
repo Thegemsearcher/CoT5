@@ -21,7 +21,6 @@ namespace CoT
         Position[] path;
         Position nextTileInPath;
         bool normalMoving, pathMoving;
-        Map map;
         FloatRectangle bottomHitBox;
 
         enum HeroClass
@@ -31,8 +30,9 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Map map, Grid grid) : base(texture, position, sourceRectangle)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map /*,List<Enemy> enemies*/) : base(texture, position, sourceRectangle, map)
         {
+            //this.enemies = enemies;
             this.map = map;
             this.grid = grid;
             attackSize = 100;
@@ -42,6 +42,8 @@ namespace CoT
             light.ShadowType = ShadowType.Occluded;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+            LayerDepth = 1f;
+
             CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
@@ -180,7 +182,7 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    Vector2 tilePos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
+                    Vector2 tilePos = map.GetTilePosition(new Vector2(x, y)).ToCartesian();
                     Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
                     //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
                     FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
@@ -196,19 +198,14 @@ namespace CoT
 
         public void PathMove() //Rörelse via Pathfinding
         {
-            if (pathMoving)
-            {
-                nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, 
-                    nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
-                nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
-                nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
-                direction.X = nextPosition.X - PositionOfFeet.X;
-                direction.Y = nextPosition.Y - PositionOfFeet.Y;
-                direction.Normalize();
-                PositionOfFeet += direction * speed * Time.DeltaTime;
-                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, 
-                    PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
-            }         
+            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+            nextPosition.X += map.TileSize.X / 2;
+            nextPosition.Y += map.TileSize.Y / 2;
+            direction.X = nextPosition.X - PositionOfFeet.X;
+            direction.Y = nextPosition.Y - PositionOfFeet.Y;
+            direction.Normalize();
+            PositionOfFeet += direction * speed * Time.DeltaTime;
+            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
@@ -223,7 +220,7 @@ namespace CoT
         public override void Draw(SpriteBatch sb)
         {
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle,
-                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, LayerDepth);
 
             //Debug
             //FullHitbox
