@@ -11,7 +11,7 @@ namespace CoT
 {
     public class Boss : Enemy
     {
-        public Boss(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle, player, grid)
+        public Boss(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map) : base(texture, position, sourceRectangle, player, grid, map)
         {
         }
 
