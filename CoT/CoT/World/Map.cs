@@ -136,30 +136,31 @@ namespace CoT
                 for (int j = 0; j < TileMap.GetLength(1); j++)
                 {
                     Tile t = TileMap[i, j];
+                    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-                    if (isometricScreenTile == new Point(i, j))
-                    {
-                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Red);
-                    }
-                    else
-                    {
-                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.White);
-                    }
-                    if (TileMap[i, j].TileType == TileType.Water)
-                    {
-                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Blue);
-                    }
+                    //if (isometricScreenTile == new Point(i, j))
+                    //{
+                    //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Red);
+                    //}
+                    //else
+                    //{
+                    //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    //}
+                    //if (TileMap[i, j].TileType == TileType.Water)
+                    //{
+                    //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Blue);
+                    //}
                 }
             }
 
-            #region Test pathfinding
-            Position[] testPath = Grid.GetPath(new Position(0, 0), new Position(isometricScreenTile.X, isometricScreenTile.Y), MovementPatterns.LateralOnly);
+            //#region Test pathfinding
+            //Position[] testPath = Grid.GetPath(new Position(0, 0), new Position(isometricScreenTile.X, isometricScreenTile.Y), MovementPatterns.LateralOnly);
 
-            for (int i = 0; i < testPath.Length; i++)
-            {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(testPath[i].X * TileSize.Y, testPath[i].Y * TileSize.Y).ToIsometric(), Color.Green * 0.5f);
-            }
-            #endregion
+            //for (int i = 0; i < testPath.Length; i++)
+            //{
+            //    sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(testPath[i].X * TileSize.Y, testPath[i].Y * TileSize.Y).ToIsometric(), Color.Green * 0.5f);
+            //}
+            //#endregion
         }
     }
 }

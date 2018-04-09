@@ -36,11 +36,11 @@ namespace CoT
 
         public bool IsExiting { get; set; }
 
-        public bool FadeInTransitionOn;
-        public bool FadeOutTransitionOn;
+        public bool FadeInTransitionOn { get; set; }
+        public bool FadeOutTransitionOn { get; set; }
 
-        public bool FadeInTransitionOff;
-        public bool FadeOutTransitionOff;
+        public bool FadeInTransitionOff { get; set; }
+        public bool FadeOutTransitionOff { get; set; }
 
         protected GameScreen()
         {

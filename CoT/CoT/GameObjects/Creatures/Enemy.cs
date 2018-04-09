@@ -28,7 +28,7 @@ namespace CoT
             this.grid = grid;
             attackSize = 100;
             this.Scale = 0.1f;
-
+            LayerDepth = 0.7f;
             path = new Position[0];
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
@@ -109,9 +109,9 @@ namespace CoT
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * map.TileSize.Y,
-                path[i].Y * map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
+                path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
-            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
 
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
             //  (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);

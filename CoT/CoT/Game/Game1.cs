@@ -35,11 +35,15 @@ namespace CoT
         public Form WindowForm { get; set; }
         public GameManager GameManager { get; set; }
         public Desktop host = new Desktop();
+        public bool IsLoaded { get; set; }
 
+        public static Random Random { get; set; } = new Random();
         #endregion
 
         public Game1()
         {
+            Console.WriteLine("Game1 - Constructor");
+
             Game = this;
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -59,7 +63,13 @@ namespace CoT
             Window.Position = new Point(WindowBorderSize.X + 1, 0);
             Graphics.ApplyChanges();
 
-            Console.WriteLine("Game1 - Constructor");
+            WindowForm.Load += (sender, args) =>
+            {
+                IsLoaded = true;
+                GameManager = new GameManager();
+                GameManager.Initialize();
+                GameManager.LoadContent();
+            };
         }
 
         public Point WindowBorderSize => new Point(
@@ -72,16 +82,12 @@ namespace CoT
 
             MyraEnvironment.Game = this;
 
-            GameManager = new GameManager();
-            GameManager.Initialize();
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             Console.WriteLine("Game1 - LoadContent");
-            GameManager.LoadContent();
             base.LoadContent();
         }
         protected override void UnloadContent()
@@ -93,15 +99,21 @@ namespace CoT
 
         protected override void Update(GameTime gameTime)
         {
-            GameManager.Update(gameTime);
-            base.Update(gameTime);
+            if (IsLoaded)
+            {
+                GameManager.Update(gameTime);
+                base.Update(gameTime);
+            }
         }
         protected override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-            GameManager.Draw(gameTime);
-            host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-            host.Render();
+            if (IsLoaded)
+            {
+                base.Draw(gameTime);
+                GameManager.Draw(gameTime);
+                host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+                host.Render();
+            }
         }
     }
 }
