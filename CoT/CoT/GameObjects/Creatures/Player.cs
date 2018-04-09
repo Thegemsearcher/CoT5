@@ -134,27 +134,30 @@ namespace CoT
 
         public void DecideEnemiesInRange(Vector2 direction) //Ser ifall fiendernas mittpunkt är inom 45-grader av den ursprungliga attackvinkeln och inom attackrange
         {
-            foreach (Enemy e in CreatureManager.Instance.Enemies)
+            foreach (Creature c in CreatureManager.Instance.Creatures)
             {
-                if (Vector2.Distance(CenterMass, e.CenterMass) <= attackSize)
+                if (c is Enemy e)
                 {
-                    Vector2 directionToEnemy = GetDirection(CenterMass, e.CenterMass);
-                    double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
-
-                    Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
-                    float attackCone = MathHelper.ToDegrees((float)(Math.PI / 5));//attackkonen är en kon med 45 graders vinkel
-
-                    if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
+                    if (Vector2.Distance(CenterMass, e.CenterMass) <= attackSize)
                     {
-                        Console.WriteLine("Hit!");
-                        e.GetHit();//GetHit kan ta strengthstat + Weapon-DMG som argument
-                    }
+                        Vector2 directionToEnemy = GetDirection(CenterMass, e.CenterMass);
+                        double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
 
-                    else
-                    {
-                        Console.WriteLine("Miss!");
+                        Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
+                        float attackCone = MathHelper.ToDegrees((float)(Math.PI / 5));//attackkonen är en kon med 45 graders vinkel
+
+                        if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
+                        {
+                            Console.WriteLine("Hit!");
+                            e.GetHit();//GetHit kan ta strengthstat + Weapon-DMG som argument
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("Miss!");
+                        }
                     }
-                }   
+                }
             }
         }
 
@@ -235,11 +238,11 @@ namespace CoT
             //CenterMass 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
 
-            foreach (Enemy e in CreatureManager.Instance.Enemies)
-            {
-                //Enemy CenterMass 
-                sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)e.CenterMass.X, (int)e.CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
-            }
+            //foreach (Creature c in CreatureManager.Instance.Creatures)
+            //{
+            //    //Enemy CenterMass 
+            //    sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)e.CenterMass.X, (int)e.CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
+            //}
 
 
 

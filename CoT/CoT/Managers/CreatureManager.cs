@@ -13,7 +13,7 @@ namespace CoT
         public static CreatureManager Instance { get; set; }
         public List<Creature> Creatures { get; set; }
 
-        public List<Enemy> Enemies { get; set; }
+        //public List<Enemy> Enemies { get; set; }
 
         public CreatureManager()
         {
@@ -23,7 +23,7 @@ namespace CoT
         public void Initialize()
         {
             Creatures = new List<Creature>();
-            Enemies = new List<Enemy>();
+            //Enemies = new List<Enemy>();
         }
 
         public void LoadContent()

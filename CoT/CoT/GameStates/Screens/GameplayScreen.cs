@@ -56,6 +56,8 @@ namespace CoT
             Map.Save("Map1.dat").Load("Map1.dat");
             Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map);
             CreatureManager.Instance.Creatures.Add(Player);
+            Enemy enemy = new Enemy("treent", new Vector2(400, 100).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map);
+            CreatureManager.Instance.Creatures.Add(enemy);
             base.Load();
         }
 

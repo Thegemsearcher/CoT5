@@ -29,6 +29,7 @@ namespace CoT
             attackSize = 100;
             this.Scale = 0.1f;
 
+            path = new Position[0];
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
             Hitbox.Size *= Scale;
