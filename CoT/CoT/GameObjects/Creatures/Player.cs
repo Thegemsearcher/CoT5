@@ -85,10 +85,10 @@ namespace CoT
             if (pathMoving)
             {
                 path = Pathing(targetPos);
-                PathSmoother.SmoothPath(grid, path, MovementPatterns.Full, 10);
                 if (path.Length > 1)
                 {
                     nextTileInPath = path[1];
+                    PathMove();
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace CoT
                     normalMoving = true;
                     direction = GetDirection(PositionOfFeet, targetPos);
                 }
-                PathMove();
+               
             }
             AttackLockTimer();
             InputAttack();
@@ -198,14 +198,17 @@ namespace CoT
 
         public void PathMove() //Rörelse via Pathfinding
         {
-            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
-            nextPosition.X += map.TileSize.X / 2;
-            nextPosition.Y += map.TileSize.Y / 2;
-            direction.X = nextPosition.X - PositionOfFeet.X;
-            direction.Y = nextPosition.Y - PositionOfFeet.Y;
-            direction.Normalize();
-            PositionOfFeet += direction * speed * Time.DeltaTime;
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            //if (pathMoving)
+            {
+                nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+                nextPosition.X += map.TileSize.X / 2;
+                nextPosition.Y += map.TileSize.Y / 2;
+                direction.X = nextPosition.X - PositionOfFeet.X;
+                direction.Y = nextPosition.Y - PositionOfFeet.Y;
+                direction.Normalize();
+                PositionOfFeet += direction * speed * Time.DeltaTime;
+                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            }     
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
