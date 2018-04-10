@@ -11,7 +11,7 @@ namespace CoT
 {
     public class Imp : Enemy
     {
-        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp) : base(texture, position, sourceRectangle, player, grid, map, hp)
+        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, player, grid, map, hp, attack, defense)
         {
         }
 

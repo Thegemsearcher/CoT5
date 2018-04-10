@@ -22,7 +22,7 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp) : base(texture, position, sourceRectangle, map, hp)
+        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
             this.player = player;
             this.grid = grid;
@@ -57,9 +57,6 @@ namespace CoT
             {
                 Move();
             }
-
-            //Move();
-            
             //Fienden går från sina fötter istället för 0,0 på bilden.
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -76,6 +73,7 @@ namespace CoT
                 }
             } else
             {
+                DamageToPlayer();
                 attackTimer++;
                 if (attackTimer == 100)
                 {
@@ -112,13 +110,7 @@ namespace CoT
                 path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
             sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
-
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-            //  (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
             
-            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, 10, 10)/*(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)*/
-            //, SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
-
             if (attacking)
             {
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)

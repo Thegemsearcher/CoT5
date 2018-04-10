@@ -13,18 +13,20 @@ namespace CoT
     public class Creature : GameObject
     {
         protected Grid grid;
-        protected Rectangle destinationRectangle = new Rectangle(0,0,0,0);
-        public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0,0),new Vector2(0,0));
+        protected Rectangle destinationRectangle = new Rectangle(0, 0, 0, 0);
+        public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0, 0), new Vector2(0, 0));
         public Vector2 CenterMass { get; protected set; }
         protected float attackSize;
         protected bool attacking = false, dealtDamage = false;
         protected int attackTimer = 0;
         public Vector2 PositionOfFeet { get; protected set; }
         public int Health { get; protected set; } 
+        public int AttackStat { get; protected set; }
+        public int Defense { get; protected set; }
         public Map map;
         protected Vector2 offsetAttackPosition;
 
-        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp) : base(texture, position, sourceRectangle)
+        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle)
         {
             Health = hp;
             this.map = map;
@@ -67,7 +69,7 @@ namespace CoT
             }
         }
         
-        public virtual void GetHit()
+        public virtual void GetHit(Creature attacker)
         {
 
         }

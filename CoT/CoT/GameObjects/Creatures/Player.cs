@@ -30,7 +30,7 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map, int hp ) : base(texture, position, sourceRectangle, map, hp)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
             //this.enemies = enemies;
             this.map = map;
@@ -149,7 +149,7 @@ namespace CoT
                         if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
                         {
                             Console.WriteLine("Hit!");
-                            e.GetHit();//GetHit kan ta strengthstat + Weapon-DMG som argument
+                            e.GetHit(this);//GetHit kan ta strengthstat + Weapon-DMG som argument
                         }
 
                         else
