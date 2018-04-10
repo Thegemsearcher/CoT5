@@ -17,7 +17,7 @@ namespace CoT
         public Rectangle SourceRectangle { get; set; }
         public float Scale { get; set; }
         public FloatRectangle Hitbox { get; set; }
-        public bool Remove { get; set; }
+        public bool Remove { get; set; } = false;
         public Vector2 Offset { get; set; }
         public float Transparency { get; set; }
         public bool IsActive { get; set; }

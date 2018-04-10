@@ -91,7 +91,7 @@ namespace CoT
         }
         public virtual void Die()
         {
-
+            
         }
 
         public override void Update()
@@ -100,6 +100,10 @@ namespace CoT
             if (invulnerability)
             {
                 InvulnerabilityTimer();
+            }
+            if (Health <= 0)
+            {
+                Die();
             }
         }
 

@@ -40,8 +40,30 @@ namespace CoT
         public void Update()
         {
             Creatures.ForEach(x => x.Update());
-        }
+            List<Creature> removeCreatures = new List<Creature>();
+            foreach (Creature c in Creatures)
+            {
+                if (c.Remove)
+                {
+                    if (c is Enemy e)
+                    {
+                        removeCreatures.Add(e);
+                    }
+                    if (c is Player p)
+                    {
 
+                    }
+                }
+            }
+            foreach (Creature c in removeCreatures)
+            {
+                Creatures.Remove(c);
+            }
+        }
+        public void ToRemove(object obj)
+        {
+
+        }
         public void Draw(SpriteBatch sb)
         {
             Creatures.ForEach(x => x.Draw(sb));
