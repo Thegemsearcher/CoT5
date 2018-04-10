@@ -16,11 +16,12 @@ namespace CoT
         protected Rectangle destinationRectangle = new Rectangle(0, 0, 0, 0);
         public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0, 0), new Vector2(0, 0));
         public Vector2 CenterMass { get; protected set; }
+        int invTimeTotal = 40;
         protected float attackSize;
-        protected bool attacking = false, dealtDamage = false;
-        protected int attackTimer = 0;
+        protected bool attacking = false, dealtDamage = false, invulnerability = false;
+        protected int attackTimer = 0, invTimer = 0;//Invulnerability efter att karaktären blivit attackerad
         public Vector2 PositionOfFeet { get; protected set; }
-        public int Health { get; protected set; } 
+        public int Health { get; protected set; }
         public int AttackStat { get; protected set; }
         public int Defense { get; protected set; }
         public Map map;
@@ -68,10 +69,25 @@ namespace CoT
                 AttackHitBox.Size = new Vector2(attackSize, attackSize);
             }
         }
-        
+        public virtual void InvulnerabilityTimer()
+        {
+            invTimer++;
+            if (invTimer > invTimeTotal)
+            {
+                invTimer = 0;
+                invulnerability = false;
+            }
+        }
         public virtual void GetHit(Creature attacker)
         {
-
+            if (!invulnerability)
+            {
+                if (attacker.AttackStat - Defense >= 0)
+                {
+                    Health -= (attacker.AttackStat - Defense);
+                    invulnerability = true;
+                }
+            } 
         }
         public virtual void Die()
         {
@@ -81,7 +97,10 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-            //Move();
+            if (invulnerability)
+            {
+                InvulnerabilityTimer();
+            }
         }
 
         public override void Draw(SpriteBatch sb)

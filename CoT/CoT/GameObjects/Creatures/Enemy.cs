@@ -87,7 +87,7 @@ namespace CoT
             if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
             {
                 dealtDamage = true;
-                //Player tar damage.
+                player.GetHit(this);
             }
         }
         public void Move()
