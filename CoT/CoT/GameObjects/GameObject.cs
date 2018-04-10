@@ -17,10 +17,11 @@ namespace CoT
         public Rectangle SourceRectangle { get; set; }
         public float Scale { get; set; }
         public FloatRectangle Hitbox { get; set; }
-        public bool Remove { get; set; }
+        public bool Remove { get; set; } = false;
         public Vector2 Offset { get; set; }
         public float Transparency { get; set; }
         public bool IsActive { get; set; }
+        public float LayerDepth { get; set; }
 
         protected GameObject(string texture, Vector2 position, Rectangle sourceRectangle)
         {
@@ -46,7 +47,7 @@ namespace CoT
 
         public virtual void Draw(SpriteBatch sb)
         {
-           
+            sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
         }
     }
 }

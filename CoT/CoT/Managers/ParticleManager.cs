@@ -12,6 +12,8 @@ namespace CoT
     {
         public static ParticleManager Instance { get; set; }
 
+        public List<Particle> Particles { get; set; }
+
         public ParticleManager()
         {
             Instance = this;
@@ -19,6 +21,7 @@ namespace CoT
 
         public void Initialize()
         {
+            Particles = new List<Particle>();
         }
 
         public void LoadContent()
@@ -27,10 +30,25 @@ namespace CoT
 
         public void Update()
         {
+            Particles.ForEach(x => x.Update());
+
+            for (int i = Particles.Count - 1; i >= 0; i--)
+            {
+                if (Particles[i].Remove)
+                {
+                    Particles[i].OnRemove();
+                    Particles.RemoveAt(i);
+                }
+            }
         }
 
         public void Draw(SpriteBatch sb)
         {
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
+        {
+            Particles.ForEach(x => x.Draw(spriteBatch));
         }
 
         public void DrawUserInterface(SpriteBatch spriteBatch)

@@ -11,12 +11,7 @@ namespace CoT
     public class CreatureManager : IManager
     {
         public static CreatureManager Instance { get; set; }
-
         public List<Creature> Creatures { get; set; }
-
-        public List<Enemy> Enemies { get; set; }
-
-        public Player Player { get; set; }
 
         public CreatureManager()
         {
@@ -26,28 +21,33 @@ namespace CoT
         public void Initialize()
         {
             Creatures = new List<Creature>();
-            Enemies = new List<Enemy>();
         }
 
         public void LoadContent()
         {
-            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), GameStateManager.Instance.Map, GameStateManager.Instance.Map.Grid);
-
-            Creatures.Add(Player);
-
-            Enemy enemy = new Enemy("treent", new Vector2(400, 100).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, GameStateManager.Instance.Map.Grid);
-            Creatures.Add(enemy);
-            Enemies.Add(enemy);
         }
 
         public void Update()
         {
             Creatures.ForEach(x => x.Update());
+
+            for (int i = Creatures.Count - 1; i >= 0; i--)
+            {
+                if (Creatures[i].Remove)
+                {
+                    Creatures[i].OnRemove();
+                    Creatures.RemoveAt(i);
+                }
+            }
         }
 
         public void Draw(SpriteBatch sb)
         {
             Creatures.ForEach(x => x.Draw(sb));
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
+        {
         }
 
         public void DrawUserInterface(SpriteBatch spriteBatch)

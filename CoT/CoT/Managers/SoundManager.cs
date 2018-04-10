@@ -33,6 +33,10 @@ namespace CoT
         {
         }
 
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
+        {
+        }
+
         public void DrawUserInterface(SpriteBatch spriteBatch)
         {
         }

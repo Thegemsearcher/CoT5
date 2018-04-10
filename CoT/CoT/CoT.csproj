@@ -42,18 +42,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameObjects\Inventory.cs" />
-    <Compile Include="Managers\IManager.cs" />
-    <Compile Include="WorldCreator.cs" />
+    <Compile Include="GameStates\Screens\GameplayScreen.cs" />
+    <Compile Include="GameStates\Screens\LoadingScreen.cs" />
+    <Compile Include="GameStates\Screens\MainMenuScreen.cs" />
+    <Compile Include="GameStates\Screens\OptionsMenuScreen.cs" />
+    <Compile Include="Helpers\TextureCreator.cs" />
+    <Compile Include="Interfaces\IManager.cs" />
+    <Compile Include="GameStates\GameScreen.cs" />
+    <Compile Include="Managers\ScreenManager.cs" />
+    <Compile Include="World\WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\FloatRectangle.cs" />
     <Compile Include="GameObjects\Creatures\Boss.cs" />
     <Compile Include="GameObjects\Creatures\Enemy.cs" />
-    <Compile Include="GameObjects\Creature.cs" />
+    <Compile Include="GameObjects\Creatures\Creature.cs" />
     <Compile Include="Managers\CreatureManager.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\ItemManager.cs" />
-    <Compile Include="Managers\GameStateManager.cs" />
     <Compile Include="Helpers\GameDebugger.cs" />
     <Compile Include="GameObjects\Physics\Particle.cs" />
     <Compile Include="GameObjects\Physics\Projectile.cs" />
@@ -63,7 +69,7 @@
     <Compile Include="GameObjects\Creatures\Player.cs" />
     <Compile Include="GameObjects\Creatures\Imp.cs" />
     <Compile Include="GameObjects\Physics\PhysicsObject.cs" />
-    <Compile Include="GameObjects\Item.cs" />
+    <Compile Include="GameObjects\Items\Item.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Input.cs" />
     <Compile Include="World\Map.cs" />
@@ -72,7 +78,7 @@
     <Compile Include="Managers\ProjectileManager.cs" />
     <Compile Include="Managers\SoundManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\ResourceManager.cs" />
+    <Compile Include="Managers\ResourceManager.cs" />
     <Compile Include="World\Tile.cs" />
     <Compile Include="World\TileType.cs" />
     <Compile Include="Helpers\Time.cs" />

@@ -22,13 +22,14 @@ namespace CoT
         Position nextTileInPath;
         float speed = 100f;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid) : base(texture, position, sourceRectangle)
+        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
             this.player = player;
             this.grid = grid;
             attackSize = 100;
             this.Scale = 0.1f;
-
+            LayerDepth = 0.7f;
+            path = new Position[0];
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
             Hitbox.Size *= Scale;
@@ -45,8 +46,12 @@ namespace CoT
         public override void Update()
         {
             base.Update();
+            if (Health <= 0)
+            {
+                return;
+            }
+            
             path = Pathing(player.PositionOfFeet);
-
             if (path.Length > 1)
             {
                 nextTileInPath = path[1];
@@ -56,9 +61,6 @@ namespace CoT
             {
                 Move();
             }
-
-            //Move();
-            
             //Fienden går från sina fötter istället för 0,0 på bilden.
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -75,6 +77,7 @@ namespace CoT
                 }
             } else
             {
+                DamageToPlayer();
                 attackTimer++;
                 if (attackTimer == 100)
                 {
@@ -88,14 +91,27 @@ namespace CoT
             if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
             {
                 dealtDamage = true;
-                //Player tar damage.
+                player.GetHit(this);
             }
         }
+
+        public override void OnRemove()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                    Helper.RandomDirection(), 500f, 2f, Color.Orange, 0f, 0.1f));
+            }
+
+            base.OnRemove();
+        }
+
         public void Move()
         {
-            nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
-            nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
-            nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
+            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+            nextPosition.X += map.TileSize.X / 2;
+            nextPosition.Y += map.TileSize.Y / 2;
             direction.X = nextPosition.X - PositionOfFeet.X;
             direction.Y = nextPosition.Y - PositionOfFeet.Y;
             direction.Normalize();
@@ -107,22 +123,19 @@ namespace CoT
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * GameStateManager.Instance.Map.TileSize.Y,
-                path[i].Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric(), Color.Gray * 0.5f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * map.TileSize.Y,
+                path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
-            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
-
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X - (int)((SourceRectangle.Width * Scale) / 2),
-            //  (int)Hitbox.Position.Y - (int)(SourceRectangle.Height * Scale), (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
             
-            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, 10, 10)/*(int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)*/
-            //, SourceRectangle, Color.Red, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
-
             if (attacking)
             {
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
                 , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
+
+
+            base.Draw(sb);
         }
     }
 }

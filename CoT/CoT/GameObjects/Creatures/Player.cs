@@ -21,7 +21,6 @@ namespace CoT
         Position[] path;
         Position nextTileInPath;
         bool normalMoving, pathMoving;
-        Map map;
         FloatRectangle bottomHitBox;
 
         enum HeroClass
@@ -31,8 +30,9 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Map map, Grid grid) : base(texture, position, sourceRectangle)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
+            //this.enemies = enemies;
             this.map = map;
             this.grid = grid;
             attackSize = 100;
@@ -42,6 +42,8 @@ namespace CoT
             light.ShadowType = ShadowType.Occluded;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+            LayerDepth = 1f;
+
             CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
             destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
@@ -52,6 +54,10 @@ namespace CoT
         public override void Update()
         {
             base.Update();
+            if (Health <= 0)
+            {
+                return;
+            }
             light.Position = PositionOfFeet;
             //Camera.Focus = PositionOfFeet;
 
@@ -83,10 +89,10 @@ namespace CoT
             if (pathMoving)
             {
                 path = Pathing(targetPos);
-                PathSmoother.SmoothPath(grid, path, MovementPatterns.Full, 10);
                 if (path.Length > 1)
                 {
                     nextTileInPath = path[1];
+                    PathMove();
                 }
                 else
                 {
@@ -94,7 +100,7 @@ namespace CoT
                     normalMoving = true;
                     direction = GetDirection(PositionOfFeet, targetPos);
                 }
-                PathMove();
+               
             }
             AttackLockTimer();
             InputAttack();
@@ -132,27 +138,30 @@ namespace CoT
 
         public void DecideEnemiesInRange(Vector2 direction) //Ser ifall fiendernas mittpunkt är inom 45-grader av den ursprungliga attackvinkeln och inom attackrange
         {
-            foreach (Enemy e in CreatureManager.Instance.Enemies)
+            foreach (Creature c in CreatureManager.Instance.Creatures)
             {
-                if (Vector2.Distance(CenterMass, e.CenterMass) <= attackSize)
+                if (c is Enemy e)
                 {
-                    Vector2 directionToEnemy = GetDirection(CenterMass, e.CenterMass);
-                    double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
-
-                    Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
-                    float attackCone = MathHelper.ToDegrees((float)(Math.PI / 5));//attackkonen är en kon med 45 graders vinkel
-
-                    if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
+                    if (Vector2.Distance(CenterMass, e.CenterMass) <= attackSize)
                     {
-                        Console.WriteLine("Hit!");
-                        e.GetHit();//GetHit kan ta strengthstat + Weapon-DMG som argument
-                    }
+                        Vector2 directionToEnemy = GetDirection(CenterMass, e.CenterMass);
+                        double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
 
-                    else
-                    {
-                        Console.WriteLine("Miss!");
+                        Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
+                        float attackCone = MathHelper.ToDegrees((float)(Math.PI / 5));//attackkonen är en kon med 45 graders vinkel
+
+                        if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
+                        {
+                            Console.WriteLine("Hit!");
+                            e.GetHit(this);//GetHit kan ta strengthstat + Weapon-DMG som argument
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("Miss!");
+                        }
                     }
-                }   
+                }
             }
         }
 
@@ -180,7 +189,7 @@ namespace CoT
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
-                    Vector2 tilePos = GameStateManager.Instance.Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
+                    Vector2 tilePos = map.GetTilePosition(new Vector2(x, y)).ToCartesian();
                     Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
                     //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
                     FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
@@ -196,19 +205,17 @@ namespace CoT
 
         public void PathMove() //Rörelse via Pathfinding
         {
-            if (pathMoving)
+            //if (pathMoving)
             {
-                nextPosition = new Vector2(nextTileInPath.X * GameStateManager.Instance.Map.TileSize.Y, 
-                    nextTileInPath.Y * GameStateManager.Instance.Map.TileSize.Y).ToIsometric();
-                nextPosition.X += GameStateManager.Instance.Map.TileSize.X / 2;
-                nextPosition.Y += GameStateManager.Instance.Map.TileSize.Y / 2;
+                nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+                nextPosition.X += map.TileSize.X / 2;
+                nextPosition.Y += map.TileSize.Y / 2;
                 direction.X = nextPosition.X - PositionOfFeet.X;
                 direction.Y = nextPosition.Y - PositionOfFeet.Y;
                 direction.Normalize();
                 PositionOfFeet += direction * speed * Time.DeltaTime;
-                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, 
-                    PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
-            }         
+                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            }     
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
@@ -222,24 +229,21 @@ namespace CoT
 
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle,
-                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
-
             //Debug
             //FullHitbox
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
-
+            
             //BottomHitox 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
             //CenterMass 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
 
-            foreach (Enemy e in CreatureManager.Instance.Enemies)
-            {
-                //Enemy CenterMass 
-                sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)e.CenterMass.X, (int)e.CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
-            }
+            //foreach (Creature c in CreatureManager.Instance.Creatures) invulnerability
+            //{
+            //    //Enemy CenterMass 
+            //    sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)e.CenterMass.X, (int)e.CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
+            //}
 
 
 

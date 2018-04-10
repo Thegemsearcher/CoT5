@@ -10,7 +10,7 @@ namespace CoT
 {
     public class Projectile : PhysicsObject
     {
-        public Projectile(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public Projectile(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 direction, float speed) : base(texture, position, sourceRectangle, direction, speed)
         {
         }
 

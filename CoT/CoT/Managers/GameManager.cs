@@ -11,12 +11,11 @@ using Penumbra;
 
 namespace CoT
 {
-    public class GameManager : DrawableGameComponent
+    public class GameManager
     {
         public static GameManager Instance { get; set; }
 
         public List<IManager> Managers { get; set; }
-        public GameStateManager GameStateManager { get; set; }
         public ParticleManager ParticleManager { get; set; }
         public SoundManager SoundManager { get; set; }
         public ItemManager ItemManager { get; set; }
@@ -24,86 +23,108 @@ namespace CoT
         public ProjectileManager ProjectileManager { get; set; }
         public PenumbraComponent Penumbra { get; set; }
 
-        public Inventory Inventory { get; set; }
-
         private SpriteBatch SpriteBatch { get; set; }
 
-        public GameManager(Game game) : base(game)
+        public ScreenManager ScreenManager { get; set; }
+
+        public Game Game { get; set; }
+
+        public GameManager()
         {
+            Console.WriteLine("GameManager - Contructor");
+
+            Game = Game1.Game;
             Instance = this;
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
+            Console.WriteLine("GameManager - Initialize");
+
             Penumbra = new PenumbraComponent(Game1.Game)
             {
                 AmbientColor = new Color(255, 255, 255, 255)
             };
-            Game1.Game.Services.AddService(Penumbra);
 
-            GameStateManager = new GameStateManager();
             ParticleManager = new ParticleManager();
             SoundManager = new SoundManager();
             ItemManager = new ItemManager();
             CreatureManager = new CreatureManager();
             ProjectileManager = new ProjectileManager();
-
-            Inventory = new Inventory();
+            ScreenManager = new ScreenManager();
 
             Managers = new List<IManager>
             {
-                GameStateManager, ParticleManager, SoundManager, ItemManager, CreatureManager, ProjectileManager
+                ParticleManager,
+                SoundManager,
+                ItemManager,
+                CreatureManager,
+                ProjectileManager,
+                ScreenManager
             };
+
             Managers.ForEach(x => x.Initialize());
             Penumbra.Initialize();
-            base.Initialize();
         }
 
-        protected override void LoadContent()
+        public void LoadContent()
         {
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
-            ResourceManager.LoadContent(Game1.Game.Content);
+            Console.WriteLine("GameManager - LoadContent");
+
+            SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            ResourceManager.RegisterResource(TextureCreator.CreateCircleTexture(30), "circle");
+            ResourceManager.RegisterResource(TextureCreator.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            ResourceManager.RegisterResource(Game1.Game.Content.Load<Texture2D>("lightMask"), "lightMask");
+            ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("font1"), "font1");
             Managers.ForEach(x => x.LoadContent());
-            base.LoadContent();
         }
 
-        public override void Update(GameTime gameTime)
+        public void UnloadContent()
+        {
+            Console.WriteLine("GameManager - UnloadContent");
+        }
+
+        public void Update(GameTime gameTime)
         {
             Managers.ForEach(x => x.Update());
-            Inventory.Update();
-            Camera.Update();
             Input.Update();
             Time.Update(gameTime);
             GameDebugger.Update();
-            base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             Penumbra.BeginDraw();
             Penumbra.Transform = Camera.Transform;
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            Game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
             DrawToWorld();
             SpriteBatch.End();
 
             Penumbra.Draw(gameTime);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
             DrawToWorldWithoutShader();
             SpriteBatch.End();
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, null);
-            DrawUserInterface();
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive, null, null, null, null, Camera.Transform);
+            DrawToWorldAdditiveBlend();
             SpriteBatch.End();
 
-            base.Draw(gameTime);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, null);
+            DrawUserInterface();
+            SpriteBatch.End();
         }
 
         public void DrawToWorld()
         {
             Managers.ForEach(x => x.Draw(SpriteBatch));
+        }
+
+        public void DrawToWorldAdditiveBlend()
+        {
+            Managers.ForEach(x => x.DrawToWorldAdditiveBlend(SpriteBatch));
         }
 
         public void DrawToWorldWithoutShader()
@@ -115,7 +136,6 @@ namespace CoT
         {
             Managers.ForEach(x => x.DrawUserInterface(SpriteBatch));
             GameDebugger.DrawToScreen(SpriteBatch);
-            Inventory.Draw(SpriteBatch);
         }
     }
 }

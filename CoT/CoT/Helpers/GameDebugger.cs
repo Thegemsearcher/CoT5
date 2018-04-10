@@ -22,62 +22,69 @@ namespace CoT
         public static void Update()
         {
             if (Input.IsKeyPressed(Keys.F8)) Debug = !Debug;
+        }
 
-            WriteLine("Mouse position to Tile Index: " + GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
-            WriteLine("Tile Index to Mouse position: " + GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld())));
-            WriteLine("Mouse Position: " + Input.CurrentMousePosition);
-            WriteLine("Player Position: " + CreatureManager.Instance.Player.Position);
+        private static void DrawTexts(SpriteBatch sb)
+        {
+            Texts.Select((value, index) => new { value, index }).ForEach(x =>
+            {
+                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), x.value,
+                    new Vector2(300 + 1, x.index * ResourceManager.Get<SpriteFont>("font1").MeasureString("|").Y + 1),
+                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+
+                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), x.value,
+                    new Vector2(300, x.index * ResourceManager.Get<SpriteFont>("font1").MeasureString("|").Y),
+                    Color.Yellow, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            });
+            Texts.Clear();
         }
 
         public static void DrawToScreen(SpriteBatch sb)
         {
             if (!Debug) return;
+            DrawTexts(sb);
 
-            Point posWorldToScreen = CreatureManager.Instance.Player.Position.WorldToScreen().ToPoint();
-            Rectangle tempRec2 = new Rectangle(100, 100, posWorldToScreen.X - 100, posWorldToScreen.Y - 100);
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), tempRec2, Color.LightGreen * 0.4f);
-            WriteLine("Lightgreen Rectangle: " + tempRec2);
-
-            Texts.Select((value, index) => new { value, index }).ForEach(x =>
+            if (ScreenManager.Instance.ContainsScreenType(typeof(GameplayScreen)))
             {
-                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), x.value,
-                    new Vector2(300 + 2, x.index * ResourceManager.Get<SpriteFont>("font1").MeasureString("|").Y + 1),
-                    Color.Black);
+                WriteLine("Mouse position to Tile Index: " + GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
+                WriteLine("Tile Index to Mouse position: " + GameplayScreen.Instance.Map.GetTilePosition(GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld())));
+                WriteLine("Mouse Position: " + Input.CurrentMousePosition);
+                WriteLine("Player Position: " + GameplayScreen.Instance.Player.Position);
 
-                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), x.value,
-                    new Vector2(300, x.index * ResourceManager.Get<SpriteFont>("font1").MeasureString("|").Y),
-                    Color.Yellow);
-            });
-            Texts.Clear();
+                Point posWorldToScreen = GameplayScreen.Instance.Player.Position.WorldToScreen().ToPoint();
+                Rectangle tempRec2 = new Rectangle(100, 100, posWorldToScreen.X - 100, posWorldToScreen.Y - 100);
+                sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), tempRec2, Color.LightGreen * 0.4f);
+                WriteLine("Lightgreen Rectangle: " + tempRec2);
+            }
         }
         public static void DrawToWorld(SpriteBatch sb)
         {
             if (!Debug) return;
 
-            Point pos = Input.CurrentMousePosition.ToPoint();
-            Point posScreenToWorld = Input.CurrentMousePosition.ScreenToWorld().ToPoint();
-            Point posWorldToScreen = CreatureManager.Instance.Player.Position.WorldToScreen().ToPoint();
+            //Point pos = Input.CurrentMousePosition.ToPoint();
+            //Point posScreenToWorld = Input.CurrentMousePosition.ScreenToWorld().ToPoint();
+            //Point posWorldToScreen = GameplayScreen.Instance.Player.Position.WorldToScreen().ToPoint();
 
 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.Red * 0.2f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.Red * 0.2f);
 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(posScreenToWorld.X - 5, posScreenToWorld.Y - 5, 10, 10), Color.LightGreen * 0.3f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(posScreenToWorld.X - 5, posScreenToWorld.Y - 5, 10, 10), Color.LightGreen * 0.3f);
 
 
-            Vector2 tempPos = GameStateManager.Instance.Map.GetTilePosition(GameStateManager.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"),
-                new Rectangle((int)tempPos.X, (int)tempPos.Y, 10, 10),Color.Black * 0.2f);
+            //Vector2 tempPos = GameplayScreen.Instance.Map.GetTilePosition(GameplayScreen.Instance.Map.GetTileIndex(Input.CurrentMousePosition.ScreenToWorld()));
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"),
+            //    new Rectangle((int)tempPos.X, (int)tempPos.Y, 10, 10),Color.Black * 0.2f);
 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(pos.X, pos.Y, 10, 10), Color.White * 1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle(pos.X, pos.Y, 10, 10), Color.White * 1f);
 
-            Rectangle tempRec = new Rectangle(
-                new Vector2(100, 100).ScreenToWorld().ToPoint().X,
-                new Vector2(100, 100).ScreenToWorld().ToPoint().Y,
-                (int)((posWorldToScreen.X - 100) / Camera.Transform.Scale.X),
-                (int)((posWorldToScreen.Y - 100) / Camera.Transform.Scale.Y));
+            //Rectangle tempRec = new Rectangle(
+            //    new Vector2(100, 100).ScreenToWorld().ToPoint().X,
+            //    new Vector2(100, 100).ScreenToWorld().ToPoint().Y,
+            //    (int)((posWorldToScreen.X - 100) / Camera.Transform.Scale.X),
+            //    (int)((posWorldToScreen.Y - 100) / Camera.Transform.Scale.Y));
 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), tempRec, Color.Black * 0.3f);
-            WriteLine("Black Rectangle: " + tempRec);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), tempRec, Color.Black * 0.3f);
+            //WriteLine("Black Rectangle: " + tempRec);
         }
     }
 }

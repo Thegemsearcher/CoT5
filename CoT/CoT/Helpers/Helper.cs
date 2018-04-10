@@ -12,40 +12,6 @@ namespace CoT
 {
     public static class Helper
     {
-        public static Texture2D CreateCircleTexture(int radius)
-        {
-            int diameter = radius * 2;
-            Texture2D texture = new Texture2D(Game1.Game.GraphicsDevice, diameter, diameter);
-            Color[] colorData = new Color[diameter * diameter];
-            float radiusSq = radius * radius;
-
-            for (int x = 0; x < diameter; x++)
-            {
-                for (int y = 0; y < diameter; y++)
-                {
-                    int index = x * diameter + y;
-                    Vector2 pos = new Vector2(x - radius, y - radius);
-                    if (pos.LengthSquared() <= radiusSq)
-                    {
-                        colorData[index] = Color.White;
-                    }
-                    else
-                    {
-                        colorData[index] = Color.Transparent;
-                    }
-                }
-            }
-            texture.SetData(colorData);
-            return texture;
-        }
-
-        public static Texture2D CreateRectangleTexture(Point size)
-        {
-            Texture2D texture = new Texture2D(Game1.Game.GraphicsDevice, size.X, size.Y);
-            texture.SetData(Enumerable.Range(0, size.X * size.Y).Select(x => Color.White).ToArray());
-            return texture;
-        }
-
         public static void Serialize(string fileName, object obj)
         {
             using (var fs = new FileStream(fileName, FileMode.Create))
@@ -62,6 +28,13 @@ namespace CoT
                 var formatter = new BinaryFormatter();
                 return formatter.Deserialize(fs);
             }
+        }
+
+        public static Vector2 RandomDirection()
+        {
+            Vector2 vec = new Vector2(Game1.Random.NextFloat(-10, 11), Game1.Random.NextFloat(-10, 11));
+            vec = Vector2.Normalize(vec);
+            return vec;
         }
     }
 }

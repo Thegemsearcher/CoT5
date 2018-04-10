@@ -12,6 +12,8 @@ namespace CoT
     {
         public static ProjectileManager Instance { get; set; }
 
+        public List<Projectile> Projectiles { get; set; }
+
         public ProjectileManager()
         {
             Instance = this;
@@ -19,6 +21,7 @@ namespace CoT
 
         public void Initialize()
         {
+            Projectiles = new List<Projectile>();
         }
 
         public void LoadContent()
@@ -27,9 +30,15 @@ namespace CoT
 
         public void Update()
         {
+            Projectiles.ForEach(x => x.Update());
         }
 
         public void Draw(SpriteBatch sb)
+        {
+            Projectiles.ForEach(x => x.Draw(sb));
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
         {
         }
 
