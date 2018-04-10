@@ -54,6 +54,10 @@ namespace CoT
         public override void Update()
         {
             base.Update();
+            if (Health <= 0)
+            {
+                return;
+            }
             light.Position = PositionOfFeet;
             //Camera.Focus = PositionOfFeet;
 

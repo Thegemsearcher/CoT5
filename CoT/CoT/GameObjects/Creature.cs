@@ -16,10 +16,10 @@ namespace CoT
         protected Rectangle destinationRectangle = new Rectangle(0, 0, 0, 0);
         public FloatRectangle AttackHitBox { get; protected set; } = new FloatRectangle(new Vector2(0, 0), new Vector2(0, 0));
         public Vector2 CenterMass { get; protected set; }
-        int invTimeTotal = 40;
+        int invTimeTotal = 40, deathTimer = 0, deathTimeTotal = 100;
         protected float attackSize;
         protected bool attacking = false, dealtDamage = false, invulnerability = false;
-        protected int attackTimer = 0, invTimer = 0;//Invulnerability efter att karaktären blivit attackerad
+        protected int attackTimer = 0/*Tiden det tar att utföra en attack.*/, invTimer = 0;/*Invulnerability efter att karaktären blivit attackerad.*/
         public Vector2 PositionOfFeet { get; protected set; }
         public int Health { get; protected set; }
         public int AttackStat { get; protected set; }
@@ -29,6 +29,8 @@ namespace CoT
 
         public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle)
         {
+            AttackStat = attack;
+            Defense = defense;
             Health = hp;
             this.map = map;
             PositionOfFeet = new Vector2(position.X /*+ (ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2*/, position.Y /*+ (ResourceManager.Get<Texture2D>(Texture).Height * Scale)*/);
@@ -91,19 +93,25 @@ namespace CoT
         }
         public virtual void Die()
         {
-            
+            deathTimer++;
+            if (deathTimer > deathTimeTotal)
+            {
+                deathTimer = 0;
+                Remove = true;
+            }
         }
 
         public override void Update()
         {
             base.Update();
-            if (invulnerability)
-            {
-                InvulnerabilityTimer();
-            }
             if (Health <= 0)
             {
                 Die();
+                return;
+            }
+            if (invulnerability)
+            {
+                InvulnerabilityTimer();
             }
         }
 

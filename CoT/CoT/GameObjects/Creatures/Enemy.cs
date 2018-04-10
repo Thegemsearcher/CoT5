@@ -46,8 +46,12 @@ namespace CoT
         public override void Update()
         {
             base.Update();
+            if (Health <= 0)
+            {
+                return;
+            }
+            
             path = Pathing(player.PositionOfFeet);
-
             if (path.Length > 1)
             {
                 nextTileInPath = path[1];
