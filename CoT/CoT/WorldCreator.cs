@@ -9,7 +9,9 @@ namespace CoT
     class WorldCreator
     {
         Random tileCreation;
-        Map map;
+
+        
+        public Map Map { get; set; }
 
         public WorldCreator(Random tileCreation)
         {
