@@ -30,7 +30,7 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map /*,List<Enemy> enemies*/) : base(texture, position, sourceRectangle, map)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map, int hp ) : base(texture, position, sourceRectangle, map, hp)
         {
             //this.enemies = enemies;
             this.map = map;

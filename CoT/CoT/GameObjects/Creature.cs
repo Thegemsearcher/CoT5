@@ -20,12 +20,13 @@ namespace CoT
         protected bool attacking = false, dealtDamage = false;
         protected int attackTimer = 0;
         public Vector2 PositionOfFeet { get; protected set; }
-
+        public int Health { get; protected set; } 
         public Map map;
         protected Vector2 offsetAttackPosition;
 
-        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map) : base(texture, position, sourceRectangle)
+        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp) : base(texture, position, sourceRectangle)
         {
+            Health = hp;
             this.map = map;
             PositionOfFeet = new Vector2(position.X /*+ (ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2*/, position.Y /*+ (ResourceManager.Get<Texture2D>(Texture).Height * Scale)*/);
         }

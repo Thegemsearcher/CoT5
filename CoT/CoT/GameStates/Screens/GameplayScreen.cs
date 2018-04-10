@@ -54,10 +54,10 @@ namespace CoT
             Map.MapData[7, 8] = "tile2";
             Map.MapData[7, 9] = "tile2";
             Map.Save("Map1.dat").Load("Map1.dat");
-            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map);
+            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map, 200/*HP*/);
             CreatureManager.Instance.Creatures.Add(Player);
 
-            Enemy enemy = new Enemy("treent", new Vector2(Game1.Random.Next(0, 500), Game1.Random.Next(0, 500)).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map);
+            Enemy enemy = new Enemy("treent", new Vector2(Game1.Random.Next(0, 500), Game1.Random.Next(0, 500)).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map, 200/*HP*/);
             CreatureManager.Instance.Creatures.Add(enemy);
             base.Load();
         }
