@@ -13,6 +13,7 @@ namespace CoT
         void LoadContent();
         void Update();
         void Draw(SpriteBatch spriteBatch);
+        void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch);
         void DrawUserInterface(SpriteBatch spriteBatch);
     }
 }

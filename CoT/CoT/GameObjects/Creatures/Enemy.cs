@@ -94,6 +94,19 @@ namespace CoT
                 player.GetHit(this);
             }
         }
+
+        public override void OnRemove()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                    Helper.RandomDirection(), 500f, 2f, Color.Orange, 0f, 0.1f));
+            }
+
+            base.OnRemove();
+        }
+
         public void Move()
         {
             nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
@@ -113,13 +126,16 @@ namespace CoT
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * map.TileSize.Y,
                 path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
-            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
+            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
             
             if (attacking)
             {
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
                 , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
+
+
+            base.Draw(sb);
         }
     }
 }

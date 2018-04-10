@@ -30,33 +30,24 @@ namespace CoT
         public void Update()
         {
             Creatures.ForEach(x => x.Update());
-            List<Creature> removeCreatures = new List<Creature>();
-            foreach (Creature c in Creatures)
-            {
-                if (c.Remove)
-                {
-                    if (c is Enemy e)
-                    {
-                        removeCreatures.Add(e);
-                    }
-                    if (c is Player p)
-                    {
 
-                    }
+            for (int i = Creatures.Count - 1; i >= 0; i--)
+            {
+                if (Creatures[i].Remove)
+                {
+                    Creatures[i].OnRemove();
+                    Creatures.RemoveAt(i);
                 }
             }
-            foreach (Creature c in removeCreatures)
-            {
-                Creatures.Remove(c);
-            }
         }
-        public void ToRemove(object obj)
-        {
 
-        }
         public void Draw(SpriteBatch sb)
         {
             Creatures.ForEach(x => x.Draw(sb));
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
+        {
         }
 
         public void DrawUserInterface(SpriteBatch spriteBatch)

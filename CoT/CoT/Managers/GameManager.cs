@@ -72,8 +72,9 @@ namespace CoT
             Console.WriteLine("GameManager - LoadContent");
 
             SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            ResourceManager.RegisterResource(Helper.CreateCircleTexture(30), "circle");
-            ResourceManager.RegisterResource(Helper.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            ResourceManager.RegisterResource(TextureCreator.CreateCircleTexture(30), "circle");
+            ResourceManager.RegisterResource(TextureCreator.CreateRectangleTexture(new Point(160, 80)), "rectangle");
+            ResourceManager.RegisterResource(Game1.Game.Content.Load<Texture2D>("lightMask"), "lightMask");
             ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("font1"), "font1");
             Managers.ForEach(x => x.LoadContent());
         }
@@ -107,6 +108,10 @@ namespace CoT
             DrawToWorldWithoutShader();
             SpriteBatch.End();
 
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive, null, null, null, null, Camera.Transform);
+            DrawToWorldAdditiveBlend();
+            SpriteBatch.End();
+
             SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, null);
             DrawUserInterface();
             SpriteBatch.End();
@@ -115,6 +120,11 @@ namespace CoT
         public void DrawToWorld()
         {
             Managers.ForEach(x => x.Draw(SpriteBatch));
+        }
+
+        public void DrawToWorldAdditiveBlend()
+        {
+            Managers.ForEach(x => x.DrawToWorldAdditiveBlend(SpriteBatch));
         }
 
         public void DrawToWorldWithoutShader()

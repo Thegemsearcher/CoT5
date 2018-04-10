@@ -229,9 +229,6 @@ namespace CoT
 
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle,
-                SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, LayerDepth);
-
             //Debug
             //FullHitbox
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);

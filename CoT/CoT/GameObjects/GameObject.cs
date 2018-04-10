@@ -47,7 +47,7 @@ namespace CoT
 
         public virtual void Draw(SpriteBatch sb)
         {
-           
+            sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
         }
     }
 }

@@ -10,11 +10,19 @@ namespace CoT
 {
     public class ScreenManager : IManager
     {
+        public static ScreenManager Instance { get; set; }
         public List<GameScreen> Screens { get; set; } = new List<GameScreen>();
 
         public ScreenManager()
         {
             Console.WriteLine("ScreenManager - Constructor");
+
+            Instance = this;
+        }
+
+        public bool ContainsScreenType(Type type)
+        {
+            return Screens.Any(x => x.GetType() == type);
         }
 
         public void AddScreen(GameScreen screen)
@@ -58,6 +66,10 @@ namespace CoT
         public void Draw(SpriteBatch spriteBatch)
         {
             Screens.ForEach(x => x.Draw(spriteBatch));
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
+        {
         }
 
         public void DrawUserInterface(SpriteBatch spriteBatch)

@@ -10,8 +10,13 @@ namespace CoT
 {
     public class PhysicsObject : GameObject
     {
-        public PhysicsObject(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public Vector2 Direction { get; set; }
+        public float Speed { get; set; }
+
+        public PhysicsObject(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 direction, float speed) : base(texture, position, sourceRectangle)
         {
+            Direction = direction;
+            Speed = speed;
         }
 
         public override void OnRemove()
@@ -20,6 +25,8 @@ namespace CoT
 
         public override void Update()
         {
+            Position += Direction * Speed * Time.DeltaTime;
+
             base.Update();
         }
 

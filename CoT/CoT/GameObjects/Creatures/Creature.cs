@@ -38,7 +38,6 @@ namespace CoT
 
         public override void OnRemove()
         {
-            throw new NotImplementedException();
         }
 
         protected Position[] Pathing(Vector2 destination)

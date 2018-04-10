@@ -12,6 +12,8 @@ namespace CoT
     {
         public static ItemManager Instance { get; set; }
 
+        public List<Item> Items { get; set; }
+
         public ItemManager()
         {
             Instance = this;
@@ -19,6 +21,7 @@ namespace CoT
 
         public void Initialize()
         {
+            Items = new List<Item>();
         }
 
         public void LoadContent()
@@ -27,9 +30,15 @@ namespace CoT
 
         public void Update()
         {
+            Items.ForEach(x => x.Update());
         }
 
         public void Draw(SpriteBatch sb)
+        {
+            Items.ForEach(x => x.Draw(sb));
+        }
+
+        public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
         {
         }
 
