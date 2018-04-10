@@ -21,7 +21,7 @@ namespace CoT
         public static Matrix Transform =>
             Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) *
             Matrix.CreateRotationZ(Rotation) *
-            Matrix.CreateScale(Scale) *
+            Matrix.CreateScale(Scale, Scale, 1f) *
             Matrix.CreateTranslation(new Vector3(Game1.Game.GraphicsDevice.Viewport.Width * 0.5f, Game1.Game.GraphicsDevice.Viewport.Height * 0.5f, 0));
 
         public static void Update()
