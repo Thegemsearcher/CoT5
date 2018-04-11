@@ -59,7 +59,7 @@ namespace CoT
                 return;
             }
             light.Position = PositionOfFeet;
-            //Camera.Focus = PositionOfFeet;
+            Camera.Focus = PositionOfFeet;
 
             if (Input.IsLeftClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
                 //spelaren kan inte röra sig under tiden det tar att utföra en attack
@@ -120,9 +120,13 @@ namespace CoT
                 DecideEnemiesInRange(attackDirection);
 
                 for (int i = 0; i < 20; i++)
-                ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
-                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
+                {
+                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                        new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                        attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
+                }
+
+                Camera.ScreenShake(0.1f, 2);
             }
         }
 

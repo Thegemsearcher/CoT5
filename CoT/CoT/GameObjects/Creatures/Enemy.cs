@@ -87,6 +87,15 @@ namespace CoT
             {
                 dealtDamage = true;
                 player.GetHit(this);
+
+                for (int i = 0; i < 15; i++)
+                {
+                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", player.Position,
+                        new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                        Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
+                }
+
+                Camera.ScreenShake(0.1f, 20);
             }
         }
 

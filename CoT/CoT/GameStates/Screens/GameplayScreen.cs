@@ -65,8 +65,18 @@ namespace CoT
             Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
             CreatureManager.Instance.Creatures.Add(Player);
 
-            Enemy enemy = new Enemy("treent", new Vector2(Game1.Random.Next(0, 500), Game1.Random.Next(0, 500)).ToIsometric(), new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map, 5/*HP*/, 25/*Attack*/, 5/*Defense*/);
-            CreatureManager.Instance.Creatures.Add(enemy);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 randomTileIndex = new Vector2(Game1.Random.Next(0, Map.TileMap.GetLength(0)), Game1.Random.Next(0, Map.TileMap.GetLength(1)));
+                Vector2 randomTilePos = Map.GetTilePosition(randomTileIndex);
+
+                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Wall)
+                {
+                    Enemy enemy = new Enemy("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    CreatureManager.Instance.Creatures.Add(enemy);
+                }
+            }
             base.Load();
         }
 
