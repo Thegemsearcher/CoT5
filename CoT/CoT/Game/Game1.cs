@@ -52,8 +52,8 @@ namespace CoT
             IsFixedTimeStep = false;
             Graphics.SynchronizeWithVerticalRetrace = true;
             Graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            Graphics.PreferredBackBufferWidth = ScreenWidth;
-            Graphics.PreferredBackBufferHeight = ScreenHeight;
+            Graphics.PreferredBackBufferWidth = MonitorWidth;
+            Graphics.PreferredBackBufferHeight = MonitorHeight;
             Graphics.IsFullScreen = false;
 
             WindowForm = (Form)Control.FromHandle(Window.Handle);
