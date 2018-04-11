@@ -34,7 +34,7 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
 
-            Inventory = new Inventory();
+            Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1,1,1,1));
 
             Map = new Map(new Point(160, 80));
             worldCreator = new WorldCreator(Map);

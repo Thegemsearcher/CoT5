@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="GameObjects\Creatures\Treent.cs" />
     <Compile Include="GameObjects\Inventory.cs" />
+    <Compile Include="GameObjects\InventoryTile.cs" />
     <Compile Include="GameStates\Screens\GameplayScreen.cs" />
     <Compile Include="GameStates\Screens\LoadingScreen.cs" />
     <Compile Include="GameStates\Screens\MainMenuScreen.cs" />

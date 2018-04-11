@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    public class Inventory
+    public class Inventory : GameObject
     {
         private Texture2D
             pixelMain = new Texture2D(Game1.Game.GraphicsDevice, 1, 1),     //Placeholder textures
@@ -19,11 +19,11 @@ namespace CoT
             colorDataMain = { Color.DarkGray },
             colorDataLayer1 = { Color.Gray },
             colorDataInvTile = { Color.Black };
-    public static Rectangle
+        public static Rectangle
             rectMain,
             rectLayer1;
 
-        InvTile[,] invTiles = new InvTile[4, 8];
+        InventoryTile[,] invTiles = new InventoryTile[4, 8];
         
         public static bool active = false;
 
@@ -40,7 +40,7 @@ namespace CoT
             invTileLeftMargin = 4,
             invTileTopMargin = 4;
 
-        public Inventory()
+        public Inventory(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
             pixelMain.SetData(colorDataMain);
             pixelLayer1.SetData(colorDataLayer1);
@@ -58,12 +58,18 @@ namespace CoT
             {
                 for (int j = 0; j < invTiles.GetLength(1); j++)
                 {
-                    invTiles[i, j] = new InvTile(new Vector2(rectLayer1.X + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invTileTopMargin * (j + 1) + invTileSize * j), invTileSize, pixelInvTile);
+                    invTiles[i, j] = new InventoryTile(
+                        new Vector2(rectLayer1.X + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invTileTopMargin * (j + 1) + invTileSize * j),
+                        invTileSize,
+                        pixelInvTile,
+                        null,
+                        SourceRectangle
+                        );
                 }
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             if (Input.CurrentKeyboard.IsKeyDown(Keys.I) && Input.LastKeyboard.IsKeyUp(Keys.I))
             {
@@ -74,17 +80,17 @@ namespace CoT
                 else active = true;
             }
 
-            foreach (InvTile tile in invTiles)
+            foreach (InventoryTile tile in invTiles)
             {
                 tile.Update();
             }
         }
 
-        public void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb)
         {
             if (active)
             {
-                sb.Draw(pixelMain, rectMain, Color.White);
+                sb.Draw(pixelMain, rectMain, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
                 sb.Draw(pixelLayer1, rectLayer1, Color.White);
                 sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Inventory", new Vector2(rectMain.X + 150, rectMain.Y + 5), Color.Black);
 
@@ -96,32 +102,16 @@ namespace CoT
                 //    }
                 //}
 
-                foreach (InvTile tile in invTiles)
+                foreach (InventoryTile tile in invTiles)
                 {
                     tile.Draw(sb);
                 }
             }
         }
-    }
 
-    class InvTile
-    {
-        Texture2D pixel;
-        Rectangle rectangle;
-
-        public InvTile(Vector2 position, int tileSize, Texture2D pixel)
+        public override void OnRemove()
         {
-            this.pixel = pixel;
-            rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
-        }
-
-        public void Update()
-        {
-        }
-
-        public void Draw(SpriteBatch sb)
-        {
-            sb.Draw(pixel, rectangle, Color.White);
+            throw new NotImplementedException();
         }
     }
 }
