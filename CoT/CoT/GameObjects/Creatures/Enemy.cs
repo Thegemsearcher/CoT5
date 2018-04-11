@@ -9,11 +9,6 @@ using RoyT.AStar;
 
 namespace CoT
 {
-    enum BehaveState
-    {
-
-    }
-
     public class Enemy : Creature
     {
         Player player;
@@ -97,11 +92,11 @@ namespace CoT
 
         public override void OnRemove()
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 25; i++)
             {
                 ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
                     new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                    Helper.RandomDirection(), 500f, 2f, Color.Orange, 0f, 0.1f));
+                    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
             }
 
             base.OnRemove();

@@ -17,6 +17,8 @@ namespace CoT
         public Map Map { get; set; }
         public Player Player { get; set; }
 
+        public WorldCreator worldCreator;
+
         public GameplayScreen()
         {
             FadeOutTransitionOn = true;
@@ -33,27 +35,33 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
 
             Inventory = new Inventory();
-            Map = new Map(new Point(160, 80));
-            Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
-            Map["tile2"] = new Tile(TileType.Wall, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
-            Map["tile3"] = new Tile(TileType.Water, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
-            //Map.Load("Map1.dat");
 
-            Map.Create(new Point(10, 20));
-            Map.MapData[1, 0] = "tile3";
-            Map.MapData[3, 3] = "tile2";
-            Map.MapData[3, 4] = "tile2";
-            Map.MapData[3, 5] = "tile2";
-            Map.MapData[3, 6] = "tile2";
-            Map.MapData[4, 6] = "tile2";
-            Map.MapData[4, 6] = "tile2";
-            Map.MapData[6, 6] = "tile2";
-            Map.MapData[7, 6] = "tile2";
-            Map.MapData[7, 6] = "tile2";
-            Map.MapData[7, 7] = "tile2";
-            Map.MapData[7, 8] = "tile2";
-            Map.MapData[7, 9] = "tile2";
+            Map = new Map(new Point(160, 80));
+            worldCreator = new WorldCreator(Map);
+            worldCreator.Generate();
             Map.Save("Map1.dat").Load("Map1.dat");
+
+            //Map = new Map(new Point(160, 80));
+            //Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            //Map["tile2"] = new Tile(TileType.Wall, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            //Map["tile3"] = new Tile(TileType.Water, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            ////Map.Load("Map1.dat");
+
+            //Map.Create(new Point(10, 20));
+            //Map.MapData[1, 0] = "tile3";
+            //Map.MapData[3, 3] = "tile2";
+            //Map.MapData[3, 4] = "tile2";
+            //Map.MapData[3, 5] = "tile2";
+            //Map.MapData[3, 6] = "tile2";
+            //Map.MapData[4, 6] = "tile2";
+            //Map.MapData[4, 6] = "tile2";
+            //Map.MapData[6, 6] = "tile2";
+            //Map.MapData[7, 6] = "tile2";
+            //Map.MapData[7, 6] = "tile2";
+            //Map.MapData[7, 7] = "tile2";
+            //Map.MapData[7, 8] = "tile2";
+            //Map.MapData[7, 9] = "tile2";
+            //Map.Save("Map1.dat").Load("Map1.dat");
             Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
             CreatureManager.Instance.Creatures.Add(Player);
 

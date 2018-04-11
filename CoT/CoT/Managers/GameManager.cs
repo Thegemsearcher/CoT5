@@ -43,8 +43,10 @@ namespace CoT
 
             Penumbra = new PenumbraComponent(Game1.Game)
             {
-                AmbientColor = new Color(255, 255, 255, 255)
+                AmbientColor = new Color(50, 50, 50, 255)
             };
+
+            Game1.Game.Services.AddService(Penumbra);
 
             ParticleManager = new ParticleManager();
             SoundManager = new SoundManager();
@@ -101,6 +103,7 @@ namespace CoT
             SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
             DrawToWorld();
             SpriteBatch.End();
+
 
             Penumbra.Draw(gameTime);
 

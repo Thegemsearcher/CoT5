@@ -118,6 +118,11 @@ namespace CoT
                 pathMoving = false;
                 attackDirection = GetDirection(CenterMass, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
+
+                for (int i = 0; i < 20; i++)
+                ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
             }
         }
 
@@ -155,7 +160,6 @@ namespace CoT
                             Console.WriteLine("Hit!");
                             e.GetHit(this);//GetHit kan ta strengthstat + Weapon-DMG som argument
                         }
-
                         else
                         {
                             Console.WriteLine("Miss!");

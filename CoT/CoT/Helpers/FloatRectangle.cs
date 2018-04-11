@@ -18,7 +18,7 @@ namespace CoT
             Size = size;
         }
 
-        public bool Intersects(Vector2 position) => (position.X >= Position.X && position.X < Position.X + Size.X &&
+        public bool Contains(Vector2 position) => (position.X >= Position.X && position.X < Position.X + Size.X &&
                                                      position.Y >= Position.Y && position.Y < Position.Y + Size.Y);
 
         public bool Intersects(FloatRectangle vr) => (vr.Position.X < (Position.X + Size.X) && (vr.Position.X + vr.Size.X) > Position.X &&
