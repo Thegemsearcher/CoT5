@@ -11,10 +11,8 @@ namespace CoT
 {
     public class OptionsMenuScreen : GameScreen
     {
-        public OptionsMenuScreen()
+        public OptionsMenuScreen(bool isPopup) : base(isPopup)
         {
-            TransitionOnTime = TimeSpan.FromSeconds(0.5);
-            TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
 
         public override void Load()

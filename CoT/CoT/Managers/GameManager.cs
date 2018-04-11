@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
+using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
@@ -16,16 +17,17 @@ namespace CoT
         public static GameManager Instance { get; set; }
 
         public List<IManager> Managers { get; set; }
+
         public ParticleManager ParticleManager { get; set; }
         public SoundManager SoundManager { get; set; }
         public ItemManager ItemManager { get; set; }
         public CreatureManager CreatureManager { get; set; }
         public ProjectileManager ProjectileManager { get; set; }
+        public ScreenManager ScreenManager { get; set; }
+
         public PenumbraComponent Penumbra { get; set; }
 
         private SpriteBatch SpriteBatch { get; set; }
-
-        public ScreenManager ScreenManager { get; set; }
 
         public Game Game { get; set; }
 
@@ -86,9 +88,29 @@ namespace CoT
             Console.WriteLine("GameManager - UnloadContent");
         }
 
+        public void ClearManagers()
+        {
+            Penumbra.Hulls.Clear();
+            Penumbra.Lights.Clear();
+            CreatureManager.Instance.Creatures.Clear();
+            ParticleManager.Instance.Particles.Clear();
+            ItemManager.Instance.Items.Clear();
+            ProjectileManager.Instance.Projectiles.Clear();
+        }
+
         public void Update(GameTime gameTime)
         {
-            Managers.ForEach(x => x.Update());
+            if (!ScreenManager.ContainsScreenType(typeof(PauseMenuScreen)))
+            {
+                CreatureManager.Update();
+                ItemManager.Update();
+                ProjectileManager.Update();
+            }
+
+            ParticleManager.Update();
+            SoundManager.Update();
+            ScreenManager.Update();
+
             Input.Update();
             Time.Update(gameTime);
             GameDebugger.Update();
@@ -103,7 +125,6 @@ namespace CoT
             SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
             DrawToWorld();
             SpriteBatch.End();
-
 
             Penumbra.Draw(gameTime);
 

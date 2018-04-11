@@ -37,6 +37,15 @@ namespace CoT
             Screens.Remove(screen);
         }
 
+        public void ChangeScreen(GameScreen screen)
+        {
+            for (int i = Screens.Count - 1; i >= 0; i--)
+            {
+                RemoveScreen(Screens[i]);
+            }
+            AddScreen(screen);
+        }
+
         public void Initialize()
         {
             Console.WriteLine("ScreenManager - Initialize");
@@ -45,7 +54,7 @@ namespace CoT
         public void LoadContent()
         {
             Console.WriteLine("ScreenManager - LoadContent");
-            AddScreen(new MainMenuScreen());
+            AddScreen(new MainMenuScreen(false));
         }
 
         public void UnloadContent()
@@ -56,10 +65,21 @@ namespace CoT
 
         public void Update()
         {
-            for (int i = 0; i < Screens.Count; i++)
+            GameScreen firstScreen = Screens[Screens.Count - 1];
+            for (int i = Screens.Count - 1; i >= 0; i--)
             {
-                Screens[i].Update();
+                GameScreen currentScreen = Screens[i];
+
+                if (currentScreen == firstScreen || currentScreen.IsPopup)
+                {
+                    Screens[i].Update();
+                }
+                else
+                {
+                    break;
+                }
             }
+
             Screens.ForEach(GameDebugger.WriteLine);
         }
 
@@ -77,9 +97,9 @@ namespace CoT
             Screens.ForEach(x => x.DrawUserInterface(spriteBatch));
         }
 
-        public void DrawBlackRectangle(SpriteBatch spriteBatch, float alpha)
+        public void DrawBlackRectangle(SpriteBatch spriteBatch, float alpha, float layerDepth)
         {
-            spriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), GameManager.Instance.Game.GraphicsDevice.Viewport.Bounds, Color.Black * alpha);
+            spriteBatch.Draw(ResourceManager.Get<Texture2D>("rectangle"), GameManager.Instance.Game.GraphicsDevice.Viewport.Bounds, null, Color.Black * alpha, 0f, Vector2.Zero, SpriteEffects.None, layerDepth);
         }
     }
 }

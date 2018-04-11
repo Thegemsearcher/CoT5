@@ -6,40 +6,22 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
-using Myra;
 using Button = Myra.Graphics2D.UI.Button;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace CoT
+namespace CoT.GameStates.Screens
 {
-    public class MainMenuScreen : GameScreen
+    public class PauseMenuScreen : GameScreen
     {
-        public MainMenuScreen(bool isPopup) : base (isPopup)
+        public PauseMenuScreen(bool isPopup) : base(isPopup)
         {
         }
 
         public override void Load()
         {
-            Button playButton = new Button
+            Button resumeButton = new Button
             {
-                Text = "Play",
-                TextColor = Color.Red,
-                PaddingLeft = 20,
-                PaddingRight = 20,
-                PaddingBottom = 10,
-                PaddingTop = 10,
-                GridPositionX = 0,
-                GridPositionY = 0
-            };
-            playButton.Up += (s, a) =>
-            {
-                ScreenManager.ChangeScreen(new GameplayScreen(false));
-            };
-            Grid.Widgets.Add(playButton);
-
-            Button optionButton = new Button
-            {
-                Text = "Options",
+                Text = "Resume",
                 TextColor = Color.Red,
                 PaddingLeft = 20,
                 PaddingRight = 20,
@@ -48,14 +30,15 @@ namespace CoT
                 GridPositionX = 0,
                 GridPositionY = 1
             };
-            optionButton.Up += (s, a) =>
+            resumeButton.Up += (s, a) =>
             {
+                ScreenManager.RemoveScreen(this);
             };
-            Grid.Widgets.Add(optionButton);
+            Grid.Widgets.Add(resumeButton);
 
             Button exitButton = new Button
             {
-                Text = "Exit",
+                Text = "Exit to menu",
                 TextColor = Color.Red,
                 PaddingLeft = 20,
                 PaddingRight = 20,
@@ -66,26 +49,31 @@ namespace CoT
             };
             exitButton.Up += (s, a) =>
             {
-                Application.Exit();
+                ScreenManager.ChangeScreen(new MainMenuScreen(false));
             };
             Grid.Widgets.Add(exitButton);
 
             base.Load();
         }
 
-        public override void Unload()
-        {
-            base.Unload();
-        }
-
         public override void Update()
         {
+            if (Input.IsKeyPressed(Keys.Escape))
+            {
+                ScreenManager.RemoveScreen(this);
+            }
             base.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
+
+        public override void DrawUserInterface(SpriteBatch spriteBatch)
+        {
+            ScreenManager.DrawBlackRectangle(spriteBatch, 0.5f, 1f);
+            base.DrawUserInterface(spriteBatch);
         }
     }
 }

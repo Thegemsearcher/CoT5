@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
@@ -19,11 +21,9 @@ namespace CoT
 
         public WorldCreator worldCreator;
 
-        public GameplayScreen()
+        public GameplayScreen(bool isPopup) : base(isPopup)
         {
-            FadeOutTransitionOn = true;
             Instance = this;
-            TransitionOnTime = TimeSpan.FromSeconds(0.5f);
         }
 
         public override void Load()
@@ -80,11 +80,23 @@ namespace CoT
             base.Load();
         }
 
+        public override void Unload()
+        {
+            GameManager.Instance.ClearManagers();
+            base.Unload();
+        }
+
         public override void Update()
         {
             Inventory.Update();
             Camera.Update();
             Map.Update();
+
+            if (Input.IsKeyPressed(Keys.Escape))
+            {
+                ScreenManager.AddScreen(new PauseMenuScreen(false));
+            }
+
             base.Update();
         }
 

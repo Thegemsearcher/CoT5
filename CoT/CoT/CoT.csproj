@@ -45,10 +45,9 @@
     <Compile Include="GameObjects\Inventory.cs" />
     <Compile Include="GameObjects\InventoryTile.cs" />
     <Compile Include="GameStates\Screens\GameplayScreen.cs" />
-    <Compile Include="GameStates\Screens\LoadingScreen.cs" />
     <Compile Include="GameStates\Screens\MainMenuScreen.cs" />
     <Compile Include="GameStates\Screens\OptionsMenuScreen.cs" />
-    <Compile Include="GameStates\Screens\PauseScreen.cs" />
+    <Compile Include="GameStates\Screens\PauseMenuScreen.cs" />
     <Compile Include="Helpers\TextureCreator.cs" />
     <Compile Include="Interfaces\IManager.cs" />
     <Compile Include="GameStates\GameScreen.cs" />
