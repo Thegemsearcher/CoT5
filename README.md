@@ -1,7 +1,8 @@
 # Crypt of Traitors (CoT)
-CoT är ett isometriskt dungeon crawler spel med en hack 'n slash inriktad combat.
+CoT är ett isometriskt dungeon crawler spel med en hack 'n slash inriktad combat. Det är skrivet i programspråket C# med ramverket MonoGame.
 
-## Monogame
+## Installing
+För att köra koden krävs det att MonoGame är installerat.
 http://www.monogame.net/
 
 ## Libraries
