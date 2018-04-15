@@ -35,7 +35,7 @@ namespace CoT
             //this.enemies = enemies;
             this.map = map;
             this.grid = grid;
-            attackSize = 100;
+            attackSize = 150;
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
             light.Intensity = 0.2f;
@@ -61,7 +61,7 @@ namespace CoT
             light.Position = PositionOfFeet;
             Camera.Focus = PositionOfFeet;
 
-            if (Input.IsLeftClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
+            if (Input.IsRightClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
                 //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
@@ -111,7 +111,7 @@ namespace CoT
         {
             Vector2 attackDirection;
 
-            if (Input.IsRightClickPressed && !attacking)
+            if (Input.IsLeftClickPressed && !attacking)
             {
                 attacking = true;
                 normalMoving = false;
@@ -162,7 +162,7 @@ namespace CoT
                         if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
                         {
                             Console.WriteLine("Hit!");
-                            e.GetHit(this);//GetHit kan ta strengthstat + Weapon-DMG som argument
+                            e.GetHit(this);
                         }
                         else
                         {
