@@ -15,7 +15,8 @@ namespace CoT
         //Grid grid;
         Position[] path;
         Position nextTileInPath;
-        float speed = 100f;
+        float speed = 100f, aggroRange;
+        bool hasAggro = false;
         Vector2 nextPosition, direction = new Vector2(0, 0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
@@ -30,12 +31,18 @@ namespace CoT
             Hitbox.Size *= Scale;
             CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
-            offsetAttackPosition = new Vector2(-destinationRectangle.Width/4, -destinationRectangle.Height / 4);
+            offsetAttackPosition = new Vector2(-destinationRectangle.Width / 4, -destinationRectangle.Height / 4);
+            //Ska flyttas.
+            aggroRange = 1000;
+            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
-        public void DetectPlayer()
+        public bool DetectPlayer()
         {
-
+            if (Vector2.Distance(player.Position, Position) <= aggroRange)
+                return hasAggro = true;
+            else
+                return false;
         }
 
         public override void Update()
@@ -45,14 +52,16 @@ namespace CoT
             {
                 return;
             }
-            
-            path = Pathing(player.PositionOfFeet);
+            if (DetectPlayer() || hasAggro)
+            {
+                path = Pathing(player.PositionOfFeet);
+            }
             if (path.Length > 1)
             {
                 nextTileInPath = path[1];
             }
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
-            if (!attacking)
+            if (!attacking && (DetectPlayer() || hasAggro))
             {
                 Move();
             }
@@ -131,14 +140,12 @@ namespace CoT
                 path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
-            
+
             if (attacking)
             {
                 sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
                 , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
-
-
             base.Draw(sb);
         }
     }
