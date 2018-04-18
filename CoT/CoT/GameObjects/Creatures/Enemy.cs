@@ -39,10 +39,26 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (Vector2.Distance(player.Position, Position) <= aggroRange)
+            if ((Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
                 return hasAggro = true;
             else
                 return false;
+        }
+
+        public bool VisionRange()
+        {
+            List<Vector2> vision = BresenhamLine(Position, player.Position);
+            foreach (Vector2 pos in vision)
+            {
+                for (int i = 0; i < map.TileMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < map.TileMap.GetLength(1); j++)
+                    {
+                       
+                    }
+                }
+            }
+            return true;
         }
 
         public override void Update()
