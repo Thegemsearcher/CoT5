@@ -174,7 +174,7 @@ namespace CoT
             }
 
 
-            //WorldObjects.ForEach(x => x.Draw(sb));
+            WorldObjects.ForEach(x => x.Draw(sb));
 
             if (GameDebugger.Debug)
             {
