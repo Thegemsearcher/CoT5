@@ -95,7 +95,7 @@ namespace CoT
             {
                 for (int y = 0; y < TileMap.GetLength(1); y++)
                 {
-                    if (TileMap[x, y].TileType == TileType.Wall)
+                    if (TileMap[x, y].TileType == TileType.Collision)
                     {
                         Hull hull = new Hull(new Vector2[]
                         {
@@ -109,18 +109,28 @@ namespace CoT
                         GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }
 
-                    if (TileMap[x, y].TileType != TileType.Wall && Game1.Random.Next(0, 50) == 0)
-                    {
-                        WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
-                        obj.Offset = new Vector2(140, 155);
-                        WorldObjects.Add(obj);
-                    }
 
-                    if (TileMap[x, y].TileType != TileType.Wall && Game1.Random.Next(0, 60) == 0)
+
+                    if (TileMap[x, y].TileType == TileType.Collision)
                     {
-                        WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
-                        obj.Offset = new Vector2(140, 155);
-                        WorldObjects.Add(obj);
+                        int rnd = Game1.Random.Next(0, 3);
+                        if (rnd.Equals(0))
+                        {
+                            WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float) TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
+                            WorldObjects.Add(obj);
+                        }
+                        else if (rnd.Equals(1))
+                        {
+                            WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
+                            obj.Offset = new Vector2(140, 155);
+                            WorldObjects.Add(obj);
+                        }
+                        else
+                        {
+                            WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
+                            obj.Offset = new Vector2(140, 155);
+                            WorldObjects.Add(obj);
+                        }
                     }
                 }
             }
@@ -129,7 +139,7 @@ namespace CoT
 
         public void SetCell(int x, int y)
         {
-            if (TileMap[x, y].TileType == TileType.Wall)
+            if (TileMap[x, y].TileType == TileType.Collision)
             {
                 Grid.BlockCell(new Position(x, y));
             } 

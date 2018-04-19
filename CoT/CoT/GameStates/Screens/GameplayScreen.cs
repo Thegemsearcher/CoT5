@@ -62,6 +62,8 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("tree"), "tree");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
+
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
             Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1,1,1,1));
 
             Map = new Map(new Point(160, 80));
@@ -111,7 +113,7 @@ namespace CoT
                 Vector2 randomTileIndex = new Vector2(Game1.Random.Next(0, Map.TileMap.GetLength(0)), Game1.Random.Next(0, Map.TileMap.GetLength(1)));
                 Vector2 randomTilePos = Map.GetTilePosition(randomTileIndex);
 
-                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Wall)
+                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Collision)
                 {
                     Enemy enemy = new Enemy("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500),  Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
                     CreatureManager.Instance.Creatures.Add(enemy);

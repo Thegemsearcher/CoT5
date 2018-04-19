@@ -20,7 +20,7 @@ namespace CoT
         public void Generate()
         {
             map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
-            map["tile2"] = new Tile(TileType.Wall, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            map["tile2"] = new Tile(TileType.Collision, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             map["tile3"] = new Tile(TileType.Water, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
 
             converter = Game1.Random.Next(10, 100);

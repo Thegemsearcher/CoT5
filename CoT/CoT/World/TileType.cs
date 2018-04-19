@@ -9,7 +9,7 @@ namespace CoT
     public enum TileType : byte
     {
         Ground,
-        Wall,
+        Collision,
         Water
     }
 }
