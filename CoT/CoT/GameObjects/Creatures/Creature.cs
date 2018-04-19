@@ -65,6 +65,7 @@ namespace CoT
             b = c;
         }
 
+        #region Bresenham algoritm
         // Returns the list of points from p0 to p1 
         public List<Vector2> BresenhamLine(Vector2 p0, Vector2 p1)
         {
@@ -109,6 +110,7 @@ namespace CoT
 
             return result;
         }
+        #endregion
 
         public virtual void Attack(Vector2 direction)
         {

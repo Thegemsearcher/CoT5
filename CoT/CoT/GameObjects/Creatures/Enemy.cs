@@ -11,13 +11,13 @@ namespace CoT
 {
     public class Enemy : Creature
     {
-        Player player;
+        private Player player;
         //Grid grid;
-        Position[] path;
-        Position nextTileInPath;
-        float speed = 100f, aggroRange;
-        bool hasAggro = false;
-        Vector2 nextPosition, direction = new Vector2(0, 0);
+        private Position[] path;
+        private Position nextTileInPath;
+        private float speed = 100f, aggroRange;
+        private bool hasAggro = false;
+        private Vector2 nextPosition, direction = new Vector2(0, 0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
         {
             this.player = player;
@@ -39,27 +39,42 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if ((Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
+            if ((Vector2.Distance(player.Position, Position) <= aggroRange))
+            {
+                //path = Pathing(player.PositionOfFeet);
+                //if (path.Length > aggroRange/map.TileSize.Y)
+                //{
+                //    return hasAggro = true;
+                //}
+                //return false;
                 return hasAggro = true;
+            }
             else
                 return false;
         }
 
+        #region bresenham algoritm
         public bool VisionRange()
         {
+            Vector2 cartesianTileWorldPos = new Vector2(0,0);
             List<Vector2> vision = BresenhamLine(Position, player.Position);
+            Tile t;
             foreach (Vector2 pos in vision)
             {
+                cartesianTileWorldPos.X = pos.X / map.TileSize.Y;
+                cartesianTileWorldPos.Y = pos.Y / map.TileSize.Y;
+                Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
                 for (int i = 0; i < map.TileMap.GetLength(0); i++)
                 {
                     for (int j = 0; j < map.TileMap.GetLength(1); j++)
                     {
-                       
+                        t = map.TileMap[i, j];
                     }
                 }
             }
             return true;
         }
+        #endregion
 
         public override void Update()
         {

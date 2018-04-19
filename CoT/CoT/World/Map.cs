@@ -142,8 +142,7 @@ namespace CoT
                     //if (isometricScreenTile == new Point(i, j))
                     //{
                     //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Red);
-                    //}
-                    //else
+                    //} else
                     //{
                     //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     //}
