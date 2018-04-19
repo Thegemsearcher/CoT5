@@ -39,7 +39,7 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) /*&& VisionRange()*/)
+            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
             {
                
                 return hasAggro = true;
@@ -49,31 +49,31 @@ namespace CoT
         }
 
         #region oanvänd bresenham algoritm
-        //public bool VisionRange()
-        //{
-        //    Vector2 cartesianTileWorldPos = new Vector2(0, 0);
-        //    List<Vector2> vision = BresenhamLine(Position, player.Position);
-        //    Tile t;
-        //    foreach (Vector2 pos in vision)
-        //    {
-        //        cartesianTileWorldPos.X = pos.X / map.TileSize.Y;
-        //        cartesianTileWorldPos.Y = pos.Y / map.TileSize.Y;
-        //        Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
-        //        for (int i = 0; i < map.TileMap.GetLength(0); i++)
-        //        {
-        //            for (int j = 0; j < map.TileMap.GetLength(1); j++)
-        //            {
-        //                t = map.TileMap[i, j];
-        //                if (isometricScreenTile == new Point(i, j))
-        //                {
-        //                    if (t.TileType == TileType.Wall)
-        //                        return false;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
+        public bool VisionRange()
+        {
+            Vector2 cartesianTileWorldPos = new Vector2(0, 0);
+            List<Vector2> vision = BresenhamLine(Position, player.Position);
+            Tile t;
+            foreach (Vector2 pos in vision)
+            {
+                cartesianTileWorldPos.X = pos.X / map.TileSize.Y;
+                cartesianTileWorldPos.Y = pos.Y / map.TileSize.Y;
+                Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
+                for (int i = 0; i < map.TileMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < map.TileMap.GetLength(1); j++)
+                    {
+                        t = map.TileMap[i, j];
+                        if (isometricScreenTile == new Point(i, j))
+                        {
+                            if (t.TileType == TileType.Wall)
+                                return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
         #endregion
 
         public override void Update()
