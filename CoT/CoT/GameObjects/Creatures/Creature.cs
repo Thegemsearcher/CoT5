@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoT.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RoyT.AStar;
@@ -10,7 +11,7 @@ using RoyT.AStar;
 namespace CoT
 {
 
-    public class Creature : GameObject
+    public class Creature : WorldObject
     {
         protected Grid grid;
         protected Rectangle destinationRectangle = new Rectangle(0, 0, 0, 0);
@@ -27,7 +28,7 @@ namespace CoT
         public Map map;
         protected Vector2 offsetAttackPosition;
 
-        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle)
+        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset)
         {
             AttackStat = attack;
             Defense = defense;

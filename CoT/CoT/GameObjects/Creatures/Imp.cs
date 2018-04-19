@@ -11,9 +11,6 @@ namespace CoT
 {
     public class Imp : Enemy
     {
-        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, player, grid, map, hp, attack, defense)
-        {
-        }
 
         public override void Update()
         {
@@ -23,6 +20,10 @@ namespace CoT
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
+        }
+
+        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
+        {
         }
     }
 }

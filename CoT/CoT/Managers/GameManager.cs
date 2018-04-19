@@ -82,7 +82,7 @@ namespace CoT
             ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("font1"), "font1");
             Managers.ForEach(x => x.LoadContent());
         }
-
+        
         public void UnloadContent()
         {
             Console.WriteLine("GameManager - UnloadContent");

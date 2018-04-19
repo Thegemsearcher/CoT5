@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoT.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
@@ -18,6 +19,8 @@ namespace CoT
         public Point TileSize { get; set; }
         public RoyT.AStar.Grid Grid { get; private  set; }
 
+        public List<GameObject> WorldObjects { get; set; }
+
         
         public Map(Point tileSize)
         {
@@ -26,6 +29,8 @@ namespace CoT
             Tiles = new Dictionary<string, Tile>();
             TileMap = new Tile[0, 0];
             MapData = new string[0, 0];
+
+            WorldObjects = new List<GameObject>();
         }
 
         public Tile this[string index]
@@ -103,6 +108,20 @@ namespace CoT
                         hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
                         GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }
+
+                    if (TileMap[x, y].TileType != TileType.Wall && Game1.Random.Next(0, 50) == 0)
+                    {
+                        WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
+                        obj.Offset = new Vector2(140, 155);
+                        WorldObjects.Add(obj);
+                    }
+
+                    if (TileMap[x, y].TileType != TileType.Wall && Game1.Random.Next(0, 60) == 0)
+                    {
+                        WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
+                        obj.Offset = new Vector2(140, 155);
+                        WorldObjects.Add(obj);
+                    }
                 }
             }
             return this;
@@ -121,6 +140,7 @@ namespace CoT
         }
         public void Update()
         {
+            WorldObjects.ForEach(x => x.Update());
         }
 
         public void Draw(SpriteBatch sb)
@@ -151,6 +171,18 @@ namespace CoT
                     //{
                     //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Blue);
                     //}
+                }
+            }
+
+
+            WorldObjects.ForEach(x => x.Draw(sb));
+
+            if (GameDebugger.Debug)
+            {
+                for (int i = 0; i < WorldObjects.Count; i++)
+                {
+                    GameObject obj = WorldObjects[i];
+                    sb.Draw(ResourceManager.Get<Texture2D>(obj.Texture), new Rectangle((int)obj.Hitbox.Position.X, (int)obj.Hitbox.Position.Y, (int)obj.Hitbox.Size.X, (int)obj.Hitbox.Size.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.3f);
                 }
             }
 

@@ -18,7 +18,7 @@ namespace CoT
         float speed = 100f, aggroRange;
         bool hasAggro = false;
         Vector2 nextPosition, direction = new Vector2(0, 0);
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
+        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
             this.player = player;
             this.grid = grid;
@@ -63,6 +63,7 @@ namespace CoT
 
         public override void Update()
         {
+            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
             if (Health <= 0)
             {

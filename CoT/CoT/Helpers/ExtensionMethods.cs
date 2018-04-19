@@ -43,5 +43,10 @@ namespace CoT
         {
             return min + ((float)random.NextDouble() * (max - min));
         }
+
+        public static float Normalize(this float value, float min, float max)
+        {
+            return Math.Abs(((value - min) / (max - min)));
+        }
     }
 }
