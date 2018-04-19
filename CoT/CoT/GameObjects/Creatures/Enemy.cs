@@ -66,7 +66,7 @@ namespace CoT
                         t = map.TileMap[i, j];
                         if (isometricScreenTile == new Point(i, j))
                         {
-                            if (t.TileType == TileType.Wall)
+                            if (t.TileType == TileType.Collision)
                                 return false;
                         }
                     }
