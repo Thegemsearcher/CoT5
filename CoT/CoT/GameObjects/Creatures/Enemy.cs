@@ -11,18 +11,18 @@ namespace CoT
 {
     public class Enemy : Creature
     {
-        private Player player;
+
+        protected Player player;
         //Grid grid;
-        private Position[] path;
-        private Position nextTileInPath;
-        private float speed = 100f, aggroRange;
-        private bool hasAggro = false;
-        private Vector2 nextPosition, direction = new Vector2(0, 0);
+        protected Position[] path;
+        protected Position nextTileInPath;
+        protected float speed = 100f, aggroRange;
+        protected bool hasAggro = false;
+        protected Vector2 nextPosition, direction = new Vector2(0, 0);
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
             this.player = player;
             this.grid = grid;
-            attackSize = 100;
             this.Scale = 0.1f;
             LayerDepth = 0.7f;
             path = new Position[0];
@@ -48,7 +48,7 @@ namespace CoT
                 return false;
         }
 
-        #region oanvänd bresenham algoritm
+        #region bresenham algoritm
         public bool VisionRange()
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
@@ -84,14 +84,7 @@ namespace CoT
             {
                 return;
             }
-            if (DetectPlayer() || hasAggro)
-            {
-                path = Pathing(player.PositionOfFeet);
-            }
-            if (path.Length > 1)
-            {
-                nextTileInPath = path[1];
-            }
+            
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
             if (!attacking && (DetectPlayer() || hasAggro))
             {
@@ -103,7 +96,7 @@ namespace CoT
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - destinationRectangle.Height / 2);
             CheckAttackDistance();
         }
-        public void CheckAttackDistance()
+        public virtual void CheckAttackDistance()
         {
             if (!attacking)
             {

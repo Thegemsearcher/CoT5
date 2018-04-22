@@ -58,7 +58,7 @@ namespace CoT
 
             return chosenPath;
         }
-        #region oanvänd Bresenham algoritm
+        #region  Bresenham algoritm
         // Swap the values of A and B
         private void Swap<T>(ref T a, ref T b)
         {
