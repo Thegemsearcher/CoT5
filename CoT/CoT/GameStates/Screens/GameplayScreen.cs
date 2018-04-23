@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using CoT.GameObjects.Creatures;
 using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -103,7 +104,7 @@ namespace CoT
             //Map.MapData[7, 8] = "tile2";
             //Map.MapData[7, 9] = "tile2";
             //Map.Save("Map1.dat").Load("Map1.dat");
-            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), 
+            Player = new Player("player1", new Vector2(10, 10).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), 
                 new Vector2(30, 130), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
             CreatureManager.Instance.Creatures.Add(Player);
 
@@ -115,10 +116,12 @@ namespace CoT
 
                 if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Collision)
                 {
-                    Enemy enemy = new Enemy("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500),  Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    Treent enemy = new Treent("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500),  Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
                     CreatureManager.Instance.Creatures.Add(enemy);
                 }
             }
+            Imp enemyImp = new Imp("treent", new Vector2(420,420), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+            CreatureManager.Instance.Creatures.Add(enemyImp);
             base.Load();
         }
 
