@@ -53,7 +53,7 @@ namespace CoT
         public bool VisionRange()
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
-            List<Vector2> vision = BresenhamLine(Position, player.Position);
+            List<Vector2> vision = BresenhamLine(CenterMass, player.CenterMass);
             Tile t;
             foreach (Vector2 pos in vision)
             {

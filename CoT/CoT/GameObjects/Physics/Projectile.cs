@@ -25,13 +25,9 @@ namespace CoT
                 if (i == 0){
                     color = Color.Orange;
                 }
-                if (i == 1)
-                {
-                    color = Color.Yellow;
-                }
                 ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                   Helper.RandomDirection(), 300f, 1f, color, 0f, 0.1f));
+                   Direction, 150f, 2f, color, 0f, 0.1f));
             }
            
         }

@@ -23,6 +23,10 @@ namespace CoT
         public override void Update()
         {
             base.Update();
+            if (Health <= 0)
+            {
+                return;
+            }
             foreach (Projectile proj in attackProj)
             {
                 if (proj.Owner != null)
@@ -44,7 +48,7 @@ namespace CoT
             }
             if (path.Length > 1)
             {
-                if (hasAggro && Vector2.Distance(player.Position, Position) > attackSize)
+                if (hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange()))
                 {
                     nextTileInPath = path[1];
                 }
@@ -105,7 +109,7 @@ namespace CoT
                 
                 direction.Normalize();
                 direction *= -1;
-                Projectile proj = new Projectile("tile2", CenterMass, new Rectangle(0, 0, 20, 20), direction, 1000f);
+                Projectile proj = new Projectile("tile2", CenterMass, new Rectangle(0, 0, 20, 20), direction, 600f);
                 proj.Color = Color.Red;
                 proj.Owner = this;
                 proj.LayerDepth = 1F;
