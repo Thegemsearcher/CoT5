@@ -11,6 +11,12 @@ namespace CoT.GameObjects.Creatures
 {
     class Treent : Enemy
     {
+        public Treent(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
+        {
+            attackSize = 100;
+            aggroRange = 1000;
+            speed = 100f;
+        }
         public override void Update()
         {
             base.Update();
@@ -23,15 +29,12 @@ namespace CoT.GameObjects.Creatures
             {
                 nextTileInPath = path[1];
             }
+            CheckAttackDistance();
         }
 
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
-        }
-        public Treent(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
-        {
-            attackSize = 100;
         }
     }
 }

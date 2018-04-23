@@ -16,9 +16,10 @@ namespace CoT
         //Grid grid;
         protected Position[] path;
         protected Position nextTileInPath;
-        protected float speed = 100f, aggroRange;
+        protected float speed, aggroRange;
         protected bool hasAggro = false;
         protected Vector2 nextPosition, direction = new Vector2(0, 0);
+
         public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
             this.player = player;
@@ -33,7 +34,7 @@ namespace CoT
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
             offsetAttackPosition = new Vector2(-destinationRectangle.Width / 4, -destinationRectangle.Height / 4);
             //Ska flyttas.
-            aggroRange = 1000;
+           
             Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
@@ -41,7 +42,6 @@ namespace CoT
         {
             if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
             {
-               
                 return hasAggro = true;
             }
             else
@@ -49,6 +49,7 @@ namespace CoT
         }
 
         #region bresenham algoritm
+
         public bool VisionRange()
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
@@ -94,8 +95,8 @@ namespace CoT
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - destinationRectangle.Height / 2);
-            CheckAttackDistance();
         }
+
         public virtual void CheckAttackDistance()
         {
             if (!attacking)
@@ -115,6 +116,7 @@ namespace CoT
                 }
             }
         }
+
         public virtual void DamageToPlayer()
         {
             if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
@@ -172,6 +174,10 @@ namespace CoT
                 , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
             base.Draw(sb);
+        }
+        public override void Attack(Vector2 direction)
+        {
+            base.Attack(direction);
         }
     }
 }
