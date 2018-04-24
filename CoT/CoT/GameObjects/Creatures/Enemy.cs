@@ -40,20 +40,21 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
+            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange(CenterMass, player.CenterMass))
             {
                 return hasAggro = true;
-            }
-            else
+            } else if (!hasAggro)
                 return false;
+            else
+                return true;
         }
 
         #region bresenham algoritm
 
-        public bool VisionRange()
+        public bool VisionRange(Vector2 start,Vector2 finish)
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
-            List<Vector2> vision = BresenhamLine(CenterMass, player.CenterMass);
+            List<Vector2> vision = BresenhamLine(start, finish);
             Tile t;
             foreach (Vector2 pos in vision)
             {

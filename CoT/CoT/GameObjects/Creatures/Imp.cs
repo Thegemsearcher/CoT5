@@ -27,20 +27,7 @@ namespace CoT
             {
                 return;
             }
-            foreach (Projectile proj in attackProj)
-            {
-                if (proj.Owner != null)
-                {
-                    if (player.Hitbox.Intersects(new FloatRectangle(proj.Position,new Vector2(proj.SourceRectangle.Width, proj.SourceRectangle.Height))))
-                    {
-                        DamageToPlayer();
-                        attackProj.Remove(proj);
-                        break;
-                    }
-                    proj.Update();
-                }
-               
-            }
+            UpdateProjectiles();
 
             if (DetectPlayer() || hasAggro)
             {
@@ -48,13 +35,57 @@ namespace CoT
             }
             if (path.Length > 1)
             {
-                if (hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange()))
+                if (hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange(CenterMass, player.CenterMass)))
                 {
                     nextTileInPath = path[1];
                 }
             }
             CheckAttackDistance();
         }
+
+        public void UpdateProjectiles()
+        {
+            List<Projectile> toRemove = new List<Projectile>();
+            foreach (Projectile proj in attackProj)
+            {
+                if (proj.Owner != null)
+                {
+                    if (player.Hitbox.Intersects(new FloatRectangle(proj.Position, new Vector2(proj.SourceRectangle.Width, proj.SourceRectangle.Height))))
+                    {
+                        DamageToPlayer();
+                        toRemove.Add(proj);
+                    }
+
+                    Vector2 cartesianTileWorldPos = new Vector2(0,0);
+                    cartesianTileWorldPos.X = proj.Position.X / map.TileSize.Y;
+                    cartesianTileWorldPos.Y = proj.Position.Y / map.TileSize.Y;
+                    Tile t;
+                    Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
+                    for (int i = 0; i < map.TileMap.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < map.TileMap.GetLength(1); j++)
+                        {
+                            t = map.TileMap[i, j];
+                            if (isometricScreenTile == new Point(i, j))
+                            {
+                                if (t.TileType == TileType.Collision)
+                                {
+                                    toRemove.Add(proj);
+                                }
+                            }
+                        }
+                    }
+                    proj.Update();
+                }
+            }
+            foreach (Projectile removeProj in toRemove)
+            {
+                attackProj.Remove(removeProj);
+            }
+            toRemove.Clear();
+        }
+        
+        
 
         public override void DamageToPlayer()
         {
@@ -85,7 +116,7 @@ namespace CoT
             {
                 if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
                 {
-                    if (VisionRange())
+                    if (VisionRange(CenterMass, player.CenterMass))
                     {
                         Attack(CenterMass - player.CenterMass);
                     }
