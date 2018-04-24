@@ -11,14 +11,16 @@ namespace CoT
 {
     public class Imp : Enemy
     {
+        protected Position lastPos;
         protected List<Projectile> attackProj = new List<Projectile>();
         protected bool attackCD = false;
+        protected int lastPosTimer;
         public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
         {
             attackSize = 500;
             aggroRange = 1200;
             speed = 160f;
-            attacking = true;
+            attacking = false;
             Color = Color.Red;
         }
         public override void Update()
@@ -34,24 +36,25 @@ namespace CoT
             {
                 path = Pathing(player.PositionOfFeet);
             }
-            if (!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20)))
+            //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
+            if ((!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20))))
             {
                 Vector2 nextPos = PositionOfFeet - player.PositionOfFeet;
                 nextPos.Normalize();
                 nextPos *= -1;
-                path = Pathing(nextPos * 100);
+                path = Pathing(nextPos * 10);
             }
             if (path.Length > 1)
-            {
-                if ((hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange(CenterMass, player.CenterMass))) || 
-                            (!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20))))
+            {       
+                if ((hasAggro && (Vector2.Distance(player.CenterMass, CenterMass) > attackSize || !VisionRange(CenterMass, player.CenterMass))) || 
+                            (!attacking && (Vector2.Distance(player.CenterMass, CenterMass) < attackSize - (attackSize / 20))))
                 {
                     nextTileInPath = path[1];
                 }
             }
             CheckAttackDistance();
         }
-
+       
         public void UpdateProjectiles()
         {
             List<Projectile> toRemove = new List<Projectile>();
@@ -64,7 +67,6 @@ namespace CoT
                         DamageToPlayer();
                         toRemove.Add(proj);
                     }
-
                     Vector2 cartesianTileWorldPos = new Vector2(0,0);
                     cartesianTileWorldPos.X = proj.Position.X / map.TileSize.Y;
                     cartesianTileWorldPos.Y = proj.Position.Y / map.TileSize.Y;
@@ -94,8 +96,6 @@ namespace CoT
             toRemove.Clear();
         }
         
-        
-
         public override void DamageToPlayer()
         {
             player.GetHit(this);
@@ -132,6 +132,7 @@ namespace CoT
                 }
             } else
             {
+                //Denna fiende gör skillnad på att ha en cd på sin attack och att ha en animation där den attackerar.
                 attackTimer++;
                 if (attackTimer == 100)
                 {
