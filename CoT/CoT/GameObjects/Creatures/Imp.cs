@@ -12,6 +12,7 @@ namespace CoT
     public class Imp : Enemy
     {
         protected List<Projectile> attackProj = new List<Projectile>();
+        protected bool attackCD = false;
         public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
         {
             attackSize = 500;
@@ -33,9 +34,17 @@ namespace CoT
             {
                 path = Pathing(player.PositionOfFeet);
             }
+            if (!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20)))
+            {
+                Vector2 nextPos = PositionOfFeet - player.PositionOfFeet;
+                nextPos.Normalize();
+                nextPos *= -1;
+                path = Pathing(nextPos * 100);
+            }
             if (path.Length > 1)
             {
-                if (hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange(CenterMass, player.CenterMass)))
+                if ((hasAggro && (Vector2.Distance(player.Position, Position) > attackSize || !VisionRange(CenterMass, player.CenterMass))) || 
+                            (!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20))))
                 {
                     nextTileInPath = path[1];
                 }
@@ -112,7 +121,7 @@ namespace CoT
 
         public override void CheckAttackDistance()
         {
-            if (!attacking)
+            if (!attackCD)
             {
                 if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
                 {
@@ -127,17 +136,21 @@ namespace CoT
                 if (attackTimer == 100)
                 {
                     attackTimer = 0;
+                    attackCD = false;
+                }
+                else if (attackCD && attackTimer == 50)
+                {
                     attacking = false;
                 }
             }
         }
         public override void Attack(Vector2 direction)
         {
-            if (!attacking)
+            if (!attackCD)
             {
                 dealtDamage = false;
                 attacking = true;
-                
+                attackCD = true;
                 direction.Normalize();
                 direction *= -1;
                 Projectile proj = new Projectile("tile2", CenterMass, new Rectangle(0, 0, 20, 20), direction, 600f);

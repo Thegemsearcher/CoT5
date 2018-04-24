@@ -194,15 +194,6 @@ namespace CoT
                     sb.Draw(ResourceManager.Get<Texture2D>(obj.Texture), new Rectangle((int)obj.Hitbox.Position.X, (int)obj.Hitbox.Position.Y, (int)obj.Hitbox.Size.X, (int)obj.Hitbox.Size.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.3f);
                 }
             }
-
-            //#region Test pathfinding
-            //Position[] testPath = Grid.GetPath(new Position(0, 0), new Position(isometricScreenTile.X, isometricScreenTile.Y), MovementPatterns.LateralOnly);
-
-            //for (int i = 0; i < testPath.Length; i++)
-            //{
-            //    sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(testPath[i].X * TileSize.Y, testPath[i].Y * TileSize.Y).ToIsometric(), Color.Green * 0.5f);
-            //}
-            //#endregion
         }
     }
 }
