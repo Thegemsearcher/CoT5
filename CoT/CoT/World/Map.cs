@@ -11,6 +11,9 @@ using RoyT.AStar;
 
 namespace CoT
 {
+    /// <summary>
+    /// Ska lägga till kommentarer
+    /// </summary>
     public class Map
     {
         public Dictionary<string, Tile> Tiles { get; set; }
@@ -88,13 +91,7 @@ namespace CoT
                 {
                     TileMap[x, y] = this[MapData[x, y]];
                     SetCell(x, y);
-                }
-            }
 
-            for (int x = 0; x < TileMap.GetLength(0); x++)
-            {
-                for (int y = 0; y < TileMap.GetLength(1); y++)
-                {
                     if (TileMap[x, y].TileType == TileType.Collision)
                     {
                         Hull hull = new Hull(new Vector2[]
@@ -104,7 +101,7 @@ namespace CoT
                             new Vector2(160, 40),
                             new Vector2(80, 80),
                         });
-                        
+
                         hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
                         GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }
@@ -116,7 +113,7 @@ namespace CoT
                         int rnd = Game1.Random.Next(0, 3);
                         if (rnd.Equals(0))
                         {
-                            WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float) TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
+                            WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float)TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
                             WorldObjects.Add(obj);
                         }
                         else if (rnd.Equals(1))
@@ -132,6 +129,13 @@ namespace CoT
                             WorldObjects.Add(obj);
                         }
                     }
+                }
+            }
+
+            for (int x = 0; x < TileMap.GetLength(0); x++)
+            {
+                for (int y = 0; y < TileMap.GetLength(1); y++)
+                {
                 }
             }
             return this;
@@ -162,12 +166,19 @@ namespace CoT
 
             Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
 
+            Rectangle visibleArea = Camera.VisibleArea;
+
             for (int i = 0; i < TileMap.GetLength(0); i++)
             {
                 for (int j = 0; j < TileMap.GetLength(1); j++)
                 {
                     Tile t = TileMap[i, j];
-                    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    Vector2 tempPos = new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric();
+
+                    if (visibleArea.Contains(tempPos.ToPoint()))
+                    {
+                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), tempPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    }
 
                     //if (isometricScreenTile == new Point(i, j))
                     //{

@@ -34,6 +34,27 @@ namespace CoT
             Matrix.CreateScale(1, 2, 1f) *
             Matrix.CreateTranslation(new Vector3(Game1.Game.GraphicsDevice.Viewport.Width * 0.5f, Game1.Game.GraphicsDevice.Viewport.Height * 0.5f, 0));
 
+        public static Rectangle VisibleArea
+        {
+            get
+            {
+                Vector2 topLeft = Vector2.Transform(Vector2.Zero, InvertedTransform);
+                Vector2 topRight = Vector2.Transform(new Vector2(Game1.ScreenWidth, 0), InvertedTransform);
+                Vector2 bottomLeft = Vector2.Transform(new Vector2(0, Game1.ScreenHeight), InvertedTransform);
+                Vector2 bottomRight = Vector2.Transform(new Vector2(Game1.ScreenWidth, Game1.ScreenHeight), InvertedTransform);
+
+                Vector2 min = new Vector2(
+                    MathHelper.Min(topLeft.X, MathHelper.Min(topRight.X, MathHelper.Min(bottomLeft.X, bottomRight.X))),
+                    MathHelper.Min(topLeft.Y, MathHelper.Min(topRight.Y, MathHelper.Min(bottomLeft.Y, bottomRight.Y))));
+
+                var max = new Vector2(
+                    MathHelper.Max(topLeft.X, MathHelper.Max(topRight.X, MathHelper.Max(bottomLeft.X, bottomRight.X))),
+                    MathHelper.Max(topLeft.Y, MathHelper.Max(topRight.Y, MathHelper.Max(bottomLeft.Y, bottomRight.Y))));
+
+                return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
+            }
+        }
+
         public static void Update()
         {
             if (Input.IsScrollMvdUp)
@@ -65,6 +86,8 @@ namespace CoT
             ScreenShakeDuration = duration;
             ScreenShakeIntensity = intensity;
         }
+
+        public static Matrix InvertedTransform => Matrix.Invert(Transform);
 
         private static Vector2 ScreenToWorld(Vector2 position)
         {
