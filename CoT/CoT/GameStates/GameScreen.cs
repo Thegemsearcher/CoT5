@@ -40,14 +40,14 @@ namespace CoT
         public virtual void Load()
         {
             try
-            {
+            { 
                 Game1.Game?.ResetElapsedTime();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
+            
             Game1.Game.host.Widgets.Add(Grid);
         }
 

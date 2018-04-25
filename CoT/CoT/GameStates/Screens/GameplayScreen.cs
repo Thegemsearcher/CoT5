@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using CoT.GameObjects.Creatures;
 using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -26,6 +30,30 @@ namespace CoT
             Instance = this;
         }
 
+        static void WriteObject(string fileName, object obj)
+        {
+            FileStream writer = new FileStream(fileName, FileMode.Create);
+            DataContractSerializer ser = new DataContractSerializer(obj.GetType());
+            ser.WriteObject(writer, obj);
+            writer.Close();
+        }
+
+        public static T ReadObject<T>(string fileName)
+        {
+            Console.WriteLine("Deserializing an instance of the object.");
+            FileStream fs = new FileStream(fileName,
+                FileMode.Open);
+            XmlDictionaryReader reader =
+                XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+            DataContractSerializer ser = new DataContractSerializer(typeof(T));
+
+            // Deserialize the data and read it from the instance.
+            object deserializedObj = ser.ReadObject(reader, true);
+            reader.Close();
+            fs.Close();
+            return (T)deserializedObj;
+        }
+
         public override void Load()
         {
             ContentManager content = Game1.Game.Content;
@@ -33,13 +61,27 @@ namespace CoT
             ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("tree"), "tree");
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
 
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
             Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1,1,1,1));
 
             Map = new Map(new Point(160, 80));
             worldCreator = new WorldCreator(Map);
             worldCreator.Generate();
             Map.Save("Map1.dat").Load("Map1.dat");
+
+            //Item item = new Item("test", new Vector2(100, 100), new Rectangle(0, 0, 50, 200));
+            //item.Color = Color.Red;
+
+            //WriteObject("Test.dat", item);
+            //Item item = ReadObject<Item>("Test.dat");
+            //Console.WriteLine($"texture: {item.Texture}, color: {item.Color}");
+
+            //GameObject obj = new Item("test", new Vector2(100, 100), new Rectangle(0, 0, 50, 200));
+
+            //Helper.Serialize("Test.dat", obj);
 
             //Map = new Map(new Point(160, 80));
             //Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
@@ -62,21 +104,24 @@ namespace CoT
             //Map.MapData[7, 8] = "tile2";
             //Map.MapData[7, 9] = "tile2";
             //Map.Save("Map1.dat").Load("Map1.dat");
-            Player = new Player("player1", new Vector2(0, 0).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
+            Player = new Player("player1", new Vector2(10, 10).ToIsometric(), new Rectangle(0, 0, ResourceManager.Get<Texture2D>("player1").Width, ResourceManager.Get<Texture2D>("player1").Height), 
+                new Vector2(30, 130), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
             CreatureManager.Instance.Creatures.Add(Player);
 
-
-            for (int i = 0; i < 5; i++)
+            
+            for (int i = 0; i < 1; i++)
             {
                 Vector2 randomTileIndex = new Vector2(Game1.Random.Next(0, Map.TileMap.GetLength(0)), Game1.Random.Next(0, Map.TileMap.GetLength(1)));
                 Vector2 randomTilePos = Map.GetTilePosition(randomTileIndex);
 
-                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Wall)
+                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Collision)
                 {
-                    Enemy enemy = new Enemy("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    Treent enemy = new Treent("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500),  Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
                     CreatureManager.Instance.Creatures.Add(enemy);
                 }
             }
+            Imp enemyImp = new Imp("treent", new Vector2(420,420), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+            CreatureManager.Instance.Creatures.Add(enemyImp);
             base.Load();
         }
 

@@ -11,18 +11,19 @@ namespace CoT
 {
     public class Enemy : Creature
     {
-        Player player;
+
+        protected Player player;
         //Grid grid;
-        Position[] path;
-        Position nextTileInPath;
-        float speed = 100f, aggroRange;
-        bool hasAggro = false;
-        Vector2 nextPosition, direction = new Vector2(0, 0);
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
+        protected Position[] path;
+        protected Position nextTileInPath;
+        protected float speed, aggroRange;
+        protected bool hasAggro = false;
+        protected Vector2 nextPosition, direction = new Vector2(0, 0);
+
+        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
             this.player = player;
             this.grid = grid;
-            attackSize = 100;
             this.Scale = 0.1f;
             LayerDepth = 0.7f;
             path = new Position[0];
@@ -33,49 +34,59 @@ namespace CoT
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
             offsetAttackPosition = new Vector2(-destinationRectangle.Width / 4, -destinationRectangle.Height / 4);
             //Ska flyttas.
-            aggroRange = 1000;
+           
             Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public bool DetectPlayer()
         {
-            if ((Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
+            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange(CenterMass, player.CenterMass))
+            {
                 return hasAggro = true;
-            else
+            } else if (!hasAggro)
                 return false;
+            else
+                return true;
         }
 
-        public bool VisionRange()
+        #region bresenham algoritm
+
+        public bool VisionRange(Vector2 start,Vector2 finish)
         {
-            List<Vector2> vision = BresenhamLine(Position, player.Position);
+            Vector2 cartesianTileWorldPos = new Vector2(0, 0);
+            List<Vector2> vision = BresenhamLine(start, finish);
+            Tile t;
             foreach (Vector2 pos in vision)
             {
+                cartesianTileWorldPos.X = pos.X / map.TileSize.Y;
+                cartesianTileWorldPos.Y = pos.Y / map.TileSize.Y;
+                Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
                 for (int i = 0; i < map.TileMap.GetLength(0); i++)
                 {
                     for (int j = 0; j < map.TileMap.GetLength(1); j++)
                     {
-                       
+                        t = map.TileMap[i, j];
+                        if (isometricScreenTile == new Point(i, j))
+                        {
+                            if (t.TileType == TileType.Collision)
+                                return false;
+                        }
                     }
                 }
             }
             return true;
         }
+        #endregion
 
         public override void Update()
         {
+            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
             if (Health <= 0)
             {
                 return;
             }
-            if (DetectPlayer() || hasAggro)
-            {
-                path = Pathing(player.PositionOfFeet);
-            }
-            if (path.Length > 1)
-            {
-                nextTileInPath = path[1];
-            }
+            
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
             if (!attacking && (DetectPlayer() || hasAggro))
             {
@@ -85,9 +96,9 @@ namespace CoT
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - destinationRectangle.Height / 2);
-            CheckAttackDistance();
         }
-        public void CheckAttackDistance()
+
+        public virtual void CheckAttackDistance()
         {
             if (!attacking)
             {
@@ -106,6 +117,7 @@ namespace CoT
                 }
             }
         }
+
         public virtual void DamageToPlayer()
         {
             if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
@@ -163,6 +175,10 @@ namespace CoT
                 , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
             base.Draw(sb);
+        }
+        public override void Attack(Vector2 direction)
+        {
+            base.Attack(direction);
         }
     }
 }

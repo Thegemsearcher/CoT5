@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoT.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RoyT.AStar;
@@ -10,7 +11,7 @@ using RoyT.AStar;
 namespace CoT
 {
 
-    public class Creature : GameObject
+    public class Creature : WorldObject
     {
         protected Grid grid;
         protected Rectangle destinationRectangle = new Rectangle(0, 0, 0, 0);
@@ -27,7 +28,7 @@ namespace CoT
         public Map map;
         protected Vector2 offsetAttackPosition;
 
-        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle)
+        public Creature(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset)
         {
             AttackStat = attack;
             Defense = defense;
@@ -57,6 +58,9 @@ namespace CoT
 
             return chosenPath;
         }
+
+
+        #region  Bresenham algoritm
         // Swap the values of A and B
         private void Swap<T>(ref T a, ref T b)
         {
@@ -64,7 +68,6 @@ namespace CoT
             a = b;
             b = c;
         }
-
         // Returns the list of points from p0 to p1 
         public List<Vector2> BresenhamLine(Vector2 p0, Vector2 p1)
         {
@@ -95,7 +98,7 @@ namespace CoT
             int ystep;
             int y = (int)y0;
             if (y0 < y1) ystep = 1; else ystep = -1;
-            for (int x = (int)x0; x <= x1; x++)
+            for (int x = (int)x0; x <= x1; x += (map.TileSize.Y/10))
             {
                 if (steep) result.Add(new Vector2(y, x));
                 else result.Add(new Vector2(x, y));
@@ -109,6 +112,7 @@ namespace CoT
 
             return result;
         }
+        #endregion
 
         public virtual void Attack(Vector2 direction)
         {

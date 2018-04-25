@@ -30,7 +30,7 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, map, hp, attack, defense)
+        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
             //this.enemies = enemies;
             this.map = map;
@@ -39,7 +39,7 @@ namespace CoT
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
             light.Intensity = 0.2f;
-            light.ShadowType = ShadowType.Occluded;
+            light.ShadowType = ShadowType.Solid;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             LayerDepth = 1f;
@@ -53,6 +53,7 @@ namespace CoT
         }
         public override void Update()
         {
+            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
             if (Health <= 0)
             {
@@ -202,7 +203,7 @@ namespace CoT
                     //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
                     FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
 
-                    if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Wall)
+                    if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Collision)
                     {
                         normalMoving = false;
                         pathMoving = true;
