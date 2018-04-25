@@ -146,6 +146,7 @@
     <None Include="Game\ClassDiagram1.cd" />
     <None Include="Game\app.manifest" />
     <None Include="Game\packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
