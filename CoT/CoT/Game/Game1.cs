@@ -16,6 +16,11 @@ using Console = System.Console;
 
 namespace CoT
 {
+    public enum Direction
+    {
+        North, East, South, West
+    }
+
     public class Game1 : Game
     {
         #region Constants

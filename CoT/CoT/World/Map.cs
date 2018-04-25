@@ -102,6 +102,8 @@ namespace CoT
                             new Vector2(80, 80),
                         });
 
+                        GameManager.Instance.Penumbra.DrawOrder = 5;
+
                         hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
                         GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }

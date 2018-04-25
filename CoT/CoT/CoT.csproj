@@ -53,6 +53,10 @@
     <Compile Include="Interfaces\IManager.cs" />
     <Compile Include="GameStates\GameScreen.cs" />
     <Compile Include="Managers\ScreenManager.cs" />
+    <Compile Include="World\Generation\Corridor.cs" />
+    <Compile Include="World\Generation\MapGenerator.cs" />
+    <Compile Include="World\Generation\RangeInt.cs" />
+    <Compile Include="World\Generation\Room.cs" />
     <Compile Include="World\WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />

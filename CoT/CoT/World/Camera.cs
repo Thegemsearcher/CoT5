@@ -15,6 +15,7 @@ namespace CoT
         public static float Rotation { get; set; } = 0f;
         public static float FocusSpeed { get; set; } = 3f;
         public static float ScaleInput { get; set; } = 1f;
+        public static float ScaleSpeed { get; set; } = 3f;
 
         public static Vector2 Position { get; set; } = new Vector2(0, 0);
         public static Vector2? Focus { get; set; } = null;
@@ -66,6 +67,8 @@ namespace CoT
                 ScaleInput = Scale / 1.3f;
             }
 
+            GameDebugger.WriteLine("scale: " + Scale);
+            GameDebugger.WriteLine($"scaleinput {ScaleInput}");
             if (ScreenShakeDuration > 0)
             {
                 ScreenShakeDuration -= Time.DeltaTime;
@@ -78,7 +81,7 @@ namespace CoT
             }
 
             if (Focus != null) Position = Vector2.Lerp(Position, Focus.Value, FocusSpeed * Time.DeltaTime);
-            Scale = MathHelper.Lerp(Scale, ScaleInput, Time.DeltaTime * 5);
+            Scale = MathHelper.Lerp(Scale, ScaleInput, Time.DeltaTime * ScaleSpeed);
         }
 
         public static void ScreenShake(float duration, float intensity)
