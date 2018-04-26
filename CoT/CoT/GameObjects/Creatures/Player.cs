@@ -10,18 +10,21 @@ using Penumbra;
 using Console = System.Console;
 using RoyT.AStar;
 using System.Threading;
+using CoT.Helpers;
 
 namespace CoT
 {
     public class Player : Creature
     {
 
-        float speed = 200f;
-        Vector2 direction, nextPosition, targetPos;
-        Position[] path;
-        Position nextTileInPath;
-        bool normalMoving, pathMoving;
-        FloatRectangle bottomHitBox;
+        private float speed = 200f;
+        private Vector2 direction, nextPosition, targetPos;
+        private Position[] path;
+        private Position nextTileInPath;
+        private bool normalMoving, pathMoving;
+        private FloatRectangle bottomHitBox;
+        private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
+        private float frameTimer = 100, frameInterval = 100;
 
         enum HeroClass
         {
@@ -103,6 +106,7 @@ namespace CoT
                 }
                
             }
+            Animation();
             AttackLockTimer();
             InputAttack();
             UpdateVariables();
@@ -234,6 +238,11 @@ namespace CoT
             targetDirection.Normalize();
 
             return targetDirection;
+        }
+
+        public void Animation()
+        {
+            SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer , frameInterval, ref frame, animationStarts, amountOfFrames,animationOffset);
         }
 
         public override void Draw(SpriteBatch sb)

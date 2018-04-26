@@ -49,6 +49,7 @@
     <Compile Include="GameStates\Screens\MainMenuScreen.cs" />
     <Compile Include="GameStates\Screens\OptionsMenuScreen.cs" />
     <Compile Include="GameStates\Screens\PauseMenuScreen.cs" />
+    <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\TextureCreator.cs" />
     <Compile Include="Interfaces\IManager.cs" />
     <Compile Include="GameStates\GameScreen.cs" />
