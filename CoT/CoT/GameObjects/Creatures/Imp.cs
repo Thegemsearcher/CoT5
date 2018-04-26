@@ -37,20 +37,26 @@ namespace CoT
                 path = Pathing(player.PositionOfFeet);
             }
             //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
-            if ((!attacking && (Vector2.Distance(player.Position, Position) < attackSize - (attackSize / 20))))
+            if ((!attacking && (Vector2.Distance(player.PositionOfFeet, PositionOfFeet) < attackSize /*- (attackSize / 20)*/)))
             {
-                Vector2 nextPos = PositionOfFeet - player.PositionOfFeet;
-                nextPos.Normalize();
-                nextPos *= -1;
-                path = Pathing(nextPos * 10);
+                Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
+                nextPos.X = player.PositionOfFeet.X - PositionOfFeet.X;
+                nextPos.Y = player.PositionOfFeet.Y - PositionOfFeet.Y;
+                //if (nextPos.Y > 0)
+                //{
+
+                //}
+                //nextPos.Normalize();
+                //nextPos *= -1;
+                path = Pathing(nextPos * map.TileSize.Y);
             }
             if (path.Length > 1)
             {       
-                if ((hasAggro && (Vector2.Distance(player.CenterMass, CenterMass) > attackSize || !VisionRange(CenterMass, player.CenterMass))) || 
-                            (!attacking && (Vector2.Distance(player.CenterMass, CenterMass) < attackSize - (attackSize / 20))))
-                {
-                    nextTileInPath = path[1];
-                }
+                //if ((hasAggro && (Vector2.Distance(player.CenterMass, CenterMass) > attackSize || !VisionRange(CenterMass, player.CenterMass))) || 
+                //            (!attacking && (Vector2.Distance(player.CenterMass, CenterMass) < attackSize/* - (attackSize / 20)*/)))
+                //{
+                //}
+                nextTileInPath = path[1];
             }
             CheckAttackDistance();
         }
