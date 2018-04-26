@@ -182,8 +182,8 @@ namespace CoT
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
-                PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2,
+                PositionOfFeet.Y - (SourceRectangle.Height * Scale));
         } 
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
@@ -223,7 +223,7 @@ namespace CoT
                 direction.Y = nextPosition.Y - PositionOfFeet.Y;
                 direction.Normalize();
                 PositionOfFeet += direction * speed * Time.DeltaTime;
-                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+                Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
             }     
         }
 
