@@ -86,12 +86,12 @@ namespace CoT
             {
                 return;
             }
-            
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
             if (!attacking && (DetectPlayer() || hasAggro))
             {
                 Move();
             }
+
             //Fienden går från sina fötter istället för 0,0 på bilden.
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -148,7 +148,7 @@ namespace CoT
             base.OnRemove();
         }
 
-        public void Move()
+        public virtual void Move()
         {
             nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
             nextPosition.X += map.TileSize.X / 2;

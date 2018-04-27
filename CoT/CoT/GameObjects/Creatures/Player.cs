@@ -46,7 +46,9 @@ namespace CoT
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             LayerDepth = 1f;
-
+            //
+            defense = 10000;
+            //
             CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
             destinationRectangle.Width = (int)(sourceRectangle.Width);
             destinationRectangle.Height = (int)(sourceRectangle.Height);
@@ -242,7 +244,10 @@ namespace CoT
 
         public void Animation()
         {
-            SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer , frameInterval, ref frame, animationStarts, amountOfFrames,animationOffset);
+            if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
+            {
+                SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
+            }
         }
 
         public override void Draw(SpriteBatch sb)

@@ -121,7 +121,7 @@ namespace CoT
                     CreatureManager.Instance.Creatures.Add(enemy);
                 }
             }
-            Imp enemyImp = new Imp("treent", new Vector2(420,420), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+            Imp enemyImp = new Imp("treent", new Vector2(420, 420), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
             CreatureManager.Instance.Creatures.Add(enemyImp);
 
             Camera.ScaleInput = 1f;

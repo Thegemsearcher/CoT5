@@ -20,7 +20,8 @@ namespace CoT.GameObjects.Creatures
         public override void Update()
         {
             base.Update();
-
+            
+            
             if (DetectPlayer() || hasAggro)
             {
                 path = Pathing(player.PositionOfFeet);
