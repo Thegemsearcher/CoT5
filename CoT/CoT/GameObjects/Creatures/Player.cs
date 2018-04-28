@@ -23,8 +23,10 @@ namespace CoT
         private Position nextTileInPath;
         private bool normalMoving, pathMoving;
         private FloatRectangle bottomHitBox;
-        private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
-        private float frameTimer = 100, frameInterval = 100;
+        //private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
+        //private float frameTimer = 100, frameInterval = 100;
+
+        private Spritesheet spriteSheet;
 
         enum HeroClass
         {
@@ -55,9 +57,13 @@ namespace CoT
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
+
+            spriteSheet = new Spritesheet(texture, new Point(4, 1), SourceRectangle, 100);
         }
         public override void Update()
         {
+            spriteSheet.Update();
+
             Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
             if (Health <= 0)
@@ -246,7 +252,8 @@ namespace CoT
         {
             if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
             {
-                SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
+                SourceRectangle = spriteSheet.SourceRectangle;
+                //SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
             }
         }
 
@@ -254,13 +261,13 @@ namespace CoT
         {
             //Debug
             //FullHitbox
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), destinationRectangle/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.1f);
-            
-            //BottomHitox 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), destinationRectangle/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.1f);
 
-            //CenterMass 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
+            ////BottomHitox 
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+
+            ////CenterMass 
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
 
             //foreach (Creature c in CreatureManager.Instance.Creatures) invulnerability
             //{
@@ -268,7 +275,7 @@ namespace CoT
             //    sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)e.CenterMass.X, (int)e.CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
             //}
 
-
+            //sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position + Offset, spriteSheet.SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
 
             //for (int i = 0; i < GameStateManager.Instance.Map.TileMap.GetLength(0); i++)
             //{
