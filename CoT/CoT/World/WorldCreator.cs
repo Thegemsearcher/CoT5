@@ -27,6 +27,39 @@ namespace CoT
 
             map.Create(new Point(converter, converter));
 
+            /*
+             *for (int i = 0; i < 15; i++)
+            {
+
+            if (romRand == 0)
+            {
+             * if (corRand == 0)
+             * {
+             * Map.Tilemap[converter, converter / 2];
+             * Map.Create(new Point(rand, 4));
+             * 
+             * romRand++;
+             *
+             * }
+             * else if (corRand == 1)
+             * {
+             *  Map.Tilemap[converter / 2, converter]
+             * Map.Create(new Point(4, rand));
+             * 
+             * romRand++;
+             * }
+             * }
+             * else if (romRand == 1)
+             * {
+             * if (corRand == 1)
+             *  Map.Tilemap[rand
+             *  map.create(converter, converter);
+             * }
+             * 
+            }
+      
+             */
+
             int min;
             int max;
             int wallConverter;
@@ -34,8 +67,8 @@ namespace CoT
             int wallsY;
             if (converter < 30)
             {
-                min = 45;
-                max = 85;
+                min = 5;
+                max = 15;
                 wallConverter = Game1.Random.Next(min, max);
                 for (int i = 0; i < wallConverter; i++)
                 {
@@ -46,8 +79,8 @@ namespace CoT
             }
             else if (converter < 50 && converter >= 30)
             {
-                min = 45;
-                max = 85;
+                min = 10;
+                max = 25;
                 wallConverter = Game1.Random.Next(min, max);
                 for (int i = 0; i < wallConverter; i++)
                 {
@@ -58,8 +91,8 @@ namespace CoT
             }
             else if (converter < 70 && converter >= 50)
             {
-                min = 45;
-                max = 80;
+                min = 25;
+                max = 50;
                 wallConverter = Game1.Random.Next(min, max);
                 for (int i = 0; i < wallConverter; i++)
                 {
