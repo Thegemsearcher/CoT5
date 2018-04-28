@@ -20,42 +20,42 @@ namespace CoT
         public Tile[,] TileMap { get; set; }
         public string[,] MapData { get; set; }
         public Point TileSize { get; set; }
-        public RoyT.AStar.Grid Grid { get; private set; }
-
+        public RoyT.AStar.Grid Grid { get; private  set; }
+ 
         public List<GameObject> WorldObjects { get; set; }
-
-
+ 
+       
         public Map(Point tileSize)
         {
             TileSize = tileSize;
-
+ 
             Tiles = new Dictionary<string, Tile>();
             TileMap = new Tile[0, 0];
             MapData = new string[0, 0];
-
+ 
             WorldObjects = new List<GameObject>();
         }
-
+ 
         public Tile this[string index]
         {
             get { if (Tiles.ContainsKey(index)) return Tiles[index].Clone(); else return null; }
             set { if (!Tiles.ContainsKey(index)) Tiles.Add(index, value); }
         }
-
+ 
         public Vector2 GetTileIndex(Vector2 position)
         {
             return (position / TileSize.Y).ToCartesian() + Game1.TileOffset;
         }
-
+ 
         public Vector2 GetTilePosition(Vector2 index)
         {
             return ((index - Game1.TileOffset) * TileSize.Y).ToIsometric();
         }
-
+ 
         public Map Create(Point size)
         {
             MapData = new string[size.X, size.Y];
-
+ 
             for (int x = 0; x < MapData.GetLength(0); x++)
             {
                 for (int y = 0; y < MapData.GetLength(1); y++)
@@ -65,13 +65,13 @@ namespace CoT
             }
             return this;
         }
-
+ 
         public Map Create(string[,] mapData)
         {
             MapData = mapData;
             return this;
         }
-
+ 
         public Map Save(string fileName, bool saveTileMap)
         {
             if (saveTileMap)
@@ -87,20 +87,20 @@ namespace CoT
             Helper.Serialize(fileName, MapData);
             return this;
         }
-
+ 
         public Map Load(string fileName)
         {
             MapData = (string[,])Helper.Deserialize(fileName);
             TileMap = new Tile[MapData.GetLength(0), MapData.GetLength(1)];
             Grid = new Grid(MapData.GetLength(0), MapData.GetLength(1), 1f);
-
+           
             for (int x = 0; x < TileMap.GetLength(0); x++)
             {
                 for (int y = 0; y < TileMap.GetLength(1); y++)
                 {
                     TileMap[x, y] = this[MapData[x, y]];
                     SetCell(x, y);
-
+ 
                     if (TileMap[x, y].TileType == TileType.Collision)
                     {
                         Hull hull = new Hull(new Vector2[]
@@ -110,15 +110,15 @@ namespace CoT
                             new Vector2(160, 40),
                             new Vector2(80, 80),
                         });
-
+ 
                         GameManager.Instance.Penumbra.DrawOrder = 5;
-
+ 
                         hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
                         GameManager.Instance.Penumbra.Hulls.Add(hull);
                     }
-
-
-
+ 
+ 
+ 
                     if (TileMap[x, y].TileType == TileType.Collision)
                     {
                         int rnd = Game1.Random.Next(0, 3);
@@ -131,7 +131,7 @@ namespace CoT
                         {
                             WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
                             //obj.Offset = new Vector2(140, 155);
-                            obj.Offset = new Vector2(-262 / 2, -316 + 2 * (TileSize.Y / 3));
+                            obj.Offset = new Vector2( - 262 / 2, -316 + 2 * (TileSize.Y/3));
                             WorldObjects.Add(obj);
                         }
                         else
@@ -145,7 +145,7 @@ namespace CoT
             }
             return this;
         }
-
+ 
         public void SetCell(int x, int y)
         {
             if (TileMap[x, y].TileType == TileType.Collision)
@@ -161,30 +161,30 @@ namespace CoT
         {
             WorldObjects.ForEach(x => x.Update());
         }
-
+ 
         public void Draw(SpriteBatch sb)
         {
             Vector2 cartesianTileWorldPos =
                 new Vector2(
                     Input.CurrentMousePosition.ScreenToWorld().X / TileSize.Y,
                     Input.CurrentMousePosition.ScreenToWorld().Y / TileSize.Y);
-
+ 
             Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
-
+ 
             Rectangle visibleArea = Camera.VisibleArea;
-
+ 
             for (int i = 0; i < TileMap.GetLength(0); i++)
             {
                 for (int j = 0; j < TileMap.GetLength(1); j++)
                 {
                     Tile t = TileMap[i, j];
                     Vector2 tempPos = new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric();
-
+ 
                     if (visibleArea.Contains(tempPos.ToPoint()))
                     {
                         sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), tempPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
-
+ 
                     //if (isometricScreenTile == new Point(i, j))
                     //{
                     //    sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), new Vector2(i * TileSize.Y, j * TileSize.Y).ToIsometric(), Color.Red);
@@ -198,10 +198,10 @@ namespace CoT
                     //}
                 }
             }
-
-
+ 
+ 
             WorldObjects.ForEach(x => x.Draw(sb));
-
+ 
             if (GameDebugger.Debug)
             {
                 for (int i = 0; i < WorldObjects.Count; i++)
