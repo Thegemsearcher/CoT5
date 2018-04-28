@@ -60,7 +60,8 @@ namespace CoT
 
             Color = Color.White;
             Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
-            Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
+            //Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
+            Offset = new Vector2(0,0);
         }
 
         public virtual void OnRemove() { }
@@ -74,7 +75,7 @@ namespace CoT
         {
             if (Camera.VisibleArea.Contains(Position))
             {
-                sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
+                sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position + Offset, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
 
                 if (GameDebugger.Debug)
                     sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox, null, Color.Magenta * 0.3f, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);

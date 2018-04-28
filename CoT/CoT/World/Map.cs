@@ -121,13 +121,14 @@ namespace CoT
                         else if (rnd.Equals(1))
                         {
                             WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
-                            obj.Offset = new Vector2(140, 155);
+                            //obj.Offset = new Vector2(140, 155);
+                            obj.Offset = new Vector2( - 262 / 2, -316 + 2 * (TileSize.Y/3));
                             WorldObjects.Add(obj);
                         }
                         else
                         {
                             WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
-                            obj.Offset = new Vector2(140, 155);
+                            obj.Offset = new Vector2(-40, -84 + TileSize.Y);
                             WorldObjects.Add(obj);
                         }
                     }
