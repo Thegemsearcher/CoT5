@@ -40,20 +40,21 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange())
+            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange(CenterMass, player.CenterMass))
             {
                 return hasAggro = true;
-            }
-            else
+            } else if (!hasAggro)
                 return false;
+            else
+                return true;
         }
 
         #region bresenham algoritm
 
-        public bool VisionRange()
+        public bool VisionRange(Vector2 start,Vector2 finish)
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
-            List<Vector2> vision = BresenhamLine(CenterMass, player.CenterMass);
+            List<Vector2> vision = BresenhamLine(start, finish);
             Tile t;
             foreach (Vector2 pos in vision)
             {
@@ -85,12 +86,12 @@ namespace CoT
             {
                 return;
             }
-            
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
             if (!attacking && (DetectPlayer() || hasAggro))
             {
                 Move();
             }
+
             //Fienden går från sina fötter istället för 0,0 på bilden.
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -147,7 +148,7 @@ namespace CoT
             base.OnRemove();
         }
 
-        public void Move()
+        public virtual void Move()
         {
             nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
             nextPosition.X += map.TileSize.X / 2;

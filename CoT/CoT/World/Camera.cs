@@ -15,6 +15,7 @@ namespace CoT
         public static float Rotation { get; set; } = 0f;
         public static float FocusSpeed { get; set; } = 3f;
         public static float ScaleInput { get; set; } = 1f;
+        public static float ScaleSpeed { get; set; } = 3f;
 
         public static Vector2 Position { get; set; } = new Vector2(0, 0);
         public static Vector2? Focus { get; set; } = null;
@@ -34,6 +35,27 @@ namespace CoT
             Matrix.CreateScale(1, 2, 1f) *
             Matrix.CreateTranslation(new Vector3(Game1.Game.GraphicsDevice.Viewport.Width * 0.5f, Game1.Game.GraphicsDevice.Viewport.Height * 0.5f, 0));
 
+        public static Rectangle VisibleArea
+        {
+            get
+            {
+                Vector2 topLeft = Vector2.Transform(Vector2.Zero, InvertedTransform);
+                Vector2 topRight = Vector2.Transform(new Vector2(Game1.ScreenWidth, 0), InvertedTransform);
+                Vector2 bottomLeft = Vector2.Transform(new Vector2(0, Game1.ScreenHeight), InvertedTransform);
+                Vector2 bottomRight = Vector2.Transform(new Vector2(Game1.ScreenWidth, Game1.ScreenHeight), InvertedTransform);
+
+                Vector2 min = new Vector2(
+                    MathHelper.Min(topLeft.X, MathHelper.Min(topRight.X, MathHelper.Min(bottomLeft.X, bottomRight.X))),
+                    MathHelper.Min(topLeft.Y, MathHelper.Min(topRight.Y, MathHelper.Min(bottomLeft.Y, bottomRight.Y))));
+
+                var max = new Vector2(
+                    MathHelper.Max(topLeft.X, MathHelper.Max(topRight.X, MathHelper.Max(bottomLeft.X, bottomRight.X))),
+                    MathHelper.Max(topLeft.Y, MathHelper.Max(topRight.Y, MathHelper.Max(bottomLeft.Y, bottomRight.Y))));
+
+                return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
+            }
+        }
+
         public static void Update()
         {
             if (Input.IsScrollMvdUp)
@@ -45,6 +67,8 @@ namespace CoT
                 ScaleInput = Scale / 1.3f;
             }
 
+            GameDebugger.WriteLine("scale: " + Scale);
+            GameDebugger.WriteLine($"scaleinput {ScaleInput}");
             if (ScreenShakeDuration > 0)
             {
                 ScreenShakeDuration -= Time.DeltaTime;
@@ -57,7 +81,7 @@ namespace CoT
             }
 
             if (Focus != null) Position = Vector2.Lerp(Position, Focus.Value, FocusSpeed * Time.DeltaTime);
-            Scale = MathHelper.Lerp(Scale, ScaleInput, Time.DeltaTime * 5);
+            Scale = MathHelper.Lerp(Scale, ScaleInput, Time.DeltaTime * ScaleSpeed);
         }
 
         public static void ScreenShake(float duration, float intensity)
@@ -65,6 +89,8 @@ namespace CoT
             ScreenShakeDuration = duration;
             ScreenShakeIntensity = intensity;
         }
+
+        public static Matrix InvertedTransform => Matrix.Invert(Transform);
 
         private static Vector2 ScreenToWorld(Vector2 position)
         {

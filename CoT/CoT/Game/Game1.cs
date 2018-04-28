@@ -16,15 +16,20 @@ using Console = System.Console;
 
 namespace CoT
 {
+    public enum Direction
+    {
+        North, East, South, West
+    }
+
     public class Game1 : Game
     {
         #region Constants
 
-        public static readonly int ScreenWidth = 1920;
-        public static readonly int ScreenHeight = 1080;
         public static readonly Vector2 TileOffset = new Vector2(-0.5f, 0.5f);
         public static readonly int MonitorWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         public static readonly int MonitorHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+        public static readonly int ScreenWidth = MonitorWidth;
+        public static readonly int ScreenHeight = MonitorHeight;
 
         #endregion
 

@@ -10,18 +10,21 @@ using Penumbra;
 using Console = System.Console;
 using RoyT.AStar;
 using System.Threading;
+using CoT.Helpers;
 
 namespace CoT
 {
     public class Player : Creature
     {
 
-        float speed = 200f;
-        Vector2 direction, nextPosition, targetPos;
-        Position[] path;
-        Position nextTileInPath;
-        bool normalMoving, pathMoving;
-        FloatRectangle bottomHitBox;
+        private float speed = 200f;
+        private Vector2 direction, nextPosition, targetPos;
+        private Position[] path;
+        private Position nextTileInPath;
+        private bool normalMoving, pathMoving;
+        private FloatRectangle bottomHitBox;
+        private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
+        private float frameTimer = 100, frameInterval = 100;
 
         enum HeroClass
         {
@@ -43,10 +46,12 @@ namespace CoT
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             LayerDepth = 1f;
-
+            //
+            defense = 10000;
+            //
             CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
-            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
-            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
+            destinationRectangle.Width = (int)(sourceRectangle.Width);
+            destinationRectangle.Height = (int)(sourceRectangle.Height);
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
@@ -103,6 +108,7 @@ namespace CoT
                 }
                
             }
+            Animation();
             AttackLockTimer();
             InputAttack();
             UpdateVariables();
@@ -182,8 +188,8 @@ namespace CoT
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
-                PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2,
+                PositionOfFeet.Y - (SourceRectangle.Height * Scale));
         } 
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
@@ -223,7 +229,7 @@ namespace CoT
                 direction.Y = nextPosition.Y - PositionOfFeet.Y;
                 direction.Normalize();
                 PositionOfFeet += direction * speed * Time.DeltaTime;
-                Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+                Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
             }     
         }
 
@@ -236,11 +242,19 @@ namespace CoT
             return targetDirection;
         }
 
+        public void Animation()
+        {
+            if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
+            {
+                SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
+            }
+        }
+
         public override void Draw(SpriteBatch sb)
         {
             //Debug
             //FullHitbox
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y), Color.Red * 0.1f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), destinationRectangle/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.1f);
             
             //BottomHitox 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);

@@ -49,10 +49,15 @@
     <Compile Include="GameStates\Screens\MainMenuScreen.cs" />
     <Compile Include="GameStates\Screens\OptionsMenuScreen.cs" />
     <Compile Include="GameStates\Screens\PauseMenuScreen.cs" />
+    <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\TextureCreator.cs" />
     <Compile Include="Interfaces\IManager.cs" />
     <Compile Include="GameStates\GameScreen.cs" />
     <Compile Include="Managers\ScreenManager.cs" />
+    <Compile Include="World\Generation\Corridor.cs" />
+    <Compile Include="World\Generation\MapGenerator.cs" />
+    <Compile Include="World\Generation\RangeInt.cs" />
+    <Compile Include="World\Generation\Room.cs" />
     <Compile Include="World\WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
@@ -146,6 +151,7 @@
     <None Include="Game\ClassDiagram1.cd" />
     <None Include="Game\app.manifest" />
     <None Include="Game\packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

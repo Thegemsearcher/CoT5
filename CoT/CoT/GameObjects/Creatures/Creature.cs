@@ -58,6 +58,8 @@ namespace CoT
 
             return chosenPath;
         }
+
+
         #region  Bresenham algoritm
         // Swap the values of A and B
         private void Swap<T>(ref T a, ref T b)
@@ -96,7 +98,7 @@ namespace CoT
             int ystep;
             int y = (int)y0;
             if (y0 < y1) ystep = 1; else ystep = -1;
-            for (int x = (int)x0; x <= x1; x += (map.TileSize.Y/2))
+            for (int x = (int)x0; x <= x1; x += (map.TileSize.Y/10))
             {
                 if (steep) result.Add(new Vector2(y, x));
                 else result.Add(new Vector2(x, y));
