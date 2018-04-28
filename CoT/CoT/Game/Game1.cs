@@ -64,8 +64,8 @@ namespace CoT
             WindowForm = (Form)Control.FromHandle(Window.Handle);
             Window.AllowAltF4 = true;
             Window.AllowUserResizing = false;
-            Window.IsBorderless = false;
-            Window.Position = new Point(WindowBorderSize.X + 1, 0);
+            Window.IsBorderless = true;
+            Window.Position = new Point(0, 0);
             Graphics.ApplyChanges();
 
             WindowForm.Load += (sender, args) =>
@@ -76,10 +76,6 @@ namespace CoT
                 GameManager.LoadContent();
             };
         }
-
-        public Point WindowBorderSize => new Point(
-                WindowForm.RectangleToScreen(WindowForm.ClientRectangle).Right - WindowForm.Right,
-                WindowForm.RectangleToScreen(WindowForm.ClientRectangle).Top - WindowForm.Top);
 
         protected override void Initialize()
         {
