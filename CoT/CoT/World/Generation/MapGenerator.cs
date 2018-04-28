@@ -58,6 +58,14 @@ namespace CoT
                     for (int k = 0; k < room.Height; k++)
                     {
                         int yPos = room.Position.Y + k;
+                        if (yPos == 100)
+                        {
+                            yPos -= 20;
+                        }
+                        else if (xPos == 100)
+                        {
+                            xPos -= 20;
+                        }
                         MapData[xPos, yPos] = "tile1";
                     }
                 }
@@ -87,7 +95,14 @@ namespace CoT
                             xPos -= j;
                             break;
                     }
-
+                    if (yPos == 100)
+                    {
+                        yPos -= 20;
+                    }
+                    else if (xPos == 100)
+                    {
+                        xPos -= 20;
+                    }
                     MapData[xPos, yPos] = "tile1";
                 }
             }

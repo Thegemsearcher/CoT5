@@ -19,6 +19,7 @@ namespace CoT
 
         }
 
+
         public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight)
         {
             Width = widthRange.Random;
