@@ -9,26 +9,55 @@ namespace CoT
 {
     class Room
     {
-        public Vector2 Position { get; set; }
+        public Point Position { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public Direction EnteringCorridor { get; set; }
 
         public Room()
         {
-            
+
         }
 
-        public void Create(RangeInt roomWidth, RangeInt roomHeight, int mapWidth, int mapHeight)
+        public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight)
         {
-            Width = roomWidth.Random;
-            Height = roomHeight.Random;
+            Width = widthRange.Random;
+            Height = heightRange.Random;
 
-            Position = new Vector2(mapWidth / 2f - Width / 2f, mapHeight / 2f - Height / 2f);
+            Position = new Point(Convert.ToInt32(mapWidth / 2f - Width / 2f), Convert.ToInt32(mapHeight / 2f - Height / 2f));
+            return this;
         }
-        public void Create(RangeInt roomWidth, RangeInt roomHeight, int mapWidth, int mapHeight, Corridor corridor)
+        public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight, Corridor corridor)
         {
+            EnteringCorridor = corridor.Direction;
+            Width = widthRange.Random;
+            Height = heightRange.Random;
 
+            switch (corridor.Direction)
+            {
+                case Direction.North:
+                    Height = MathHelper.Clamp(Height, 1, mapHeight - corridor.EndPosition.Y);
+                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 1, corridor.EndPosition.X), 0, mapWidth - Width), corridor.EndPosition.Y);
+                    break;
+                case Direction.East:
+                    Width = MathHelper.Clamp(Width, 1, mapWidth - corridor.EndPosition.X);
+                    Position = new Point(corridor.EndPosition.X, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 1, corridor.EndPosition.Y), 0, mapHeight - Height));
+                    break;
+                case Direction.South:
+
+                    Height = MathHelper.Clamp(Height, 1, corridor.EndPosition.Y);
+                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 1, corridor.EndPosition.X), 0, mapWidth - Width), corridor.EndPosition.Y - Height + 1);
+                    break;
+                case Direction.West:
+
+                    Width = MathHelper.Clamp(Width, 1, corridor.EndPosition.X);
+                    Position = new Point(corridor.EndPosition.X - Width + 1, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 1, corridor.EndPosition.Y), 0, mapHeight - Height));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return this;
         }
     }
 }

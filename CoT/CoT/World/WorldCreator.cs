@@ -26,7 +26,7 @@ namespace CoT
             converter = Game1.Random.Next(10, 100);
 
             map.Create(new Point(converter, converter));
-            map.TileMap[converter, converter]
+            //map.TileMap[converter, converter]
 
             int min;
             int max;

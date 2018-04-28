@@ -20,10 +20,11 @@ namespace CoT
         public Tile[,] TileMap { get; set; }
         public string[,] MapData { get; set; }
         public Point TileSize { get; set; }
-        public RoyT.AStar.Grid Grid { get; private  set; }
+        public RoyT.AStar.Grid Grid { get; private set; }
+
         public List<GameObject> WorldObjects { get; set; }
 
-        
+
         public Map(Point tileSize)
         {
             TileSize = tileSize;
@@ -65,13 +66,22 @@ namespace CoT
             return this;
         }
 
-        public Map Save(string fileName)
+        public Map Create(string[,] mapData)
         {
-            for (int x = 0; x < TileMap.GetLength(0); x++)
+            MapData = mapData;
+            return this;
+        }
+
+        public Map Save(string fileName, bool saveTileMap)
+        {
+            if (saveTileMap)
             {
-                for (int y = 0; y < TileMap.GetLength(1); y++)
+                for (int x = 0; x < TileMap.GetLength(0); x++)
                 {
-                    MapData[x, y] = TileMap[x, y].Tag;
+                    for (int y = 0; y < TileMap.GetLength(1); y++)
+                    {
+                        MapData[x, y] = TileMap[x, y].Tag;
+                    }
                 }
             }
             Helper.Serialize(fileName, MapData);
@@ -83,7 +93,7 @@ namespace CoT
             MapData = (string[,])Helper.Deserialize(fileName);
             TileMap = new Tile[MapData.GetLength(0), MapData.GetLength(1)];
             Grid = new Grid(MapData.GetLength(0), MapData.GetLength(1), 1f);
-            
+
             for (int x = 0; x < TileMap.GetLength(0); x++)
             {
                 for (int y = 0; y < TileMap.GetLength(1); y++)
@@ -121,7 +131,7 @@ namespace CoT
                         {
                             WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
                             //obj.Offset = new Vector2(140, 155);
-                            obj.Offset = new Vector2( - 262 / 2, -316 + 2 * (TileSize.Y/3));
+                            obj.Offset = new Vector2(-262 / 2, -316 + 2 * (TileSize.Y / 3));
                             WorldObjects.Add(obj);
                         }
                         else
@@ -133,13 +143,6 @@ namespace CoT
                     }
                 }
             }
-
-            for (int x = 0; x < TileMap.GetLength(0); x++)
-            {
-                for (int y = 0; y < TileMap.GetLength(1); y++)
-                {
-                }
-            }
             return this;
         }
 
@@ -148,7 +151,7 @@ namespace CoT
             if (TileMap[x, y].TileType == TileType.Collision)
             {
                 Grid.BlockCell(new Position(x, y));
-            } 
+            }
             else if (TileMap[x, y].TileType == TileType.Water)
             {
                 Grid.SetCellCost(new Position(x, y), 5);
