@@ -60,10 +60,12 @@ namespace CoT
                         int yPos = room.Position.Y + k;
                         if (yPos >= 100)
                         {
+                            yPos = 100;
                             yPos -= 20;
                         }
                         else if (xPos >= 100)
                         {
+                            xPos = 100;
                             xPos -= 20;
                         }
                         MapData[xPos, yPos] = "tile1";
@@ -80,6 +82,16 @@ namespace CoT
                     int xPos = corridor.Position.X;
                     int yPos = corridor.Position.Y;
 
+                    if (yPos >= 100)
+                    {
+                        yPos = 100;
+                        yPos -= 5;
+                    }
+                    else if (xPos >= 100)
+                    {
+                        xPos = 100;
+                        xPos -= 5;
+                    }
                     switch (corridor.Direction)
                     {
                         case Direction.North:
@@ -95,14 +107,7 @@ namespace CoT
                             xPos -= j;
                             break;
                     }
-                    if (yPos >= 100)
-                    {
-                        yPos -= 5;
-                    }
-                    else if (xPos >= 100)
-                    {
-                        xPos -= 5;
-                    }
+
                     MapData[xPos, yPos] = "tile1";
                 }
             }
