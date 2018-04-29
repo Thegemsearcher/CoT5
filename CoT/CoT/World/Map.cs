@@ -121,25 +121,25 @@ namespace CoT
  
                     if (TileMap[x, y].TileType == TileType.Collision)
                     {
-                        int rnd = Game1.Random.Next(0, 3);
-                        if (rnd.Equals(0))
-                        {
-                            WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float)TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
-                            WorldObjects.Add(obj);
-                        }
-                        else if (rnd.Equals(1))
-                        {
-                            WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
-                            //obj.Offset = new Vector2(140, 155);
-                            obj.Offset = new Vector2( - 262 / 2, -316 + 2 * (TileSize.Y/3));
-                            WorldObjects.Add(obj);
-                        }
-                        else
-                        {
-                            WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
-                            obj.Offset = new Vector2(-40, -84 + TileSize.Y);
-                            WorldObjects.Add(obj);
-                        }
+                        //int rnd = Game1.Random.Next(0, 3);
+                        //if (rnd.Equals(0))
+                        //{
+                        WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float)TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
+                        WorldObjects.Add(obj);
+                        //}
+                        //else if (rnd.Equals(1))
+                        //{
+                        //    WorldObject obj = new WorldObject("tree", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 262, 316), new Vector2(131, 270));
+                        //    //obj.Offset = new Vector2(140, 155);
+                        //    obj.Offset = new Vector2( - 262 / 2, -316 + 2 * (TileSize.Y/3));
+                        //    WorldObjects.Add(obj);
+                        //}
+                        //else
+                        //{
+                        //    WorldObject obj = new WorldObject("stone", GetTilePosition(new Vector2(x, y)), new Rectangle(0, 0, 80, 64), new Vector2(80 / 2, 40));
+                        //    obj.Offset = new Vector2(-40, -84 + TileSize.Y);
+                        //    WorldObjects.Add(obj);
+                        //}
                     }
                 }
             }

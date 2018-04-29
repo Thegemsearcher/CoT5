@@ -21,6 +21,15 @@ namespace CoT.GameObjects
         {
             LayerDepth = (Position.Y + DepthSortingOffset.Y).Normalize(short.MinValue, short.MaxValue);
             //base.Update();
+
+            if (GameplayScreen.Instance.Player.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
+            {
+                Transparency = 0.1f;
+            }
+            else
+            {
+                Transparency = 1f;
+            }
         }
 
         public override void Draw(SpriteBatch sb)

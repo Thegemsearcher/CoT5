@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace CoT
 {
     class MapGenerator
     {
-        public int MapWidth { get; set; } = 100;
-        public int MapHeight { get; set; } = 100;
-        public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 20);
-        public RangeInt RoomWidthRange { get; set; } = new RangeInt(10, 20);
-        public RangeInt RoomHeightRange { get; set; } = new RangeInt(10, 20);
+        public int MapWidth { get; set; } = 50;
+        public int MapHeight { get; set; } = 50;
+        public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 10);
+        public RangeInt RoomWidthRange { get; set; } = new RangeInt(7, 15);
+        public RangeInt RoomHeightRange { get; set; } = new RangeInt(7, 15);
         public RangeInt CorridorLengthRange { get; set; } = new RangeInt(5, 10);
 
         public Room[] Rooms { get; set; }
         public Corridor[] Corridors { get; set; }
         public string[,] MapData { get; set; }
+
+        public Vector2 PlayerStartPosition { get; set; }
 
         public MapGenerator()
         {
@@ -45,6 +48,11 @@ namespace CoT
                 {
                     Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, false);
                 }
+
+                if (i == 1)
+                {
+                    PlayerStartPosition = new Vector2((Rooms[i].Position.X + 1) * 80, (Rooms[i].Position.Y) * 80);
+                }
             }
 
             for (int i = 0; i < Rooms.Length; i++)
@@ -58,15 +66,14 @@ namespace CoT
                     for (int k = 0; k < room.Height; k++)
                     {
                         int yPos = room.Position.Y + k;
-                        if (yPos >= 100)
+
+                        if (yPos >= MapHeight)
                         {
-                            yPos = 100;
-                            yPos -= 20;
+                            yPos = MapHeight - 1;
                         }
-                        else if (xPos >= 100)
+                        else if (xPos >= MapWidth)
                         {
-                            xPos = 100;
-                            xPos -= 20;
+                            xPos = MapWidth - 1;
                         }
                         MapData[xPos, yPos] = "tile1";
                     }
@@ -82,16 +89,6 @@ namespace CoT
                     int xPos = corridor.Position.X;
                     int yPos = corridor.Position.Y;
 
-                    if (yPos >= 100)
-                    {
-                        yPos = 100;
-                        yPos -= 5;
-                    }
-                    else if (xPos >= 100)
-                    {
-                        xPos = 100;
-                        xPos -= 5;
-                    }
                     switch (corridor.Direction)
                     {
                         case Direction.North:
@@ -108,7 +105,37 @@ namespace CoT
                             break;
                     }
 
+                    if (yPos >= MapHeight)
+                    {
+                        yPos = MapHeight - 1;
+                    }
+                    else if (xPos >= MapWidth)
+                    {
+                        xPos = MapWidth - 1;
+                    }
+
                     MapData[xPos, yPos] = "tile1";
+                }
+            }
+
+            for (int i = 0; i < MapData.GetLength(0); i++)
+            {
+                for (int j = 0; j < MapData.GetLength(1); j++)
+                {
+                    if (MapData[i, j] == "tile2")
+                    {
+                        try
+                        {
+                            if (MapData[i + 1, j] == "tile1" || MapData[i - 1, j] == "tile1" || MapData[i, j + 1] == "tile1" || MapData[i, j - 1] == "tile1")
+                            {
+                                MapData[i, j] = "tile3";
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                    }
                 }
             }
         }

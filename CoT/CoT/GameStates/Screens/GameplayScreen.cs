@@ -87,12 +87,14 @@ namespace CoT
                 Map = new Map(new Point(160, 80));
                 Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
                 Map["tile2"] = new Tile(TileType.Water, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
-                //Map.Create(new Point(100, 100)).Save("Map1.dat", false).Load("Map1.dat");
+                Map["tile3"] = new Tile(TileType.Collision, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            //Map.Create(new Point(100, 100)).Save("Map1.dat", false).Load("Map1.dat");
 
-                MapGenerator generation = new MapGenerator();
+            MapGenerator generation = new MapGenerator();
                 Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
-                Player = new Player("stationaryPCSheet", new Vector2(10, 10).ToIsometric(), new Rectangle(0, 0, 26, 53),
+                Console.WriteLine(generation.PlayerStartPosition);
+                Player = new Player("stationaryPCSheet", generation.PlayerStartPosition.ToIsometric(), new Rectangle(0, 0, 26, 53),
                     new Vector2(30, 130), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
                 CreatureManager.Instance.Creatures.Add(Player);
 
