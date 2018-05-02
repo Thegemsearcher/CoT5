@@ -24,11 +24,11 @@ namespace CoT.GameObjects
 
             if (GameplayScreen.Instance.Player.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
             {
-                Transparency = 0.1f;
+                if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
             }
             else
             {
-                Transparency = 1f;
+                if (Transparency < 1f) Transparency += Time.DeltaTime;
             }
         }
 

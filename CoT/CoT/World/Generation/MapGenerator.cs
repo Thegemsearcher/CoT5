@@ -40,7 +40,7 @@ namespace CoT
             Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight);
             Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, true);
 
-            PlayerStartPosition = new Vector2(Rooms[0].Position.X + 2, Rooms[0].Position.Y);
+            PlayerStartPosition = new Vector2(Rooms[0].Position.X + 1, Rooms[0].Position.Y);
 
             Console.WriteLine(Rooms[0].Position);
 
