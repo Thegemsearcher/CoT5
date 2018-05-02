@@ -9,8 +9,8 @@ namespace CoT
 {
     class MapGenerator
     {
-        public int MapWidth { get; set; } = 50;
-        public int MapHeight { get; set; } = 50;
+        public int MapWidth { get; set; } = 100;
+        public int MapHeight { get; set; } = 100;
         public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 10);
         public RangeInt RoomWidthRange { get; set; } = new RangeInt(7, 15);
         public RangeInt RoomHeightRange { get; set; } = new RangeInt(7, 15);
@@ -40,6 +40,10 @@ namespace CoT
             Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight);
             Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, true);
 
+            PlayerStartPosition = new Vector2(Rooms[0].Position.X + 2, Rooms[0].Position.Y);
+
+            Console.WriteLine(Rooms[0].Position);
+
             for (int i = 1; i < Rooms.Length; i++)
             {
                 Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, Corridors[i - 1]);
@@ -47,11 +51,6 @@ namespace CoT
                 if (i < Corridors.Length)
                 {
                     Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, false);
-                }
-
-                if (i == 1)
-                {
-                    PlayerStartPosition = new Vector2((Rooms[i].Position.X + 1) * 80, (Rooms[i].Position.Y) * 80);
                 }
             }
 
