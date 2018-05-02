@@ -37,7 +37,7 @@ namespace CoT
                 path = Pathing(player.PositionOfFeet);
             }
             //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
-            if (((Vector2.Distance(player.PositionOfFeet, PositionOfFeet) < attackSize /*- (attackSize / 20)*/)))
+            if (((Vector2.Distance(player.PositionOfFeet, PositionOfFeet) < attackSize - (attackSize / 20))))
             {
                 Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
                 nextPos.X = PositionOfFeet.X - (player.PositionOfFeet.X - PositionOfFeet.X);
