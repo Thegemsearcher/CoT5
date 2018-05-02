@@ -33,11 +33,20 @@ namespace CoT
 
         }
 
+        enum MovementState 
+        {
+            Idle,
+            DirectMoving,
+            Pathfinding,
+            Collide,
+        }
+
+        private MovementState currentMovementState;
+
         private Penumbra.Light light;
 
         public Player(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
         {
-            //this.enemies = enemies;
             this.map = map;
             this.grid = grid;
             attackSize = 150;
@@ -60,6 +69,7 @@ namespace CoT
 
             spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
         }
+
         public override void Update()
         {
             spriteSheet.Update();
@@ -71,57 +81,79 @@ namespace CoT
             {
                 return;
             }
-            light.Position = PositionOfFeet;
-            Camera.Focus = PositionOfFeet;
 
             if (Input.IsRightClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
-                //spelaren kan inte röra sig under tiden det tar att utföra en attack
+                                                         //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
                 direction = GetDirection(PositionOfFeet, targetPos);
-                normalMoving = true;
-                pathMoving = false;
-            }
-
-            if (normalMoving)
-            {
-                CheckForCollision();
-            }
-
-            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
-            {
-                normalMoving = false;
-                pathMoving = false;
-            }
-
-            if (normalMoving)
-            {
-                Move(direction);
-            }
-
-            if (pathMoving)
-            {
                 path = Pathing(targetPos);
-                if (path.Length > 1)
-                {
-                    nextTileInPath = path[1];
-                    PathMove();
-                }
-                else
-                {
-                    pathMoving = false;
-                    normalMoving = true;
-                    direction = GetDirection(PositionOfFeet, targetPos);
-                }
-               
+                currentMovementState = MovementState.DirectMoving;
             }
-            Animation();
+
+            switch (currentMovementState)
+            {
+                case MovementState.Idle:
+                    Animation();
+                    break;
+                case MovementState.DirectMoving:
+                    Move(direction);
+                    if (CheckForCollision())
+                    {
+                        currentMovementState = MovementState.Collide;
+                    }
+                    break;
+                case MovementState.Pathfinding:
+                    PathMoving();
+                    if (path.Length <= 1)
+                    {
+                        direction = GetDirection(PositionOfFeet, targetPos);
+                        currentMovementState = MovementState.DirectMoving;
+                    }
+                    break;
+                case MovementState.Collide:
+                    Move((direction * -1));
+                    if (CheckForCollision())
+                    {
+                        break;
+                    }
+                    if (path.Length < 1)
+                    {
+                        currentMovementState = MovementState.Idle;
+                    }
+                    else
+                    {
+                        currentMovementState = MovementState.Pathfinding;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            StopMoving();
             AttackLockTimer();
             InputAttack();
             UpdateVariables();
         }
 
-        public void InputAttack() //Vid högerklick attackerar spelaren
+        private void PathMoving()
+        {
+            path = Pathing(targetPos);
+            if (path.Length > 1)
+            {
+                nextTileInPath = path[1];
+                PathMove();
+            }
+        }
+
+        private void StopMoving()
+        {
+            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            {
+                currentMovementState = MovementState.Idle;
+            }
+        }
+
+        public void InputAttack() //Vid vänsterklick attackerar spelaren
         {
             Vector2 attackDirection;
 
@@ -189,6 +221,8 @@ namespace CoT
 
         public void UpdateVariables() //Samlar uppdatering av variabler
         {
+            light.Position = PositionOfFeet;
+            Camera.Focus = PositionOfFeet;
             float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
                 Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
@@ -223,40 +257,41 @@ namespace CoT
             }
         }
 
-        public void CheckForCollision() //Kollision med väggtile-check
+        public bool CheckForCollision() //Kollision med väggtile-check
         {
             int stoppingDistance = map.TileSize.Y / 16;
+            Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
+            FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
             for (int x = 0; x < map.TileMap.GetLength(0); x++)
             {
                 for (int y = 0; y < map.TileMap.GetLength(1); y++)
                 {
                     Vector2 tilePos = map.GetTilePosition(new Vector2(x, y)).ToCartesian();
-                    Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
-                    //Vector2 hitboxPos = bottomHitBox.Position.ToCartesian();
-                    FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
 
                     if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Collision)
                     {
-                        normalMoving = false;
-                        pathMoving = true;
+                        
+                        //normalMoving = false;
+                        //PositionOfFeet -= direction * speed * 2 * Time.DeltaTime;
+                        //pathMoving = true;
+
+                        return true;
                     }
                 }
             }
+            return false;
         } 
 
         public void PathMove() //Rörelse via Pathfinding
         {
-            //if (pathMoving)
-            {
-                nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
-                nextPosition.X += map.TileSize.X / 2;
-                nextPosition.Y += map.TileSize.Y / 2;
-                direction.X = nextPosition.X - PositionOfFeet.X;
-                direction.Y = nextPosition.Y - PositionOfFeet.Y;
-                direction.Normalize();
-                PositionOfFeet += direction * speed * Time.DeltaTime;
-                Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
-            }     
+            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
+            nextPosition.X += map.TileSize.X / 2;
+            nextPosition.Y += map.TileSize.Y / 2;
+            direction.X = nextPosition.X - PositionOfFeet.X;
+            direction.Y = nextPosition.Y - PositionOfFeet.Y;
+            direction.Normalize();
+            PositionOfFeet += direction * speed * Time.DeltaTime;
+            Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
@@ -270,7 +305,7 @@ namespace CoT
 
         public void Animation()
         {
-            if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
+            //if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
             {
                 //spriteSheet.SetCurrentFrame(5);
                 //spriteSheet.SetFrameCount(new Point(5, 2));
