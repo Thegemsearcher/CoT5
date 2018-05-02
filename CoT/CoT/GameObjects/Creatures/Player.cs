@@ -58,11 +58,12 @@ namespace CoT
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
 
-            spriteSheet = new Spritesheet(texture, new Point(4, 1), SourceRectangle, 100);
+            spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
         }
         public override void Update()
         {
             spriteSheet.Update();
+            SourceRectangle = spriteSheet.SourceRectangle;
 
             Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
@@ -201,6 +202,25 @@ namespace CoT
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
             PositionOfFeet += direction * speed * Time.DeltaTime;
+
+            if (direction.X > 0)
+            {
+                spriteSheet.SetFrameCount(new Point(5, 3));
+                if (spriteSheet.StartFrame != 10)
+                {
+                    spriteSheet.StartFrame = 10;
+                    spriteSheet.CurrentFrame = 10;
+                }
+            }
+            else if (direction.X < 0)
+            {
+                spriteSheet.SetFrameCount(new Point(5, 2));
+                if (spriteSheet.StartFrame != 5)
+                {
+                    spriteSheet.StartFrame = 5;
+                    spriteSheet.CurrentFrame = 5;
+                }
+            }
         }
 
         public void CheckForCollision() //Kollision med väggtile-check
@@ -252,7 +272,14 @@ namespace CoT
         {
             if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
             {
+                //spriteSheet.SetCurrentFrame(5);
+                //spriteSheet.SetFrameCount(new Point(5, 2));
+                //SourceRectangle = spriteSheet.SourceRectangle;
+                spriteSheet.SetFrameCount(new Point(5, 1));
+                spriteSheet.StartFrame = 0;
+
                 SourceRectangle = spriteSheet.SourceRectangle;
+
                 //SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
             }
         }

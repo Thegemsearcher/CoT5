@@ -65,8 +65,8 @@ namespace CoT
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("tree"), "tree");
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
-
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
+                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation"), "playerAnimation");
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
                 Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1, 1, 1, 1));
 
                 //Map = new Map(new Point(160, 80)).Load("Map1.dat");
@@ -94,7 +94,7 @@ namespace CoT
                 Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
                 Console.WriteLine(generation.PlayerStartPosition);
-                Player = new Player("stationaryPCSheet", generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Rectangle(0, 0, 26, 53),
+                Player = new Player("playerAnimation", generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Rectangle(0, 0, 100, 100),
                     new Vector2(30, 130), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
                 CreatureManager.Instance.Creatures.Add(Player);
 
