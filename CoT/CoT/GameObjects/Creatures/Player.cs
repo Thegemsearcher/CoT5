@@ -242,6 +242,7 @@ namespace CoT
                 spriteSheet.SetFrameCount(new Point(5, 3));
                 if (spriteSheet.StartFrame != 10)
                 {
+                    spriteSheet.Interval = 100;
                     spriteSheet.StartFrame = 10;
                     spriteSheet.CurrentFrame = 10;
                 }
@@ -251,6 +252,7 @@ namespace CoT
                 spriteSheet.SetFrameCount(new Point(5, 2));
                 if (spriteSheet.StartFrame != 5)
                 {
+                    spriteSheet.Interval = 100;
                     spriteSheet.StartFrame = 5;
                     spriteSheet.CurrentFrame = 5;
                 }
@@ -310,8 +312,14 @@ namespace CoT
                 //spriteSheet.SetCurrentFrame(5);
                 //spriteSheet.SetFrameCount(new Point(5, 2));
                 //SourceRectangle = spriteSheet.SourceRectangle;
+                spriteSheet.Interval = 100;
                 spriteSheet.SetFrameCount(new Point(5, 1));
-                spriteSheet.StartFrame = 0;
+
+                if (spriteSheet.StartFrame != 0)
+                {
+                    spriteSheet.StartFrame = 0;
+                    spriteSheet.CurrentFrame = 0;
+                }
 
                 SourceRectangle = spriteSheet.SourceRectangle;
 
