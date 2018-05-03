@@ -34,7 +34,8 @@ namespace CoT
             Defense = defense;
             Health = hp;
             this.map = map;
-            PositionOfFeet = new Vector2(position.X /*+ (ResourceManager.Get<Texture2D>(Texture).Width * Scale)/2*/, position.Y /*+ (ResourceManager.Get<Texture2D>(Texture).Height * Scale)*/);
+            PositionOfFeet = new Vector2(position.X + (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2,
+                position.Y + (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public override void OnRemove()

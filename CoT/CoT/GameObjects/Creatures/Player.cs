@@ -67,14 +67,17 @@ namespace CoT
                 new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
             Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
 
+
             spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
+
         }
 
         public override void Update()
         {
             spriteSheet.Update();
             SourceRectangle = spriteSheet.SourceRectangle;
-
+            PositionOfFeet = new Vector2(Position.X + spriteSheet.SourceRectangle.Width / 2 * Scale,
+                Position.Y + spriteSheet.SourceRectangle.Height / 2 * Scale + 65);
             Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
             if (Health <= 0)
@@ -229,13 +232,14 @@ namespace CoT
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
-            Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2,
-                PositionOfFeet.Y - (SourceRectangle.Height * Scale));
+            
+            //Position = new Vector2(this.PositionOfFeet.X - (spriteSheet.SourceRectangle.Width * Scale) / 2,
+            //    this.PositionOfFeet.Y - (spriteSheet.SourceRectangle.Height * Scale));
         } 
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
-            PositionOfFeet += direction * speed * Time.DeltaTime;
+            Position += direction * speed * Time.DeltaTime;
 
             if (direction.X > 0)
             {
@@ -292,8 +296,8 @@ namespace CoT
             direction.X = nextPosition.X - PositionOfFeet.X;
             direction.Y = nextPosition.Y - PositionOfFeet.Y;
             direction.Normalize();
-            PositionOfFeet += direction * speed * Time.DeltaTime;
-            Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
+            Position += direction * speed * Time.DeltaTime;
+            //Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
@@ -331,13 +335,17 @@ namespace CoT
         {
             //Debug
             //FullHitbox
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
 
-            ////BottomHitox 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            //////BottomHitox 
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
-            ////CenterMass 
-            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
+            //FloatRectangle f = new FloatRectangle(PositionOfFeet - new Vector2(5, 5), new Vector2(10, 10));
+            //////BottomHitox 
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), f, Color.Red * 0.5f);
+
+            //////CenterMass 
+            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
 
             //foreach (Creature c in CreatureManager.Instance.Creatures) invulnerability
             //{
