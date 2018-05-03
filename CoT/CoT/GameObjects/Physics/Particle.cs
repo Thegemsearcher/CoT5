@@ -13,8 +13,8 @@ namespace CoT
     {
         public float FadeSpeed { get; set; }
 
-        public Particle(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 direction, float speed, float fadeSpeed, Color color, float rotation = 0, float scale = 1) : 
-            base(texture, position, sourceRectangle, direction, speed)
+        public Particle(Spritesheet spritesheet, Vector2 position, Vector2 direction, float speed, float fadeSpeed, Color color, float rotation = 0, float scale = 1) :
+            base(spritesheet, position, direction, speed)
         {
             FadeSpeed = fadeSpeed;
             Color = color;

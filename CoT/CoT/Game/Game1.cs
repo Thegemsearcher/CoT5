@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
@@ -12,6 +15,8 @@ using Penumbra;
 using Button = Myra.Graphics2D.UI.Button;
 using ComboBox = Myra.Graphics2D.UI.ComboBox;
 using Console = System.Console;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 
 namespace CoT
@@ -60,7 +65,6 @@ namespace CoT
             Graphics.PreferredBackBufferWidth = MonitorWidth;
             Graphics.PreferredBackBufferHeight = MonitorHeight;
             Graphics.IsFullScreen = false;
-
             WindowForm = (Form)Control.FromHandle(Window.Handle);
             Window.AllowAltF4 = true;
             Window.AllowUserResizing = false;

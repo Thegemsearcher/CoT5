@@ -11,36 +11,28 @@ namespace CoT
 {
     public class Enemy : Creature
     {
-
-        protected Player player;
-        //Grid grid;
         protected Position[] path;
         protected Position nextTileInPath;
-        protected float speed, aggroRange;
+        protected float speed;
+        protected float aggroRange;
         protected bool hasAggro = false;
-        protected Vector2 nextPosition, direction = new Vector2(0, 0);
+        protected Vector2 nextPosition;
+        protected Vector2 direction = new Vector2(0, 0);
 
-        public Enemy(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
+        public Enemy(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            this.player = player;
-            this.grid = grid;
-            this.Scale = 0.1f;
+            Scale = 0.1f;
             LayerDepth = 0.7f;
             path = new Position[0];
-            destinationRectangle.Width = (int)(ResourceManager.Get<Texture2D>(Texture).Width * Scale);
-            destinationRectangle.Height = (int)(ResourceManager.Get<Texture2D>(Texture).Height * Scale);
-            Hitbox.Size *= Scale;
-            CenterMass = new Vector2(Position.X, Position.Y - destinationRectangle.Height / 2);
+
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
-            offsetAttackPosition = new Vector2(-destinationRectangle.Width / 4, -destinationRectangle.Height / 4);
+            offsetAttackPosition = new Vector2(-spritesheet.SourceRectangle.Width / (float)2, -spritesheet.SourceRectangle.Height / (float)2);
             //Ska flyttas.
-           
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
         }
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(player.Position, Position) <= aggroRange) && VisionRange(CenterMass, player.CenterMass))
+            if (!hasAggro && (Vector2.Distance(Player.Position, Position) <= aggroRange) && VisionRange(Center, Player.Center))
             {
                 return hasAggro = true;
             } else if (!hasAggro)
@@ -58,14 +50,14 @@ namespace CoT
             Tile t;
             foreach (Vector2 pos in vision)
             {
-                cartesianTileWorldPos.X = pos.X / map.TileSize.Y;
-                cartesianTileWorldPos.Y = pos.Y / map.TileSize.Y;
+                cartesianTileWorldPos.X = pos.X / Map.TileSize.Y;
+                cartesianTileWorldPos.Y = pos.Y / Map.TileSize.Y;
                 Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
-                for (int i = 0; i < map.TileMap.GetLength(0); i++)
+                for (int i = 0; i < Map.TileMap.GetLength(0); i++)
                 {
-                    for (int j = 0; j < map.TileMap.GetLength(1); j++)
+                    for (int j = 0; j < Map.TileMap.GetLength(1); j++)
                     {
-                        t = map.TileMap[i, j];
+                        t = Map.TileMap[i, j];
                         if (isometricScreenTile == new Point(i, j))
                         {
                             if (t.TileType == TileType.Collision)
@@ -80,31 +72,25 @@ namespace CoT
 
         public override void Update()
         {
-            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
-            if (Health <= 0)
+            if (Stats.Health <= 0)
             {
                 return;
             }
             //Fienden kommer ha en animation när den attackerar, den ska då stå stilla.
-            if (!attacking && (DetectPlayer() || hasAggro))
+            if (!isAttacking && (DetectPlayer() || hasAggro))
             {
                 Move();
             }
-
-            //Fienden går från sina fötter istället för 0,0 på bilden.
-            destinationRectangle.X = (int)Position.X;
-            destinationRectangle.Y = (int)Position.Y;
-            CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - destinationRectangle.Height / 2);
         }
 
         public virtual void CheckAttackDistance()
         {
-            if (!attacking)
+            if (!isAttacking)
             {
-                if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
+                if (Vector2.Distance(Center, Player.Center) <= attackSize)
                 {
-                    Attack(CenterMass - player.CenterMass);
+                    Attack(Center - Player.Center);
                 }
             } else
             {
@@ -113,23 +99,24 @@ namespace CoT
                 if (attackTimer == 100)
                 {
                     attackTimer = 0;
-                    attacking = false;
+                    isAttacking = false;
                 }
             }
         }
 
         public virtual void DamageToPlayer()
         {
-            if (player.Hitbox.Intersects(AttackHitBox) && !dealtDamage)
+            if (Player.Hitbox.Intersects(attackHitbox) && !dealtDamage)
             {
                 dealtDamage = true;
-                player.GetHit(this);
+                Player.GetHit(this);
 
                 for (int i = 0; i < 15; i++)
                 {
-                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", player.Position,
-                        new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                        Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
+                    ParticleManager.CreateStandard(Player.Position, Color.Red);
+                    //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Player.Position,
+                    //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                    //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
                 }
 
                 Camera.ScreenShake(0.1f, 20);
@@ -140,9 +127,10 @@ namespace CoT
         {
             for (int i = 0; i < 25; i++)
             {
-                ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
-                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
+                ParticleManager.CreateStandard(Position, Color.Orange);
+                //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                //    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
             }
 
             base.OnRemove();
@@ -150,35 +138,30 @@ namespace CoT
 
         public virtual void Move()
         {
-            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
-            nextPosition.X += map.TileSize.X / 2;
-            nextPosition.Y += map.TileSize.Y / 2;
-            direction.X = nextPosition.X - PositionOfFeet.X;
-            direction.Y = nextPosition.Y - PositionOfFeet.Y;
+            nextPosition = new Vector2(nextTileInPath.X * Map.TileSize.Y, nextTileInPath.Y * Map.TileSize.Y).ToIsometric();
+            nextPosition.X += Map.TileSize.X / 2;
+            nextPosition.Y += Map.TileSize.Y / 2;
+            direction.X = nextPosition.X - GroundPosition.X;
+            direction.Y = nextPosition.Y - GroundPosition.Y;
             direction.Normalize();
-            PositionOfFeet += direction * speed * Time.DeltaTime;
-            Position = new Vector2(PositionOfFeet.X - (ResourceManager.Get<Texture2D>(Texture).Width * Scale) / 2, PositionOfFeet.Y - (ResourceManager.Get<Texture2D>(Texture).Height * Scale));
+            Position += direction * speed * Time.DeltaTime;
         }
 
         public override void Draw(SpriteBatch sb)
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * map.TileSize.Y,
-                path[i].Y * map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Map.TileSize.Y,
+                path[i].Y * Map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
 
-            if (attacking)
+            if (isAttacking)
             {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)AttackHitBox.Position.X, (int)AttackHitBox.Position.Y, (int)AttackHitBox.Size.X, (int)AttackHitBox.Size.Y)
-                , SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+                //sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)attackHitbox.Position.X, (int)attackHitbox.Position.Y, (int)attackHitbox.Size.X, (int)attackHitbox.Size.Y)
+                //, Spritesheet.SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
             base.Draw(sb);
-        }
-        public override void Attack(Vector2 direction)
-        {
-            base.Attack(direction);
         }
     }
 }

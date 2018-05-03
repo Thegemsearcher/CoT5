@@ -40,7 +40,7 @@ namespace CoT
             invTileLeftMargin = 4,
             invTileTopMargin = 4;
 
-        public Inventory(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public Inventory(Spritesheet spritesheet, Vector2 position) : base(spritesheet, position)
         {
             pixelMain.SetData(colorDataMain);
             pixelLayer1.SetData(colorDataLayer1);
@@ -58,13 +58,10 @@ namespace CoT
             {
                 for (int j = 0; j < invTiles.GetLength(1); j++)
                 {
-                    invTiles[i, j] = new InventoryTile(
+                    invTiles[i, j] = new InventoryTile(new Spritesheet("", new Point(1, 1), Spritesheet.SourceRectangle), 
                         new Vector2(rectLayer1.X + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invTileTopMargin * (j + 1) + invTileSize * j),
                         invTileSize,
-                        pixelInvTile,
-                        null,
-                        SourceRectangle
-                        );
+                        pixelInvTile);
                 }
             }
         }

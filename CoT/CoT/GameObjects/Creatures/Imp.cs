@@ -15,18 +15,28 @@ namespace CoT
         protected List<Projectile> attackProj = new List<Projectile>();
         protected bool attackCD = false;
         protected int lastPosTimer;
-        public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
+
+        //public Imp(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : 
+        //{
+        //    attackSize = 500;
+        //    aggroRange = 1200;
+        //    speed = 160f;
+        //    attacking = false;
+        //    Color = Color.Red;
+        //}
+        public Imp(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             attackSize = 500;
             aggroRange = 1200;
             speed = 160f;
-            attacking = false;
+            isAttacking = false;
             Color = Color.Red;
         }
+
         public override void Update()
         {
             base.Update();
-            if (Health <= 0)
+            if (Stats.Health <= 0)
             {
                 return;
             }
@@ -34,14 +44,14 @@ namespace CoT
 
             if (DetectPlayer() || hasAggro)
             {
-                path = Pathing(player.PositionOfFeet);
+                path = Pathing(Player.GroundPosition);
             }
             //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
-            if (((Vector2.Distance(player.PositionOfFeet, PositionOfFeet) < attackSize - (attackSize / 20))))
+            if (((Vector2.Distance(Player.GroundPosition, GroundPosition) < attackSize - (attackSize / 20))))
             {
                 Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
-                nextPos.X = PositionOfFeet.X - (player.PositionOfFeet.X - PositionOfFeet.X);
-                nextPos.Y = PositionOfFeet.Y - (player.PositionOfFeet.Y - PositionOfFeet.Y);
+                nextPos.X = GroundPosition.X - (Player.GroundPosition.X - GroundPosition.X);
+                nextPos.Y = GroundPosition.Y - (Player.GroundPosition.Y - GroundPosition.Y);
             
                 path = Pathing(nextPos /** map.TileSize.X*/);
             }
@@ -64,21 +74,21 @@ namespace CoT
             {
                 if (proj.Owner != null)
                 {
-                    if (player.Hitbox.Intersects(new FloatRectangle(proj.Position, new Vector2(proj.SourceRectangle.Width, proj.SourceRectangle.Height))))
+                    if (Player.Hitbox.Intersects(new FloatRectangle(proj.Position, new Vector2(proj.Spritesheet.SourceRectangle.Width, proj.Spritesheet.SourceRectangle.Height))))
                     {
                         DamageToPlayer();
                         toRemove.Add(proj);
                     }
                     Vector2 cartesianTileWorldPos = new Vector2(0,0);
-                    cartesianTileWorldPos.X = proj.Position.X / map.TileSize.Y;
-                    cartesianTileWorldPos.Y = proj.Position.Y / map.TileSize.Y;
+                    cartesianTileWorldPos.X = proj.Position.X / Map.TileSize.Y;
+                    cartesianTileWorldPos.Y = proj.Position.Y / Map.TileSize.Y;
                     Tile t;
                     Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
-                    for (int i = 0; i < map.TileMap.GetLength(0); i++)
+                    for (int i = 0; i < Map.TileMap.GetLength(0); i++)
                     {
-                        for (int j = 0; j < map.TileMap.GetLength(1); j++)
+                        for (int j = 0; j < Map.TileMap.GetLength(1); j++)
                         {
-                            t = map.TileMap[i, j];
+                            t = Map.TileMap[i, j];
                             if (isometricScreenTile == new Point(i, j))
                             {
                                 if (t.TileType == TileType.Collision)
@@ -100,13 +110,14 @@ namespace CoT
         
         public override void DamageToPlayer()
         {
-            player.GetHit(this);
+            Player.GetHit(this);
 
             for (int i = 0; i < 15; i++)
             {
-                ParticleManager.Instance.Particles.Add(new Particle("lightMask", player.Position,
-                    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
+                ParticleManager.CreateStandard(Position, Color.Red);
+                //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Player.Position,
+                //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
             }
 
             Camera.ScreenShake(0.1f, 20);
@@ -125,14 +136,15 @@ namespace CoT
         {
             if (!attackCD)
             {
-                if (Vector2.Distance(CenterMass, player.CenterMass) <= attackSize)
+                if (Vector2.Distance(Center, Player.Center) <= attackSize)
                 {
-                    if (VisionRange(CenterMass, player.CenterMass))
+                    if (VisionRange(Center, Player.Center))
                     {
-                        Attack(CenterMass - player.CenterMass);
+                        Attack(Center - Player.Center);
                     }
                 }
-            } else
+            }
+            else
             {
                 //Denna fiende gör skillnad på att ha en cd på sin attack och att ha en animation där den attackerar.
                 attackTimer++;
@@ -143,7 +155,7 @@ namespace CoT
                 }
                 else if (attackCD && attackTimer == 50)
                 {
-                    attacking = false;
+                    isAttacking = false;
                 }
             }
         }
@@ -152,11 +164,11 @@ namespace CoT
             if (!attackCD)
             {
                 dealtDamage = false;
-                attacking = true;
+                isAttacking = true;
                 attackCD = true;
                 direction.Normalize();
                 direction *= -1;
-                Projectile proj = new Projectile("tile2", CenterMass, new Rectangle(0, 0, 20, 20), direction, 600f);
+                Projectile proj = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Center, direction, 600f);
                 proj.Color = Color.Red;
                 proj.Owner = this;
                 proj.LayerDepth = 1F;

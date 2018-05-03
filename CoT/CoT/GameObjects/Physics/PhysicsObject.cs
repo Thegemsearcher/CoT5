@@ -13,7 +13,7 @@ namespace CoT
         public Vector2 Direction { get; set; }
         public float Speed { get; set; }
 
-        public PhysicsObject(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 direction, float speed) : base(texture, position, sourceRectangle)
+        public PhysicsObject(Spritesheet spritesheet, Vector2 position, Vector2 direction, float speed) : base(spritesheet, position)
         {
             Direction = direction;
             Speed = speed;

@@ -14,7 +14,7 @@ namespace CoT
         Texture2D pixel;
         Rectangle rectangle;
 
-        public InventoryTile(Vector2 position, int tileSize, Texture2D pixel, string texture, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public InventoryTile(Spritesheet spritesheet, Vector2 position, int tileSize, Texture2D pixel) : base(spritesheet, position)
         {
             this.pixel = pixel;
             rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);

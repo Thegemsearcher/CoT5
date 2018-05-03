@@ -124,7 +124,7 @@ namespace CoT
                         //int rnd = Game1.Random.Next(0, 3);
                         //if (rnd.Equals(0))
                         //{
-                        WorldObject obj = new WorldObject("wall", GetTilePosition(new Vector2(x, y)) + new Vector2(-(float)TileSize.X / 2, -320 + TileSize.Y), new Rectangle(0, 0, 160, 320), new Vector2(80, 320 - TileSize.Y / 2));
+                        WorldObject obj = new WorldObject(new Spritesheet("wall", new Point(1, 1), new Rectangle(0, 0, 160, 320)), GetTilePosition(new Vector2(x, y)) + new Vector2(-(float)TileSize.X / 2, -320 + TileSize.Y), new Vector2(80, 320 - TileSize.Y / 2), false);
                         WorldObjects.Add(obj);
                         //}
                         //else if (rnd.Equals(1))
@@ -207,7 +207,7 @@ namespace CoT
                 for (int i = 0; i < WorldObjects.Count; i++)
                 {
                     GameObject obj = WorldObjects[i];
-                    sb.Draw(ResourceManager.Get<Texture2D>(obj.Texture), new Rectangle((int)obj.Hitbox.Position.X, (int)obj.Hitbox.Position.Y, (int)obj.Hitbox.Size.X, (int)obj.Hitbox.Size.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.3f);
+                    //sb.Draw(ResourceManager.Get<Texture2D>(obj.Texture), new Rectangle((int)obj.Hitbox.Position.X, (int)obj.Hitbox.Position.Y, (int)obj.Hitbox.Size.X, (int)obj.Hitbox.Size.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.3f);
                 }
             }
         }

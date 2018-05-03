@@ -11,12 +11,13 @@ namespace CoT.GameObjects.Creatures
 {
     class Treent : Enemy
     {
-        public Treent(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Player player, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, player, grid, map, hp, attack, defense)
+        public Treent(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             attackSize = 100;
             aggroRange = 1000;
             speed = 100f;
         }
+
         public override void Update()
         {
             base.Update();
@@ -24,7 +25,7 @@ namespace CoT.GameObjects.Creatures
             
             if (DetectPlayer() || hasAggro)
             {
-                path = Pathing(player.PositionOfFeet);
+                path = Pathing(Player.GroundPosition);
             }
             if (path.Length > 1)
             {

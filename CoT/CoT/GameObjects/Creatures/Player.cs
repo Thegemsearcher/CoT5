@@ -21,17 +21,11 @@ namespace CoT
         private Vector2 direction, nextPosition, targetPos;
         private Position[] path;
         private Position nextTileInPath;
-        private bool normalMoving, pathMoving;
+        private bool normalMoving;
+        private bool pathMoving;
         private FloatRectangle bottomHitBox;
         //private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
         //private float frameTimer = 100, frameInterval = 100;
-
-        private Spritesheet spriteSheet;
-
-        enum HeroClass
-        {
-
-        }
 
         enum MovementState 
         {
@@ -45,11 +39,37 @@ namespace CoT
 
         private Penumbra.Light light;
 
-        public Player(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
+        //public Player(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
+        //{
+        //    this.map = map;
+        //    this.grid = grid;
+        //    attackSize = 150;
+        //    light = new PointLight();
+        //    light.Scale = new Vector2(5000, 5000).ToCartesian();
+        //    light.Intensity = 0.2f;
+        //    light.ShadowType = ShadowType.Solid;
+        //    GameManager.Instance.Penumbra.Lights.Add(light);
+        //    Scale = 3;
+        //    LayerDepth = 1f;
+        //    //
+        //    defense = 10000;
+        //    //
+        //    CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
+        //    destinationRectangle.Width = (int)(sourceRectangle.Width);
+        //    destinationRectangle.Height = (int)(sourceRectangle.Height);
+        //    bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
+        //        new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
+        //    Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
+
+
+        //    spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
+
+        //}
+
+        public Player(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            this.map = map;
-            this.grid = grid;
             attackSize = 150;
+
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
             light.Intensity = 0.2f;
@@ -57,39 +77,26 @@ namespace CoT
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             LayerDepth = 1f;
-            //
-            defense = 10000;
-            //
-            CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
-            destinationRectangle.Width = (int)(sourceRectangle.Width);
-            destinationRectangle.Height = (int)(sourceRectangle.Height);
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
-                new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
-            Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
 
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
+                new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
-            spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
-
+            spritesheet.SetFrameCount(new Point(5, 1));
         }
 
         public override void Update()
         {
-            spriteSheet.Update();
-            SourceRectangle = spriteSheet.SourceRectangle;
-            PositionOfFeet = new Vector2(Position.X + spriteSheet.SourceRectangle.Width / 2 * Scale,
-                Position.Y + spriteSheet.SourceRectangle.Height / 2 * Scale + 65);
-            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
             base.Update();
-            if (Health <= 0)
+            if (Stats.Health <= 0)
             {
                 return;
             }
 
-            if (Input.IsRightClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
+            if (Input.IsRightClickPressed && !isAttacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
                 targetPos = Input.CurrentMousePosition /*+ new Vector2(0, SourceRectangle.Height * Scale / 3))*/.ScreenToWorld();
-                direction = GetDirection(PositionOfFeet, targetPos);
+                direction = GetDirection(GroundPosition, targetPos);
                 path = Pathing(targetPos);
                 currentMovementState = MovementState.DirectMoving;
             }
@@ -110,7 +117,7 @@ namespace CoT
                     PathMoving();
                     if (path.Length <= 1)
                     {
-                        direction = GetDirection(PositionOfFeet, targetPos);
+                        direction = GetDirection(GroundPosition, targetPos);
                         currentMovementState = MovementState.DirectMoving;
                     }
                     break;
@@ -150,7 +157,7 @@ namespace CoT
 
         private void StopMoving()
         {
-            if (Vector2.Distance(PositionOfFeet, targetPos) < map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
+            if (Vector2.Distance(GroundPosition, targetPos) < Map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
                 currentMovementState = MovementState.Idle;
             }
@@ -160,19 +167,20 @@ namespace CoT
         {
             Vector2 attackDirection;
 
-            if (Input.IsLeftClickPressed && !attacking)
+            if (Input.IsLeftClickPressed && !isAttacking)
             {
-                attacking = true;
+                isAttacking = true;
                 normalMoving = false;
                 pathMoving = false;
-                attackDirection = GetDirection(CenterMass, Input.CurrentMousePosition.ScreenToWorld());
+                attackDirection = GetDirection(Center, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", CenterMass,
-                        new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                        attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
+                    ParticleManager.CreateStandard(Center, Color.Green);
+                    //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Center,
+                    //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
+                    //    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
                 }
 
                 Camera.ScreenShake(0.1f, 2);
@@ -183,13 +191,13 @@ namespace CoT
         {
             int attackDuration = 30;
 
-            if (attacking)
+            if (isAttacking)
             {
                 attackTimer++;
                 if (attackTimer >= attackDuration)
                 {
                     attackTimer = 0;
-                    attacking = false;
+                    isAttacking = false;
                 }
             }
         }
@@ -200,9 +208,9 @@ namespace CoT
             {
                 if (c is Enemy e)
                 {
-                    if (Vector2.Distance(CenterMass, e.CenterMass) <= attackSize)
+                    if (Vector2.Distance(Center, e.Center) <= attackSize)
                     {
-                        Vector2 directionToEnemy = GetDirection(CenterMass, e.CenterMass);
+                        Vector2 directionToEnemy = GetDirection(Center, e.Center);
                         double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
 
                         Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
@@ -224,14 +232,11 @@ namespace CoT
 
         public void UpdateVariables() //Samlar uppdatering av variabler
         {
-            light.Position = PositionOfFeet;
-            Camera.Focus = PositionOfFeet;
-            float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
-            bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
-                Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 20));
-            CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
-            destinationRectangle.X = (int)Position.X;
-            destinationRectangle.Y = (int)Position.Y;
+            light.Position = GroundPosition;
+            Camera.Focus = GroundPosition;
+            float bottomHitBoxWidth = Spritesheet.SourceRectangle.Width * Scale / 5;
+            bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)Spritesheet.SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
+                Position.Y + (int)(Spritesheet.SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (Spritesheet.SourceRectangle.Height * Scale) / 20));
             
             //Position = new Vector2(this.PositionOfFeet.X - (spriteSheet.SourceRectangle.Width * Scale) / 2,
             //    this.PositionOfFeet.Y - (spriteSheet.SourceRectangle.Height * Scale));
@@ -243,38 +248,38 @@ namespace CoT
 
             if (direction.X > 0)
             {
-                spriteSheet.SetFrameCount(new Point(5, 3));
-                if (spriteSheet.StartFrame != 10)
+                Spritesheet.SetFrameCount(new Point(5, 3));
+                if (Spritesheet.StartFrame != 10)
                 {
-                    spriteSheet.Interval = 100;
-                    spriteSheet.StartFrame = 10;
-                    spriteSheet.CurrentFrame = 10;
+                    Spritesheet.Interval = 100;
+                    Spritesheet.StartFrame = 10;
+                    Spritesheet.CurrentFrame = 10;
                 }
             }
             else if (direction.X < 0)
             {
-                spriteSheet.SetFrameCount(new Point(5, 2));
-                if (spriteSheet.StartFrame != 5)
+                Spritesheet.SetFrameCount(new Point(5, 2));
+                if (Spritesheet.StartFrame != 5)
                 {
-                    spriteSheet.Interval = 100;
-                    spriteSheet.StartFrame = 5;
-                    spriteSheet.CurrentFrame = 5;
+                    Spritesheet.Interval = 100;
+                    Spritesheet.StartFrame = 5;
+                    Spritesheet.CurrentFrame = 5;
                 }
             }
         }
 
         public bool CheckForCollision() //Kollision med väggtile-check
         {
-            int stoppingDistance = map.TileSize.Y / 16;
-            Vector2 estimatedHitboxPos = (PositionOfFeet + (direction * stoppingDistance)).ToCartesian();
+            int stoppingDistance = Map.TileSize.Y / 16;
+            Vector2 estimatedHitboxPos = (GroundPosition + (direction * stoppingDistance)).ToCartesian();
             FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
-            for (int x = 0; x < map.TileMap.GetLength(0); x++)
+            for (int x = 0; x < Map.TileMap.GetLength(0); x++)
             {
-                for (int y = 0; y < map.TileMap.GetLength(1); y++)
+                for (int y = 0; y < Map.TileMap.GetLength(1); y++)
                 {
-                    Vector2 tilePos = map.GetTilePosition(new Vector2(x, y)).ToCartesian();
+                    Vector2 tilePos = Map.GetTilePosition(new Vector2(x, y)).ToCartesian();
 
-                    if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && map.TileMap[x, y].TileType == TileType.Collision)
+                    if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && Map.TileMap[x, y].TileType == TileType.Collision)
                     {
                         
                         //normalMoving = false;
@@ -290,11 +295,11 @@ namespace CoT
 
         public void PathMove() //Rörelse via Pathfinding
         {
-            nextPosition = new Vector2(nextTileInPath.X * map.TileSize.Y, nextTileInPath.Y * map.TileSize.Y).ToIsometric();
-            nextPosition.X += map.TileSize.X / 2;
-            nextPosition.Y += map.TileSize.Y / 2;
-            direction.X = nextPosition.X - PositionOfFeet.X;
-            direction.Y = nextPosition.Y - PositionOfFeet.Y;
+            nextPosition = new Vector2(nextTileInPath.X * Map.TileSize.Y, nextTileInPath.Y * Map.TileSize.Y).ToIsometric();
+            nextPosition.X += Map.TileSize.X / 2;
+            nextPosition.Y += Map.TileSize.Y / 2;
+            direction.X = nextPosition.X - GroundPosition.X;
+            direction.Y = nextPosition.Y - GroundPosition.Y;
             direction.Normalize();
             Position += direction * speed * Time.DeltaTime;
             //Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
@@ -316,16 +321,14 @@ namespace CoT
                 //spriteSheet.SetCurrentFrame(5);
                 //spriteSheet.SetFrameCount(new Point(5, 2));
                 //SourceRectangle = spriteSheet.SourceRectangle;
-                spriteSheet.Interval = 100;
-                spriteSheet.SetFrameCount(new Point(5, 1));
+                Spritesheet.Interval = 100;
+                Spritesheet.SetFrameCount(new Point(5, 1));
 
-                if (spriteSheet.StartFrame != 0)
+                if (Spritesheet.StartFrame != 0)
                 {
-                    spriteSheet.StartFrame = 0;
-                    spriteSheet.CurrentFrame = 0;
+                    Spritesheet.StartFrame = 0;
+                    Spritesheet.CurrentFrame = 0;
                 }
-
-                SourceRectangle = spriteSheet.SourceRectangle;
 
                 //SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
             }

@@ -13,9 +13,6 @@ namespace CoT
     public class GameObject
     {
         [DataMember]
-        public string Texture { get; set; }
-
-        [DataMember]
         public Vector2 Position { get; set; }
 
         [DataMember]
@@ -23,9 +20,6 @@ namespace CoT
 
         [DataMember]
         public float Rotation { get; set; }
-
-        [DataMember]
-        public Rectangle SourceRectangle { get; set; }
 
         [DataMember]
         public float Scale { get; set; }
@@ -37,7 +31,7 @@ namespace CoT
         public bool Remove { get; set; } = false;
 
         [DataMember]
-        public Vector2 Offset { get; set; }
+        public Vector2 Center { get; set; }
 
         [DataMember]
         public float Transparency { get; set; }
@@ -48,37 +42,41 @@ namespace CoT
         [DataMember]
         public float LayerDepth { get; set; }
 
-        public GameObject(string texture, Vector2 position, Rectangle sourceRectangle)
-        { 
-            Texture = texture;
+        public Spritesheet Spritesheet { get; set; }
+
+        public GameObject(Spritesheet spritesheet, Vector2 position)
+        {
+            Spritesheet = spritesheet;
             Position = position;
-            SourceRectangle = sourceRectangle;
 
             Transparency = 1f;
             Scale = 1f;
             IsActive = true;
 
             Color = Color.White;
-            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
-            //Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
-            Offset = new Vector2(0,0);
+            Hitbox = new FloatRectangle(Position, new Vector2(spritesheet.SourceRectangle.Width * Scale, spritesheet.SourceRectangle.Height * Scale));
+            Center = new Vector2((float)spritesheet.SourceRectangle.Width / 2 * Scale, (float)spritesheet.SourceRectangle.Height / 2 * Scale);
         }
 
         public virtual void OnRemove() { }
 
         public virtual void Update()
         {
-            Hitbox = new FloatRectangle(Position, new Vector2(SourceRectangle.Width * Scale, SourceRectangle.Height * Scale));
+            Spritesheet.Update();
+            Hitbox = new FloatRectangle(Position, new Vector2(Spritesheet.SourceRectangle.Width * Scale, Spritesheet.SourceRectangle.Height * Scale));
+            Center = new Vector2((float)Spritesheet.SourceRectangle.Width / 2 * Scale, (float)Spritesheet.SourceRectangle.Height / 2 * Scale);
         }
 
         public virtual void Draw(SpriteBatch sb)
         {
             if (Camera.VisibleArea.Contains(Position))
             {
-                sb.Draw(ResourceManager.Get<Texture2D>(Texture), Position, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
+                sb.Draw(ResourceManager.Get<Texture2D>(Spritesheet.Texture), Position, Spritesheet.SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, Scale, SpriteEffects.None, LayerDepth);
 
                 if (GameDebugger.Debug)
-                    sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox, null, Color.Magenta * 0.3f, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
+                {
+                    sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox, null, Color.Magenta * 0.3f, Rotation, Vector2.Zero, SpriteEffects.None, LayerDepth + 0.01f);
+                }
             }
         }
     }

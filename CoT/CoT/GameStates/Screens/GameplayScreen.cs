@@ -66,7 +66,7 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation"), "playerAnimation");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
-            Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1, 1, 1, 1));
+            Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1)), Vector2.Zero);
 
             //Map = new Map(new Point(160, 80)).Load("Map1.dat");
             //worldCreator = new WorldCreator(Map);
@@ -93,43 +93,44 @@ namespace CoT
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
             Console.WriteLine(generation.PlayerStartPosition);
-            Player = new Player("playerAnimation", generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Rectangle(0, 0, 100, 100),
-                new Vector2(30, 130), Map.Grid, Map, 200/*HP*/, 25/*Attack*/, 5/*Defense*/);
+            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 0), new Vector2(0, 0), new Stats(100, 100, 100), Map, Map.Grid, Player);
             CreatureManager.Instance.Creatures.Add(Player);
 
 
-            for (int i = 0; i < 1; i++)
-            {
-                Vector2 randomTileIndex = new Vector2(Game1.Random.Next(0, Map.TileMap.GetLength(0)), Game1.Random.Next(0, Map.TileMap.GetLength(1)));
-                Vector2 randomTilePos = Map.GetTilePosition(randomTileIndex);
-
-                if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Collision)
-                {
-                    Treent enemy = new Treent("treent", randomTilePos, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
-                    CreatureManager.Instance.Creatures.Add(enemy);
-                }
-            }
-            Imp enemyImp = new Imp("treent", new Vector2(/*Player.Position.X + 420, Player.Position.Y + 420*/), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
-            CreatureManager.Instance.Creatures.Add(enemyImp);
-
-            //for (int i = 1; i < generation.Rooms.Length; i++)
+            //for (int i = 0; i < 1; i++)
             //{
-            //    int r = Game1.Random.Next(1, 3);
-            //    Room room = generation.Rooms[i];
-            //    if (r == 1)
-            //    {
+            //    Vector2 randomTileIndex = new Vector2(Game1.Random.Next(0, Map.TileMap.GetLength(0)), Game1.Random.Next(0, Map.TileMap.GetLength(1)));
+            //    Vector2 randomTilePos = Map.GetTilePosition(randomTileIndex);
 
-            //            Treent enemy = new Treent("treent", generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
-            //        //Treent enemy = new Treent("treent", Map.GetTileIndex(new Vector2(room.Position.X + 1, room.Position.Y)) * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+            //    if (Map.TileMap[(int)randomTileIndex.X, (int)randomTileIndex.Y].TileType != TileType.Collision)
+            //    {
+            //        Treent enemy = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), randomTilePos, new Vector2(0, 0), new Vector2(650, 1500), new Stats(5, 25, 5), Map, Map.Grid, Player);
             //        CreatureManager.Instance.Creatures.Add(enemy);
             //    }
-            //    else
-            //    {
-            //        Imp enemyImp = new Imp("treent", Map.GetTileIndex(new Vector2(room.Position.X + 1, room.Position.Y)) * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
-            //        CreatureManager.Instance.Creatures.Add(enemyImp);
-            //    }
-
             //}
+            //Imp enemyImp = new Imp("treent", new Vector2(/*Player.Position.X + 420, Player.Position.Y + 420*/), new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+            //CreatureManager.Instance.Creatures.Add(enemyImp);
+
+            for (int i = 1; i < generation.Rooms.Length; i++)
+            {
+                int r = Game1.Random.Next(1, 3);
+                Room room = generation.Rooms[i];
+                if (r == 1)
+                {
+                    Treent enemy = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 0), new Vector2(650, 1500), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    //        CreatureManager.Instance.Creatures.Add(enemy);
+                    //Treent enemy = new Treent("treent", generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    ////Treent enemy = new Treent("treent", Map.GetTileIndex(new Vector2(room.Position.X + 1, room.Position.Y)) * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    CreatureManager.Instance.Creatures.Add(enemy);
+                }
+                else
+                {
+                    //Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), Map.GetTileIndex(new Vector2(room.Position.X + 1, room.Position.Y)) * Map.TileSize.Y, new Rectangle(0, 0, 1300, 1500), new Vector2(650, 1500), Player, Map.Grid, Map, 5 /*HP*/, 25 /*Attack*/, 5 /*Defense*/);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 0), new Vector2(650, 1500), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    CreatureManager.Instance.Creatures.Add(enemyImp);
+                }
+
+            }
 
             Camera.ScaleInput = 1f;
             Camera.Scale = 100f;

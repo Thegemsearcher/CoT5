@@ -11,7 +11,7 @@ namespace CoT
 {
     public class Item : GameObject
     {
-        public Item(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
+        public Item(Spritesheet spritesheet, Vector2 position) : base(spritesheet, position)
         {
         }
 
