@@ -85,7 +85,7 @@ namespace CoT
             if (Input.IsRightClickPressed && !attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
-                targetPos = Input.CurrentMousePosition.ScreenToWorld();
+                targetPos = Input.CurrentMousePosition /*+ new Vector2(0, SourceRectangle.Height * Scale / 3))*/.ScreenToWorld();
                 direction = GetDirection(PositionOfFeet, targetPos);
                 path = Pathing(targetPos);
                 currentMovementState = MovementState.DirectMoving;
@@ -167,7 +167,7 @@ namespace CoT
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
+                    ParticleManager.Instance.Particles.Add(new Particle("lightMask", CenterMass,
                         new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                         attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
                 }
@@ -225,7 +225,7 @@ namespace CoT
             Camera.Focus = PositionOfFeet;
             float bottomHitBoxWidth = SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
-                Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 10));
+                Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (SourceRectangle.Height * Scale) / 20));
             CenterMass = new Vector2(PositionOfFeet.X, PositionOfFeet.Y - (SourceRectangle.Height / 2) * Scale);
             destinationRectangle.X = (int)Position.X;
             destinationRectangle.Y = (int)Position.Y;
@@ -331,13 +331,13 @@ namespace CoT
         {
             //Debug
             //FullHitbox
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), destinationRectangle/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.1f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
 
             ////BottomHitox 
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
             ////CenterMass 
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
 
             //foreach (Creature c in CreatureManager.Instance.Creatures) invulnerability
             //{
