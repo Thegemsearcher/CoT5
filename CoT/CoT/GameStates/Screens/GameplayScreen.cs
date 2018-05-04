@@ -93,7 +93,7 @@ namespace CoT
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
             Console.WriteLine(generation.PlayerStartPosition);
-            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 0), new Vector2(0, 0), new Stats(100, 100, 100), Map, Map.Grid, Player);
+            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(0, 0), new Stats(100, 100, 100), Map, Map.Grid, Player);
             CreatureManager.Instance.Creatures.Add(Player);
 
 
