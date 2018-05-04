@@ -26,7 +26,7 @@ namespace CoT
         //}
         public Imp(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            attackSize = 500;
+            attackRange = 500;
             aggroRange = 1200;
             speed = 160f;
             isAttacking = false;
@@ -47,7 +47,7 @@ namespace CoT
                 path = Pathing(Player.GroundPosition);
             }
             //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
-            if (((Vector2.Distance(Player.GroundPosition, GroundPosition) < attackSize - (attackSize / 20))))
+            if (((Vector2.Distance(Player.GroundPosition, GroundPosition) < attackRange - (attackRange / 20))))
             {
                 Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
                 nextPos.X = GroundPosition.X - (Player.GroundPosition.X - GroundPosition.X);
@@ -114,7 +114,7 @@ namespace CoT
 
             for (int i = 0; i < 15; i++)
             {
-                ParticleManager.CreateStandard(Position, Color.Red);
+                ParticleManager.CreateStandard(Player.Position + Player.Center, Helper.RandomDirection(), Color.Red);
                 //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Player.Position,
                 //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                 //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
@@ -136,11 +136,11 @@ namespace CoT
         {
             if (!attackCD)
             {
-                if (Vector2.Distance(Center, Player.Center) <= attackSize)
+                if (Vector2.Distance(Position + Center, Player.Position + Player.Center) <= attackRange)
                 {
-                    if (VisionRange(Center, Player.Center))
+                    if (VisionRange(Position + Center, Player.Position + Player.Center))
                     {
-                        Attack(Center - Player.Center);
+                        Attack((Position + Center) - (Player.Position + Player.Center));
                     }
                 }
             }
@@ -168,7 +168,7 @@ namespace CoT
                 attackCD = true;
                 direction.Normalize();
                 direction *= -1;
-                Projectile proj = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Center, direction, 600f);
+                Projectile proj = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center, direction, 600f);
                 proj.Color = Color.Red;
                 proj.Owner = this;
                 proj.LayerDepth = 1F;

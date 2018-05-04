@@ -14,6 +14,7 @@ namespace CoT
 
         public Projectile(Spritesheet spritesheet, Vector2 position, Vector2 direction, float speed) : base(spritesheet, position, direction, speed)
         {
+            this.Direction = direction;
         }
 
         public override void Update()
@@ -27,7 +28,7 @@ namespace CoT
                     color = Color.Orange;
                 }
 
-                ParticleManager.CreateStandard(Position, color);
+                ParticleManager.CreateStandard(Position, Direction, color);
                 //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
                 //   new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                 //   Direction, 150f, 2f, color, 0f, 0.1f));

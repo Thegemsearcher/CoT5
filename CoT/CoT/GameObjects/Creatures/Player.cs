@@ -21,8 +21,6 @@ namespace CoT
         private Vector2 direction, nextPosition, targetPos;
         private Position[] path;
         private Position nextTileInPath;
-        private bool normalMoving;
-        private bool pathMoving;
         private FloatRectangle bottomHitBox;
         //private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
         //private float frameTimer = 100, frameInterval = 100;
@@ -68,7 +66,7 @@ namespace CoT
 
         public Player(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            attackSize = 150;
+            attackRange = 150;
 
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
@@ -95,7 +93,7 @@ namespace CoT
             if (Input.IsRightClickPressed && !isAttacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
-                targetPos = Input.CurrentMousePosition /*+ new Vector2(0, SourceRectangle.Height * Scale / 3))*/.ScreenToWorld();
+                targetPos = Input.CurrentMousePosition.ScreenToWorld();
                 direction = GetDirection(GroundPosition, targetPos);
                 path = Pathing(targetPos);
                 currentMovementState = MovementState.DirectMoving;
@@ -170,14 +168,12 @@ namespace CoT
             if (Input.IsLeftClickPressed && !isAttacking)
             {
                 isAttacking = true;
-                normalMoving = false;
-                pathMoving = false;
-                attackDirection = GetDirection(Center, Input.CurrentMousePosition.ScreenToWorld());
+                attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.CreateStandard(Center, Color.Green);
+                    ParticleManager.CreateStandard(Position + Center, attackDirection, Color.Green);
                     //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Center,
                     //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                     //    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
@@ -208,9 +204,9 @@ namespace CoT
             {
                 if (c is Enemy e)
                 {
-                    if (Vector2.Distance(Center, e.Center) <= attackSize)
+                    if (Vector2.Distance(Position + Center, e.Position + e.Center) <= attackRange)
                     {
-                        Vector2 directionToEnemy = GetDirection(Center, e.Center);
+                        Vector2 directionToEnemy = GetDirection(Position + Center, e.Position + e.Center);
                         double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
 
                         Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
@@ -281,11 +277,6 @@ namespace CoT
 
                     if (hitbox.Intersects(new FloatRectangle(tilePos, new Vector2(80, 80))) && Map.TileMap[x, y].TileType == TileType.Collision)
                     {
-                        
-                        //normalMoving = false;
-                        //PositionOfFeet -= direction * speed * 2 * Time.DeltaTime;
-                        //pathMoving = true;
-
                         return true;
                     }
                 }
@@ -302,7 +293,6 @@ namespace CoT
             direction.Y = nextPosition.Y - GroundPosition.Y;
             direction.Normalize();
             Position += direction * speed * Time.DeltaTime;
-            //Position = new Vector2(PositionOfFeet.X - (SourceRectangle.Width * Scale) / 2, PositionOfFeet.Y - (SourceRectangle.Height * Scale));
         }
 
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner

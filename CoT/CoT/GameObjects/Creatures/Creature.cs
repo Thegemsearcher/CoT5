@@ -17,7 +17,7 @@ namespace CoT
         public Map Map;
         public Player Player;
         
-        protected float attackSize;
+        protected float attackRange;
         protected bool isAttacking;
         protected bool invulnerable;
         protected bool dealtDamage;
@@ -41,9 +41,8 @@ namespace CoT
             Map = map;
             Grid = grid;
             Player = player;
-
             this.groundPositionOffset = groundPositionOffset;
-
+            attackHitbox = new FloatRectangle(new Vector2(), new Vector2(attackRange, attackRange));
             GroundPosition = Position + Center + groundPositionOffset;
         }
 
@@ -130,8 +129,8 @@ namespace CoT
                 isAttacking = true;
                 direction.Normalize();
                 direction *= -1;
-                attackHitbox.Position = Center + (direction * attackSize) + offsetAttackPosition;
-                attackHitbox.Size = new Vector2(attackSize, attackSize);
+                attackHitbox.Position = Position + Center + (direction * attackRange) + offsetAttackPosition;
+                attackHitbox.Size = new Vector2(attackRange, attackRange);
             }
         }
         public virtual void InvulnerabilityTimer()

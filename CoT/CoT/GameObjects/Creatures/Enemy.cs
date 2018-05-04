@@ -26,13 +26,13 @@ namespace CoT
             path = new Position[0];
 
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
-            offsetAttackPosition = new Vector2(-spritesheet.SourceRectangle.Width / (float)2, -spritesheet.SourceRectangle.Height / (float)2);
+            offsetAttackPosition = new Vector2(-spritesheet.SourceRectangle.Width * Scale / (float)4, -spritesheet.SourceRectangle.Height * Scale/ (float)4);
             //Ska flyttas.
         }
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(Player.Position, Position) <= aggroRange) && VisionRange(Center, Player.Center))
+            if (!hasAggro && (Vector2.Distance(Player.Position + Player.Center, Position + Center) <= aggroRange) && VisionRange(Position + Center, Player.Position + Player.Center))
             {
                 return hasAggro = true;
             } else if (!hasAggro)
@@ -88,9 +88,9 @@ namespace CoT
         {
             if (!isAttacking)
             {
-                if (Vector2.Distance(Center, Player.Center) <= attackSize)
+                if (Vector2.Distance(Position + Center, Player.Position + Player.Center) <= attackRange)
                 {
-                    Attack(Center - Player.Center);
+                    Attack((Position + Center) - (Player.Position + Player.Center));
                 }
             } else
             {
@@ -113,7 +113,7 @@ namespace CoT
 
                 for (int i = 0; i < 15; i++)
                 {
-                    ParticleManager.CreateStandard(Player.Position, Color.Red);
+                    ParticleManager.CreateStandard(Player.Position + Player.Center, Helper.RandomDirection(), Color.Red);
                     //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Player.Position,
                     //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                     //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
@@ -127,7 +127,7 @@ namespace CoT
         {
             for (int i = 0; i < 25; i++)
             {
-                ParticleManager.CreateStandard(Position, Color.Orange);
+                ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
                 //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
                 //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                 //    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
@@ -158,8 +158,8 @@ namespace CoT
 
             if (isAttacking)
             {
-                //sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)attackHitbox.Position.X, (int)attackHitbox.Position.Y, (int)attackHitbox.Size.X, (int)attackHitbox.Size.Y)
-                //, Spritesheet.SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)attackHitbox.Position.X, (int)attackHitbox.Position.Y, (int)attackHitbox.Size.X, (int)attackHitbox.Size.Y)
+                , Spritesheet.SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
             }
             base.Draw(sb);
         }
