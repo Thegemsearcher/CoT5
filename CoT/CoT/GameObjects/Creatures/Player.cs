@@ -75,7 +75,6 @@ namespace CoT
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             LayerDepth = 1f;
-
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
@@ -173,7 +172,7 @@ namespace CoT
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.CreateStandard(Position + Center, attackDirection, Color.Green);
+                    ParticleManager.CreateStandard(Position + Center, attackDirection + Helper.RandomDirection(), Color.BlueViolet);
                     //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Center,
                     //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                     //    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
@@ -185,7 +184,7 @@ namespace CoT
 
         public void AttackLockTimer() //Låser spelaren i en attack under 30 frames
         {
-            int attackDuration = 30;
+            int attackDuration = 20;
 
             if (isAttacking)
             {
@@ -232,7 +231,7 @@ namespace CoT
             Camera.Focus = GroundPosition;
             float bottomHitBoxWidth = Spritesheet.SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)Spritesheet.SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
-                Position.Y + (int)(Spritesheet.SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (Spritesheet.SourceRectangle.Height * Scale) / 20));
+                Position.Y + (int)(Spritesheet.SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (Spritesheet.SourceRectangle.Height * Scale) / 25));
             
             //Position = new Vector2(this.PositionOfFeet.X - (spriteSheet.SourceRectangle.Width * Scale) / 2,
             //    this.PositionOfFeet.Y - (spriteSheet.SourceRectangle.Height * Scale));
@@ -268,7 +267,7 @@ namespace CoT
         {
             int stoppingDistance = Map.TileSize.Y / 16;
             Vector2 estimatedHitboxPos = (GroundPosition + (direction * stoppingDistance)).ToCartesian();
-            FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos, bottomHitBox.Size);
+            FloatRectangle hitbox = new FloatRectangle(estimatedHitboxPos - new Vector2(bottomHitBox.Size.X / 2, 0), bottomHitBox.Size);
             for (int x = 0; x < Map.TileMap.GetLength(0); x++)
             {
                 for (int y = 0; y < Map.TileMap.GetLength(1); y++)
@@ -331,11 +330,9 @@ namespace CoT
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
 
             //////BottomHitox 
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)bottomHitBox.Position.X, (int)bottomHitBox.Position.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
+            sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)GroundPosition.X - (int)bottomHitBox.Size.X, (int)GroundPosition.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
             //FloatRectangle f = new FloatRectangle(PositionOfFeet - new Vector2(5, 5), new Vector2(10, 10));
-            //////BottomHitox 
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), f, Color.Red * 0.5f);
 
             //////CenterMass 
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)CenterMass.X, (int)CenterMass.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Black * 0.9f);
