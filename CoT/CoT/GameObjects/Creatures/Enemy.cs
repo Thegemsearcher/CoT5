@@ -13,11 +13,9 @@ namespace CoT
     {
         protected Position[] path;
         protected Position nextTileInPath;
-        protected float speed;
         protected float aggroRange;
         protected bool hasAggro = false;
         protected Vector2 nextPosition;
-        protected Vector2 direction = new Vector2(0, 0);
 
         public Enemy(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {

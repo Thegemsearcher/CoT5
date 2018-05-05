@@ -59,8 +59,12 @@ namespace CoT
 
         public Spritesheet SetCurrentFrame(int frame)
         {
-            CurrentFrame = frame;
-            SourceRectangle = CalculateSourceRectangle(CurrentFrame);
+            if (StartFrame != frame)
+            {
+                StartFrame = frame;
+                CurrentFrame = frame;
+                SourceRectangle = CalculateSourceRectangle(CurrentFrame);
+            }
             return this;
         }
 

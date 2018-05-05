@@ -42,8 +42,6 @@ namespace CoT
 
             PlayerStartPosition = new Vector2(Rooms[0].Position.X + 1, Rooms[0].Position.Y);
 
-            Console.WriteLine(Rooms[0].Position);
-
             for (int i = 1; i < Rooms.Length; i++)
             {
                 Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, Corridors[i - 1]);

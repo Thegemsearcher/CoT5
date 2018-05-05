@@ -13,6 +13,18 @@ namespace CoT
 
     public class Creature : WorldObject
     {
+        protected enum FacingDirection
+        {
+            North,
+            NorthEast,
+            East,
+            SouthEast,
+            South,
+            SouthWest,
+            West,
+            NorthWest
+        }
+
         public Grid Grid;
         public Map Map;
         public Player Player;
@@ -34,6 +46,11 @@ namespace CoT
         protected FloatRectangle attackHitbox;
 
         protected Vector2 groundPositionOffset;
+
+        protected Vector2 direction;
+        protected float speed;
+
+        protected FacingDirection facingDirection;
 
         public Creature(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, depthSortingOffset, true)
         {
@@ -167,6 +184,48 @@ namespace CoT
         {
             base.Update();
             GroundPosition = Position + Center + groundPositionOffset;
+
+            float angle = (float)Math.Atan2(direction.Y, direction.X);
+            float pi8 = (float)Math.PI / 8;
+
+            if (angle > -pi8 && angle < pi8)
+            {
+                facingDirection = FacingDirection.East;
+            }
+            else if (angle > pi8 && angle < pi8 * 3)
+            {
+                facingDirection = FacingDirection.SouthEast;
+            }
+            else if (angle > pi8 * 3 && angle < pi8 * 5)
+            {
+                facingDirection = FacingDirection.South;
+            }
+            else if (angle > pi8 * 5 && angle < pi8 * 7)
+            {
+                facingDirection = FacingDirection.SouthWest;
+            }
+            else if (angle > pi8 * 7 || angle < -pi8 * 7)
+            {
+                facingDirection = FacingDirection.West;
+            }
+            else if (angle < -pi8 && angle > -pi8 * 3)
+            {
+                facingDirection = FacingDirection.NorthEast;
+            }
+            else if (angle < -pi8 * 3 && angle > -pi8 * 5)
+            {
+                facingDirection = FacingDirection.North;
+            }
+            else if (angle < -pi8 * 5 && angle > -pi8 * 7)
+            {
+                facingDirection = FacingDirection.NorthWest;
+            }
+
+
+            if (GetType() == typeof(Player))
+            {
+                GameDebugger.WriteLine("player direction: " + facingDirection);
+            }
 
             if (Stats.Health <= 0)
             {

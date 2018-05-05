@@ -16,9 +16,7 @@ namespace CoT
 {
     public class Player : Creature
     {
-
-        private float speed = 200f;
-        private Vector2 direction, nextPosition, targetPos;
+        private Vector2 nextPosition, targetPos;
         private Position[] path;
         private Position nextTileInPath;
         private FloatRectangle bottomHitBox;
@@ -74,11 +72,13 @@ namespace CoT
             light.ShadowType = ShadowType.Solid;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
+            speed = 200f;
             LayerDepth = 1f;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
             spritesheet.SetFrameCount(new Point(5, 1));
+            spritesheet.Interval = 100;
         }
 
         public override void Update()
@@ -98,10 +98,11 @@ namespace CoT
                 currentMovementState = MovementState.DirectMoving;
             }
 
+            Animation();
+
             switch (currentMovementState)
             {
                 case MovementState.Idle:
-                    Animation();
                     break;
                 case MovementState.DirectMoving:
                     Move(direction);
@@ -240,27 +241,6 @@ namespace CoT
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
         {
             Position += direction * speed * Time.DeltaTime;
-
-            if (direction.X > 0)
-            {
-                Spritesheet.SetFrameCount(new Point(5, 3));
-                if (Spritesheet.StartFrame != 10)
-                {
-                    Spritesheet.Interval = 100;
-                    Spritesheet.StartFrame = 10;
-                    Spritesheet.CurrentFrame = 10;
-                }
-            }
-            else if (direction.X < 0)
-            {
-                Spritesheet.SetFrameCount(new Point(5, 2));
-                if (Spritesheet.StartFrame != 5)
-                {
-                    Spritesheet.Interval = 100;
-                    Spritesheet.StartFrame = 5;
-                    Spritesheet.CurrentFrame = 5;
-                }
-            }
         }
 
         public bool CheckForCollision() //Kollision med väggtile-check
@@ -305,21 +285,36 @@ namespace CoT
 
         public void Animation()
         {
-            //if (!attacking && Vector2.Distance(PositionOfFeet, targetPos) < 20)
+            if (currentMovementState != MovementState.Idle)
             {
-                //spriteSheet.SetCurrentFrame(5);
-                //spriteSheet.SetFrameCount(new Point(5, 2));
-                //SourceRectangle = spriteSheet.SourceRectangle;
-                Spritesheet.Interval = 100;
-                Spritesheet.SetFrameCount(new Point(5, 1));
-
-                if (Spritesheet.StartFrame != 0)
+                switch (facingDirection)
                 {
-                    Spritesheet.StartFrame = 0;
-                    Spritesheet.CurrentFrame = 0;
+                    case FacingDirection.North:
+                        break;
+                    case FacingDirection.NorthEast:
+                        break;
+                    case FacingDirection.East:
+                        Spritesheet.SetFrameCount(new Point(5, 3));
+                        Spritesheet.SetCurrentFrame(10);
+                        break;
+                    case FacingDirection.SouthEast:
+                        break;
+                    case FacingDirection.South:
+                        break;
+                    case FacingDirection.SouthWest:
+                        break;
+                    case FacingDirection.West:
+                        Spritesheet.SetFrameCount(new Point(5, 2));
+                        Spritesheet.SetCurrentFrame(5);
+                        break;
+                    case FacingDirection.NorthWest:
+                        break;
                 }
-
-                //SourceRectangle = AnimationHelper.Animation(SourceRectangle, ref frameTimer, frameInterval, ref frame, animationStarts, amountOfFrames, animationOffset);
+            }
+            else
+            {
+                Spritesheet.SetFrameCount(new Point(5, 1));
+                Spritesheet.SetCurrentFrame(0);
             }
         }
 
