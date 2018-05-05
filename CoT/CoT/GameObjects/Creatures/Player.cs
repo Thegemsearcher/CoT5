@@ -328,7 +328,7 @@ namespace CoT
             //Debug
             //FullHitbox
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
-
+            
             //////BottomHitox 
             sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)GroundPosition.X - (int)bottomHitBox.Size.X, (int)GroundPosition.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 

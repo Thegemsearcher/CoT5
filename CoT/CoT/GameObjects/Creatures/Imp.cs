@@ -31,6 +31,7 @@ namespace CoT
             speed = 160f;
             isAttacking = false;
             Color = Color.Red;
+            
         }
 
         public override void Update()
@@ -53,8 +54,8 @@ namespace CoT
                 nextPos.X = GroundPosition.X - (Player.GroundPosition.X - GroundPosition.X);
                 nextPos.Y = GroundPosition.Y - (Player.GroundPosition.Y - GroundPosition.Y);
                 nextPos.Normalize();
-                nextPos *= new Vector2(Map.TileSize.X,Map.TileSize.Y);
-                path = Pathing(nextPos /** map.TileSize.X*/);
+                nextPos *= new Vector2(Map.TileSize.X, Map.TileSize.X);
+                path = Pathing((GroundPosition) + nextPos /** map.TileSize.X*/);
             }
             if (path.Length > 1)
             {
