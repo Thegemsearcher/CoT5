@@ -172,7 +172,7 @@ namespace CoT
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.CreateStandard(Position + Center, attackDirection + Helper.RandomDirection(), Color.BlueViolet);
+                    ParticleManager.CreateStandard(Position + Center/2, attackDirection + Helper.RandomDirection(), Color.BlueViolet);
                     //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Center,
                     //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                     //    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));

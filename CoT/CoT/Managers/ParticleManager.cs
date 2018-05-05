@@ -14,11 +14,11 @@ namespace CoT
 
         public List<Particle> Particles { get; set; }
 
-        public static void CreateStandard(Vector2 position, Vector2 direction, Color color)
+        public static void CreateStandard(Vector2 position, Vector2 direction, Color color, float scale = 0.3f)
         {
             Instance.Particles.Add(new Particle(new Spritesheet("lightMask", new Point(1, 1), 
                 new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height)), 
-                position, direction, 300f, 2f, color, 0f, 0.3f));
+                position, direction, 300f, 2f, color, 0f, scale));
         }
 
         public ParticleManager()

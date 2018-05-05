@@ -52,7 +52,8 @@ namespace CoT
                 Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
                 nextPos.X = GroundPosition.X - (Player.GroundPosition.X - GroundPosition.X);
                 nextPos.Y = GroundPosition.Y - (Player.GroundPosition.Y - GroundPosition.Y);
-            
+                nextPos.Normalize();
+                nextPos *= new Vector2(Map.TileSize.X,Map.TileSize.Y);
                 path = Pathing(nextPos /** map.TileSize.X*/);
             }
             if (path.Length > 1)
