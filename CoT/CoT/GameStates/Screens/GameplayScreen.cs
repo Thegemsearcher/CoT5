@@ -64,7 +64,7 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("tree"), "tree");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
-            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation"), "playerAnimation");
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation2"), "playerAnimation");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
             Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1)), Vector2.Zero);
 

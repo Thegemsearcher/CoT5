@@ -290,24 +290,36 @@ namespace CoT
                 switch (facingDirection)
                 {
                     case FacingDirection.North:
+                        Spritesheet.SetFrameCount(new Point(5, 5));
+                        Spritesheet.SetCurrentFrame(20);
                         break;
                     case FacingDirection.NorthEast:
+                        Spritesheet.SetFrameCount(new Point(5, 9));
+                        Spritesheet.SetCurrentFrame(40);
                         break;
                     case FacingDirection.East:
                         Spritesheet.SetFrameCount(new Point(5, 3));
                         Spritesheet.SetCurrentFrame(10);
                         break;
                     case FacingDirection.SouthEast:
+                        Spritesheet.SetFrameCount(new Point(5, 6));
+                        Spritesheet.SetCurrentFrame(25);
                         break;
                     case FacingDirection.South:
+                        Spritesheet.SetFrameCount(new Point(5, 4));
+                        Spritesheet.SetCurrentFrame(15);
                         break;
                     case FacingDirection.SouthWest:
+                        Spritesheet.SetFrameCount(new Point(5, 7));
+                        Spritesheet.SetCurrentFrame(30);
                         break;
                     case FacingDirection.West:
                         Spritesheet.SetFrameCount(new Point(5, 2));
                         Spritesheet.SetCurrentFrame(5);
                         break;
                     case FacingDirection.NorthWest:
+                        Spritesheet.SetFrameCount(new Point(5, 8));
+                        Spritesheet.SetCurrentFrame(35);
                         break;
                 }
             }
