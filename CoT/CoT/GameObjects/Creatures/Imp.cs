@@ -50,12 +50,10 @@ namespace CoT
             //Impen försöker röra sig från spelaren men håller sig innanför sin egen attack range
             if (((Vector2.Distance(Player.GroundPosition, GroundPosition) < attackRange - (attackRange / 20))))
             {
-                Vector2 nextPos/* = player.PositionOfFeet - PositionOfFeet*/;
+                Vector2 nextPos;
                 nextPos.X = GroundPosition.X - (Player.GroundPosition.X - GroundPosition.X);
                 nextPos.Y = GroundPosition.Y - (Player.GroundPosition.Y - GroundPosition.Y);
-                nextPos.Normalize();
-                nextPos *= new Vector2(Map.TileSize.X, Map.TileSize.X);
-                path = Pathing((GroundPosition) + nextPos /** map.TileSize.X*/);
+                path = Pathing(/*(GroundPosition) +*/ nextPos );
             }
             if (path.Length > 1)
             {
@@ -170,7 +168,7 @@ namespace CoT
                 attackCD = true;
                 direction.Normalize();
                 direction *= -1;
-                Projectile proj = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center, direction, 600f);
+                Projectile proj = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center, direction, 500f);
                 proj.Color = Color.Red;
                 proj.Owner = this;
                 proj.LayerDepth = 1F;
