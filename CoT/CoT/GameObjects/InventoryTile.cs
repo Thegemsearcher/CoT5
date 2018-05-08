@@ -9,10 +9,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    class InventoryTile : GameObject
+    public class InventoryTile : GameObject
     {
-        Texture2D pixel;
-        Rectangle rectangle;
+        private Texture2D pixel;
+        public Rectangle rectangle;
+
+        public bool occupied = false;
 
         public InventoryTile(Vector2 position, int tileSize, Texture2D pixel, string texture, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
@@ -20,13 +22,14 @@ namespace CoT
             rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
         }
 
-        public void Update()
+        public override void Update()
         {
+
         }
 
-        public void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(pixel, rectangle, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1);
+            sb.Draw(pixel, rectangle, null, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, 0.4f);
         }
 
         public override void OnRemove()

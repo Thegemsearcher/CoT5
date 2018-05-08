@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
@@ -13,6 +14,8 @@ namespace CoT
         public static ItemManager Instance { get; set; }
 
         public List<Item> Items { get; set; }
+
+        //public static Texture2D PotionSpriteSheet = ResourceManager.Get<Texture2D>("potions");
 
         public ItemManager()
         {
@@ -31,11 +34,21 @@ namespace CoT
         public void Update()
         {
             Items.ForEach(x => x.Update());
+
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.A) && Input.LastKeyboard.IsKeyUp(Keys.A))
+            {
+                Items.Add(new Potion("potionSheet", Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1,1,1,1), false, Potion.PotionType.HealthSmall));
+            }
         }
 
         public void Draw(SpriteBatch sb)
         {
-            Items.ForEach(x => x.Draw(sb));
+            //Items.ForEach(x => x.Draw(sb));
+            foreach (Item item in Items)
+            {
+                if (!item.isInBag)
+                    item.Draw(sb);
+            }
         }
 
         public void DrawToWorldAdditiveBlend(SpriteBatch spriteBatch)
@@ -44,6 +57,11 @@ namespace CoT
 
         public void DrawUserInterface(SpriteBatch spriteBatch)
         {
+            //foreach (Item item in Items)
+            //{
+            //    if (item.isInBag)
+            //        item.Draw(spriteBatch);
+            //}
         }
     }
 }

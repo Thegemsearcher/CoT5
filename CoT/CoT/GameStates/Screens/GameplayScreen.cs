@@ -65,6 +65,8 @@ namespace CoT
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
 
+            ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("potions"), "potionSheet");
+
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
             Inventory = new Inventory(null, Vector2.Zero, new Rectangle(1,1,1,1));
 

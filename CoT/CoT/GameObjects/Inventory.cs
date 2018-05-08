@@ -23,18 +23,17 @@ namespace CoT
             rectMain,
             rectLayer1;
 
-        InventoryTile[,] invTiles = new InventoryTile[4, 8];
-        
-        public static bool active = false;
+        public static InventoryTile[,] invTiles = new InventoryTile[4, 8];
 
-        int
+        private int
             //Main layer
             invMainWidth = 400,
             invMainMarginY = 20,
             invMainMarginX = 20,
             //Layer 1
             invLayer1MarginY = 30,
-            invLayer1MarginX = 10,
+            invLayer1MarginX = 10;
+        public static int
             //Inventory tile
             invTileSize = 60,
             invTileLeftMargin = 4,
@@ -45,10 +44,10 @@ namespace CoT
             pixelMain.SetData(colorDataMain);
             pixelLayer1.SetData(colorDataLayer1);
             pixelInvTile.SetData(colorDataInvTile);
-
+            IsActive = false;
             rectMain = new Rectangle(Game1.ScreenWidth - invMainWidth - invMainMarginX, invMainMarginY, invMainWidth, Game1.ScreenHeight - invMainMarginY * 2);
             rectLayer1 = new Rectangle(rectMain.X + invLayer1MarginX, rectMain.Y + invLayer1MarginY, rectMain.Width - invLayer1MarginX * 2, rectMain.Height - invLayer1MarginY * 2);
-
+            
             CreateTiles();
         }
 
@@ -63,8 +62,7 @@ namespace CoT
                         invTileSize,
                         pixelInvTile,
                         null,
-                        SourceRectangle
-                        );
+                        SourceRectangle);
                 }
             }
         }
@@ -73,11 +71,11 @@ namespace CoT
         {
             if (Input.CurrentKeyboard.IsKeyDown(Keys.I) && Input.LastKeyboard.IsKeyUp(Keys.I))
             {
-                if (active)
+                if (IsActive)
                 {
-                    active = false;
+                    IsActive = false;
                 }
-                else active = true;
+                else IsActive = true;
             }
 
             foreach (InventoryTile tile in invTiles)
@@ -88,24 +86,18 @@ namespace CoT
 
         public override void Draw(SpriteBatch sb)
         {
-            if (active)
+            if (IsActive)
             {
-                sb.Draw(pixelMain, rectMain, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
-                sb.Draw(pixelLayer1, rectLayer1, Color.White);
-                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Inventory", new Vector2(rectMain.X + 150, rectMain.Y + 5), Color.Black);
-
-                //for (int i = 0; i < invTiles.GetLength(0); i++)
-                //{
-                //    for (int j = 0; j < invTiles.GetLength(1); j++)
-                //    {
-                //        invTiles[i, j].Draw(sb);
-                //    }
-                //}
+                sb.Draw(pixelMain, rectMain, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+                sb.Draw(pixelLayer1, rectLayer1, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Inventory", new Vector2(rectMain.X + 150, rectMain.Y + 5), Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.3f);
 
                 foreach (InventoryTile tile in invTiles)
-                {
                     tile.Draw(sb);
-                }
+
+                foreach (Item item in GameManager.Instance.ItemManager.Items)
+                    if (item.isInBag)
+                        sb.Draw(ResourceManager.Get<Texture2D>(item.Texture), item.rectItemInv, item.sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
             }
         }
 
