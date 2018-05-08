@@ -93,9 +93,18 @@ namespace CoT
                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack
             {
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
-                direction = GetDirection(GroundPosition, targetPos);
-                path = Pathing(targetPos);
-                currentMovementState = MovementState.DirectMoving;
+                Vector2 TargetTileIndex = Map.GetTileIndex(targetPos);
+
+                if ((int)TargetTileIndex.X >= 0 && (int)TargetTileIndex.X <= Map.TileMap.GetLength(0) &&
+                    (int)TargetTileIndex.Y >= 0 && (int)TargetTileIndex.Y <= Map.TileMap.GetLength(1))
+                {
+                    if (Map.TileMap[(int)TargetTileIndex.X, (int)TargetTileIndex.Y].TileType == TileType.Ground)
+                    {
+                        direction = GetDirection(GroundPosition, targetPos);
+                        path = Pathing(targetPos);
+                        currentMovementState = MovementState.DirectMoving;
+                    }
+                }
             }
 
             Animation();
