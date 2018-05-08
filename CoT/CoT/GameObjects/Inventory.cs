@@ -25,6 +25,8 @@ namespace CoT
 
         public static InventoryTile[,] invTiles = new InventoryTile[4, 8];
 
+        public static Inventory Instance { get; set; }
+
         private int
             //Main layer
             invMainWidth = 400,
@@ -32,12 +34,16 @@ namespace CoT
             invMainMarginX = 20,
             //Layer 1
             invLayer1MarginY = 30,
-            invLayer1MarginX = 10;
+            invLayer1MarginX = 10,
+            invLayer1PaddingY = 50,
+            invLayer1PaddingX = 50;
         public static int
             //Inventory tile
             invTileSize = 60,
-            invTileLeftMargin = 4,
-            invTileTopMargin = 4;
+            invTileLeftMargin = 10,
+            invTileTopMargin = 10,
+            invTileTotalWidth = (invTileSize + invTileLeftMargin) * invTiles.GetLength(0),
+            invTileTotalHeight = (invTileSize + invTileTopMargin) * invTiles.GetLength(1);
 
         public Inventory(string texture, Vector2 position, Rectangle sourceRectangle) : base(texture, position, sourceRectangle)
         {
@@ -47,18 +53,21 @@ namespace CoT
             IsActive = false;
             rectMain = new Rectangle(Game1.ScreenWidth - invMainWidth - invMainMarginX, invMainMarginY, invMainWidth, Game1.ScreenHeight - invMainMarginY * 2);
             rectLayer1 = new Rectangle(rectMain.X + invLayer1MarginX, rectMain.Y + invLayer1MarginY, rectMain.Width - invLayer1MarginX * 2, rectMain.Height - invLayer1MarginY * 2);
-            
+
+            Instance = this;
             CreateTiles();
         }
 
         public void CreateTiles()
         {
+            
+
             for (int i = 0; i < invTiles.GetLength(0); i++)
             {
                 for (int j = 0; j < invTiles.GetLength(1); j++)
                 {
                     invTiles[i, j] = new InventoryTile(
-                        new Vector2(rectLayer1.X + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invTileTopMargin * (j + 1) + invTileSize * j),
+                        new Vector2(rectLayer1.X + rectLayer1.Width / 2 - invTileTotalWidth / 2 + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + rectLayer1.Height / 2 - invTileTotalHeight / 2 + invTileTopMargin * (j + 1) + invTileSize * j/*rectLayer1.X + invLayer1PaddingX + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invLayer1PaddingY + invTileTopMargin * (j + 1) + invTileSize * j*/),
                         invTileSize,
                         pixelInvTile,
                         null,

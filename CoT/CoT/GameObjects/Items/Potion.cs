@@ -74,21 +74,6 @@ namespace CoT
         public override void Pickup()
         {
             base.Pickup();
-            bool roomAvailable = false;
-            foreach (InventoryTile tile in Inventory.invTiles)
-            {
-                if (!tile.occupied)
-                {
-                    rectItemInv = tile.rectangle;
-                    isInBag = true;
-                    tile.occupied = true;
-                    roomAvailable = true;
-                    break;
-                }
-            }
-            if (!roomAvailable)
-            {
-            }
         }
 
         public override void Use()
@@ -101,8 +86,6 @@ namespace CoT
 
             if (!isInBag)
                 sb.Draw(ResourceManager.Get<Texture2D>(Texture), rectItemDrop, rectCurrentSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
-            //else if (Inventory.isActive)
-            //    sb.Draw(ResourceManager.Get<Texture2D>(Texture), rectItemInv, sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
         }
     }
 }

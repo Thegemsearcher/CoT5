@@ -110,7 +110,24 @@ namespace CoT
             }
             Animation();
             AttackLockTimer();
-            InputAttack();
+
+            if (Inventory.Instance.IsActive)
+            {
+                if (!Inventory.rectMain.Contains(Input.CurrentMousePosition) && Input.IsLeftClickPressed)
+                {
+                    Inventory.Instance.IsActive = false;
+                    InputAttack();
+                }
+                if (normalMoving || pathMoving)
+                {
+                    Inventory.Instance.IsActive = false;
+                }
+            }
+            else
+            {
+                InputAttack();
+            }
+            
             UpdateVariables();
         }
 

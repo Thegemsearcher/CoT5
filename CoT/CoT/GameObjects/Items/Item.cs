@@ -40,7 +40,6 @@ namespace CoT
                     {
                         if (verticalSize == 2 && j != 7) 
                         {
-                            Console.WriteLine("This went wrong");
                             if (!Inventory.invTiles[i, j + 1].occupied) 
                             {
                                 roomAvailable = true;
@@ -68,20 +67,6 @@ namespace CoT
                     break;
                 }
             }
-
-            //foreach (InventoryTile tile in Inventory.invTiles)
-            //{
-            //    if (!tile.occupied)
-            //    {
-            //        rectItemInv = tile.rectangle;
-            //        isInBag = true;
-            //        tile.occupied = true;
-            //        roomAvailable = true;
-            //        break;
-            //    }
-            //}
-            //if (!roomAvailable) {
-            //}
         }
 
         public virtual void Drop()
