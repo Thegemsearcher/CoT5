@@ -23,44 +23,17 @@ namespace CoT
         //private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
         //private float frameTimer = 100, frameInterval = 100;
 
-        enum MovementState 
+        enum PlayerState 
         {
             Idle,
+            Attacking,
             DirectMoving,
             Pathfinding,
             Collide,
         }
 
-        private MovementState currentMovementState;
-
+        private PlayerState currentPlayerState;
         private Penumbra.Light light;
-
-        //public Player(string texture, Vector2 position, Rectangle sourceRectangle, Vector2 depthSortingOffset, Grid grid, Map map, int hp, int attack, int defense) : base(texture, position, sourceRectangle, depthSortingOffset, map, hp, attack, defense)
-        //{
-        //    this.map = map;
-        //    this.grid = grid;
-        //    attackSize = 150;
-        //    light = new PointLight();
-        //    light.Scale = new Vector2(5000, 5000).ToCartesian();
-        //    light.Intensity = 0.2f;
-        //    light.ShadowType = ShadowType.Solid;
-        //    GameManager.Instance.Penumbra.Lights.Add(light);
-        //    Scale = 3;
-        //    LayerDepth = 1f;
-        //    //
-        //    defense = 10000;
-        //    //
-        //    CenterMass = new Vector2(PositionOfFeet.X, Position.Y - SourceRectangle.Height * Scale);
-        //    destinationRectangle.Width = (int)(sourceRectangle.Width);
-        //    destinationRectangle.Height = (int)(sourceRectangle.Height);
-        //    bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(SourceRectangle.Height * 0.90 * Scale)),
-        //        new Vector2(SourceRectangle.Width * Scale, (SourceRectangle.Height * Scale) / 10));
-        //    Offset = new Vector2((float)SourceRectangle.Width / 2, (float)SourceRectangle.Height / 2);
-
-
-        //    spriteSheet = new Spritesheet(texture, new Point(5, 1), SourceRectangle, 100);
-
-        //}
 
         public Player(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
@@ -89,8 +62,9 @@ namespace CoT
                 return;
             }
 
-            if (Input.IsRightClickPressed && !isAttacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
-                                                         //spelaren kan inte röra sig under tiden det tar att utföra en attack
+            if (Input.IsRightClickPressed && currentPlayerState != PlayerState.Attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
+                                                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack. Musklickspositionen måste vara
+                                                                                          //på en giltig groundtile innanför kartan
             {
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
                 Vector2 TargetTileIndex = Map.GetTileIndex(targetPos);
@@ -102,33 +76,36 @@ namespace CoT
                     {
                         direction = GetDirection(GroundPosition, targetPos);
                         path = Pathing(targetPos);
-                        currentMovementState = MovementState.DirectMoving;
+                        currentPlayerState = PlayerState.DirectMoving;
                     }
                 }
             }
 
             Animation();
 
-            switch (currentMovementState)
+            switch (currentPlayerState)
             {
-                case MovementState.Idle:
+                case PlayerState.Idle:
                     break;
-                case MovementState.DirectMoving:
+                case PlayerState.DirectMoving:
                     Move(direction);
                     if (CheckForCollision())
                     {
-                        currentMovementState = MovementState.Collide;
+                        currentPlayerState = PlayerState.Collide;
                     }
                     break;
-                case MovementState.Pathfinding:
+                case PlayerState.Attacking:
+                    AttackLockTimer();
+                    break;
+                case PlayerState.Pathfinding:
                     PathMoving();
                     if (path.Length <= 1)
                     {
                         direction = GetDirection(GroundPosition, targetPos);
-                        currentMovementState = MovementState.DirectMoving;
+                        currentPlayerState = PlayerState.DirectMoving;
                     }
                     break;
-                case MovementState.Collide:
+                case PlayerState.Collide:
                     //Move((direction * -1));
                     //if (CheckForCollision())
                     //{
@@ -136,18 +113,17 @@ namespace CoT
                     //}
                     if (path.Length < 1)
                     {
-                        currentMovementState = MovementState.Idle;
+                        currentPlayerState = PlayerState.Idle;
                     }
                     else
                     {
-                        currentMovementState = MovementState.Pathfinding;
+                        currentPlayerState = PlayerState.Pathfinding;
                     }
                     break;
                 default:
                     break;
             }
             StopMoving();
-            AttackLockTimer();
             InputAttack();
             UpdateVariables();
         }
@@ -166,7 +142,7 @@ namespace CoT
         {
             if (Vector2.Distance(GroundPosition, targetPos) < Map.TileSize.Y / 16) //Spelaren slutar röra sig inom 10 pixlar av sin destination
             {
-                currentMovementState = MovementState.Idle;
+                currentPlayerState = PlayerState.Idle;
             }
         }
 
@@ -174,18 +150,15 @@ namespace CoT
         {
             Vector2 attackDirection;
 
-            if (Input.IsLeftClickPressed && !isAttacking)
+            if (Input.IsLeftClickPressed && currentPlayerState != PlayerState.Attacking)
             {
-                isAttacking = true;
+                currentPlayerState = PlayerState.Attacking;
                 attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
 
                 for (int i = 0; i < 20; i++)
                 {
                     ParticleManager.CreateStandard(Position + Center/2, attackDirection + Helper.RandomDirection(), Color.BlueViolet);
-                    //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Center,
-                    //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                    //    attackDirection + Helper.RandomDirection() / 3, 1000f, 5f, Color.Green, 0f, 0.2f));
                 }
 
                 Camera.ScreenShake(0.1f, 2);
@@ -195,15 +168,12 @@ namespace CoT
         public void AttackLockTimer() //Låser spelaren i en attack under 30 frames
         {
             int attackDuration = 20;
+            attackTimer++;
 
-            if (isAttacking)
+            if (attackTimer >= attackDuration)
             {
-                attackTimer++;
-                if (attackTimer >= attackDuration)
-                {
-                    attackTimer = 0;
-                    isAttacking = false;
-                }
+                attackTimer = 0;
+                currentPlayerState = PlayerState.Idle;
             }
         }
 
@@ -223,12 +193,7 @@ namespace CoT
 
                         if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
                         {
-                            Console.WriteLine("Hit!");
                             e.GetHit(this);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Miss!");
                         }
                     }
                 }
@@ -242,9 +207,6 @@ namespace CoT
             float bottomHitBoxWidth = Spritesheet.SourceRectangle.Width * Scale / 5;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X + ((float)Spritesheet.SourceRectangle.Width * Scale / 2) - ((float)bottomHitBoxWidth / 2), 
                 Position.Y + (int)(Spritesheet.SourceRectangle.Height * 0.90 * Scale) - 60), new Vector2(bottomHitBoxWidth, (Spritesheet.SourceRectangle.Height * Scale) / 25));
-            
-            //Position = new Vector2(this.PositionOfFeet.X - (spriteSheet.SourceRectangle.Width * Scale) / 2,
-            //    this.PositionOfFeet.Y - (spriteSheet.SourceRectangle.Height * Scale));
         } 
 
         public void Move(Vector2 direction) //Förflyttar spelaren med en en riktningsvektor, hastighet och deltatid
@@ -294,7 +256,7 @@ namespace CoT
 
         public void Animation()
         {
-            if (currentMovementState != MovementState.Idle)
+            if (currentPlayerState != PlayerState.Idle)
             {
                 switch (facingDirection)
                 {
