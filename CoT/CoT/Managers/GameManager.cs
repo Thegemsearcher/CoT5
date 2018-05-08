@@ -120,7 +120,7 @@ namespace CoT
         {
             Penumbra.BeginDraw();
             Penumbra.Transform = Camera.Transform;
-            Game.GraphicsDevice.Clear(Color.CornflowerBlue);
+            Game.GraphicsDevice.Clear(Color.Black);
 
             SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.Transform);
             DrawToWorld();

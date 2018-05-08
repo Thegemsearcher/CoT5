@@ -120,11 +120,11 @@ namespace CoT
                     }
                     break;
                 case MovementState.Collide:
-                    Move((direction * -1));
-                    if (CheckForCollision())
-                    {
-                        break;
-                    }
+                    //Move((direction * -1));
+                    //if (CheckForCollision())
+                    //{
+                    //    break;
+                    //}
                     if (path.Length < 1)
                     {
                         currentMovementState = MovementState.Idle;

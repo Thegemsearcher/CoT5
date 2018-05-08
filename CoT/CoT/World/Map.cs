@@ -182,7 +182,10 @@ namespace CoT
  
                     if (visibleArea.Contains(tempPos.ToPoint()))
                     {
-                        sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), tempPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        if (t.TileType == TileType.Collision || t.TileType == TileType.Ground /*|| t.TileType == TileType.Water*/)
+                        {
+                            sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), tempPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        }
                     }
  
                     //if (isometricScreenTile == new Point(i, j))
