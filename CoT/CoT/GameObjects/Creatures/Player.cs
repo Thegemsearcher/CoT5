@@ -46,7 +46,7 @@ namespace CoT
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
             speed = 200f;
-            LayerDepth = 1f;
+            LayerDepth = 0.2f;
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
