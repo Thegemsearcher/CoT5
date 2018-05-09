@@ -79,9 +79,20 @@ namespace CoT
         public override void Use()
         {
             base.Use();
+            switch (currentPotionType)
+            {
+                case PotionType.HealthSmall:
+                    //GameplayScreen.Instance.Player.Health += 50; <-- Health-variabelns kan inte ändras, 'set' är 'protected'
+                    break;
+                case PotionType.ExplosiveMedium:
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public override void Draw(SpriteBatch sb) {
+        public override void Draw(SpriteBatch sb)
+        {
             base.Draw(sb);
 
             if (!isInBag)
