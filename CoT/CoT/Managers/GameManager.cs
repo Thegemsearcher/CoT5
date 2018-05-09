@@ -132,12 +132,12 @@ namespace CoT
             DrawToWorldWithoutShader();
             SpriteBatch.End();
 
-            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive, null, null, null, null, Camera.Transform);
-            DrawToWorldAdditiveBlend();
-            SpriteBatch.End();
-
             SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, null);
             DrawUserInterface();
+            SpriteBatch.End();
+
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive, null, null, null, null, Camera.Transform);
+            DrawToWorldAdditiveBlend();
             SpriteBatch.End();
         }
 

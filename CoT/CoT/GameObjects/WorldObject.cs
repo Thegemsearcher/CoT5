@@ -31,7 +31,10 @@ namespace CoT.GameObjects
             
             if (GameplayScreen.Instance.Player.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
             {
-                if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                if (LayerDepth > GameplayScreen.Instance.Player.LayerDepth)
+                {
+                    if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                }
             }
             else
             {

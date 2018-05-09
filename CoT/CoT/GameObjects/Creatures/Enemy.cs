@@ -154,11 +154,11 @@ namespace CoT
             }
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
 
-            if (isAttacking)
-            {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)attackHitbox.Position.X, (int)attackHitbox.Position.Y, (int)attackHitbox.Size.X, (int)attackHitbox.Size.Y)
-                , Spritesheet.SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
-            }
+            //if (isAttacking)
+            //{
+            //    sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Rectangle((int)attackHitbox.Position.X, (int)attackHitbox.Position.Y, (int)attackHitbox.Size.X, (int)attackHitbox.Size.Y)
+            //    , Spritesheet.SourceRectangle, Color.Red * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            //}
             base.Draw(sb);
         }
     }
