@@ -102,11 +102,11 @@ namespace CoT
                             break;
                     }
 
-                    if (yPos >= MapHeight)
+                    if (yPos > MapHeight - 1)
                     {
                         yPos = MapHeight - 1;
                     }
-                    else if (xPos >= MapWidth)
+                    else if (xPos > MapWidth - 1)
                     {
                         xPos = MapWidth - 1;
                     }
