@@ -101,21 +101,21 @@ namespace CoT
                     TileMap[x, y] = this[MapData[x, y]];
                     SetCell(x, y);
  
-                    if (TileMap[x, y].TileType == TileType.Collision)
-                    {
-                        Hull hull = new Hull(new Vector2[]
-                        {
-                            new Vector2(0, 40),
-                            new Vector2(80, 0),
-                            new Vector2(160, 40),
-                            new Vector2(80, 80),
-                        });
+                    //if (TileMap[x, y].TileType == TileType.Collision)
+                    //{
+                    //    Hull hull = new Hull(new Vector2[]
+                    //    {
+                    //        new Vector2(0, 40),
+                    //        new Vector2(80, 0),
+                    //        new Vector2(160, 40),
+                    //        new Vector2(80, 80),
+                    //    });
  
-                        GameManager.Instance.Penumbra.DrawOrder = 5;
+                    //    GameManager.Instance.Penumbra.DrawOrder = 5;
  
-                        hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
-                        GameManager.Instance.Penumbra.Hulls.Add(hull);
-                    }
+                    //    hull.Position = new Vector2(x * TileSize.Y, y * TileSize.Y).ToIsometric();
+                    //    GameManager.Instance.Penumbra.Hulls.Add(hull);
+                    //}
  
  
  
