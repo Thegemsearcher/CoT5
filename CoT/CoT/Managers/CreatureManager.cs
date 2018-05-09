@@ -29,10 +29,9 @@ namespace CoT
 
         public void Update()
         {
-            Creatures.ForEach(x => x.Update());
-
             for (int i = Creatures.Count - 1; i >= 0; i--)
             {
+                Creatures[i].Update();
                 if (Creatures[i].Remove)
                 {
                     Creatures[i].OnRemove();

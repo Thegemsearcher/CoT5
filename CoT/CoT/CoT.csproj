@@ -60,7 +60,6 @@
     <Compile Include="World\Generation\MapGenerator.cs" />
     <Compile Include="World\Generation\RangeInt.cs" />
     <Compile Include="World\Generation\Room.cs" />
-    <Compile Include="World\WorldCreator.cs" />
     <Compile Include="World\Camera.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\FloatRectangle.cs" />

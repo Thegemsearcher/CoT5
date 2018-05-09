@@ -41,7 +41,7 @@ namespace CoT
 
             light = new PointLight();
             light.Scale = new Vector2(5000, 5000).ToCartesian();
-            light.Intensity = 0.2f;
+            light.Intensity = 1f;
             light.ShadowType = ShadowType.Solid;
             GameManager.Instance.Penumbra.Lights.Add(light);
             Scale = 3;
@@ -52,10 +52,17 @@ namespace CoT
 
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
+          
         }
 
         public override void Update()
         {
+            if (Map.TileMap[(int)Map.GetTileIndex(GroundPosition).X, (int)Map.GetTileIndex(GroundPosition).Y].TileType == TileType.Teleport)
+            {
+                GameplayScreen.Instance.ChangeToNextLevel();
+                Map = GameplayScreen.Instance.Map;
+                Grid = Map.Grid;
+            }
             base.Update();
             if (Stats.Health <= 0)
             {

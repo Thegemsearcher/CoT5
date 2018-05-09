@@ -10,6 +10,7 @@ namespace CoT
     {
         Ground,
         Collision,
-        Water
+        Water,
+        Teleport
     }
 }

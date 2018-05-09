@@ -55,7 +55,7 @@ namespace CoT
             for (int i = 0; i < Rooms.Length; i++)
             {
                 Room room = Rooms[i];
-
+                
                 for (int j = 0; j < room.Width; j++)
                 {
                     int xPos = room.Position.X + j;
@@ -72,7 +72,12 @@ namespace CoT
                         {
                             xPos = MapWidth - 1;
                         }
+                        
                         MapData[xPos, yPos] = "tile1";
+
+                     
+
+
                     }
                 }
             }
