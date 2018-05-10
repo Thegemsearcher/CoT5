@@ -79,7 +79,7 @@ namespace CoT
                         DamageToPlayer();
                         toRemove.Add(proj);
                     }
-                    Vector2 cartesianTileWorldPos = new Vector2(0,0);
+                    Vector2 cartesianTileWorldPos = new Vector2(0, 0);
                     cartesianTileWorldPos.X = proj.Position.X / Map.TileSize.Y;
                     cartesianTileWorldPos.Y = proj.Position.Y / Map.TileSize.Y;
                     Tile t;

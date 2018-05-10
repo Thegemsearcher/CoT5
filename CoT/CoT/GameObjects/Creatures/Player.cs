@@ -22,7 +22,8 @@ namespace CoT
         private FloatRectangle bottomHitBox;
         //private int frame, animationOffset = 27, animationStarts = 0, amountOfFrames = 5;
         //private float frameTimer = 100, frameInterval = 100;
-
+        private bool castingFireBall = false;
+        private Projectile fireBall = null;
         enum PlayerState 
         {
             Idle,
@@ -88,6 +89,13 @@ namespace CoT
                 }
             }
 
+            if (Input.IsKeyPressed(Keys.F))
+            {
+                if (castingFireBall)
+                    castingFireBall = false;
+                else
+                    castingFireBall = true;
+            }
             Animation();
 
             switch (currentPlayerState)
@@ -130,6 +138,7 @@ namespace CoT
                 default:
                     break;
             }
+            UpdateFireBall();
             StopMoving();
             InputAttack();
             UpdateVariables();
@@ -159,6 +168,12 @@ namespace CoT
 
             if (Input.IsLeftClickPressed && currentPlayerState != PlayerState.Attacking)
             {
+                if (castingFireBall == true)
+                {
+                    FireBall();
+                    castingFireBall = false;
+                    return;
+                }
                 currentPlayerState = PlayerState.Attacking;
                 attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
@@ -252,6 +267,43 @@ namespace CoT
             Position += direction * speed * Time.DeltaTime;
         }
 
+        public void FireBall()
+        {
+            if (fireBall != null)
+            {
+                fireBall = null;
+            }
+           else
+            {
+                Vector2 temp = Input.CurrentMousePosition.ScreenToWorld();
+                Vector2 fireBallDirection = temp - (Position + Center);
+                fireBallDirection.Normalize();
+                fireBall = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center/2, fireBallDirection, 500f);
+            }
+        }
+
+        public void UpdateFireBall()
+        {
+            if (fireBall != null)
+            {
+                fireBall.Update();
+                foreach (Creature c in CreatureManager.Instance.Creatures)
+                {
+                    if (c is Enemy e)
+                    {
+                        if (c.Hitbox.Intersects(fireBall.Hitbox))
+                        {
+                            e.GetHit(this);
+                            fireBall = null;
+                            return;
+                        }
+                    }
+                }
+                if (Vector2.Distance(fireBall.Position, Position) > 1200)
+                    fireBall = null;
+            }
+        }
+
         public Vector2 GetDirection(Vector2 currentPos, Vector2 targetPos) //Ger en normaliserad riktning mellan två positioner
         {
             Vector2 targetDirection = targetPos - currentPos;
@@ -310,10 +362,11 @@ namespace CoT
 
         public override void Draw(SpriteBatch sb)
         {
+            
             //Debug
             //FullHitbox
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
-            
+
             //////BottomHitox 
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new Rectangle((int)GroundPosition.X - (int)bottomHitBox.Size.X, (int)GroundPosition.Y, (int)bottomHitBox.Size.X, (int)bottomHitBox.Size.Y), Color.Red * 0.5f);
 
