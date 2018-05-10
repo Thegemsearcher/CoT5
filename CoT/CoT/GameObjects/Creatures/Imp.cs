@@ -120,7 +120,7 @@ namespace CoT
                 //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
             }
 
-            Camera.ScreenShake(0.1f, 20);
+            Camera.ScreenShake(0.2f, 20);
         }
 
         public override void Draw(SpriteBatch sb)

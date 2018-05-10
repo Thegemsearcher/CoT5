@@ -18,7 +18,11 @@ namespace CoT
         {
             Instance.Particles.Add(new Particle(new Spritesheet("lightMask", new Point(1, 1), 
                 new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height)), 
-                position, direction, speed, fadeSpeed, color, 0f, scale));
+                position - 
+                new Vector2(
+                    ResourceManager.Get<Texture2D>("lightMask").Width / (float)2, 
+                    ResourceManager.Get<Texture2D>("lightMask").Height / (float)2) * scale, 
+                direction, speed, fadeSpeed, color, 0f, scale));
         }
 
         public ParticleManager()

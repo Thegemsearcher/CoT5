@@ -178,12 +178,13 @@ namespace CoT
                 attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
                 DecideEnemiesInRange(attackDirection);
 
+
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.CreateStandard(Position + Center/2, attackDirection + Helper.RandomDirection(), Color.BlueViolet);
+                    ParticleManager.CreateStandard(Position + Center + attackDirection * 80, attackDirection + Helper.RandomDirection(), Color.BlueViolet, 1000, 3f, 0.5f);
                 }
 
-                Camera.ScreenShake(0.1f, 2);
+                Camera.ScreenShake(0.1f, 10);
             }
         }
 
@@ -278,7 +279,7 @@ namespace CoT
                 Vector2 temp = Input.CurrentMousePosition.ScreenToWorld();
                 Vector2 fireBallDirection = temp - (Position + Center);
                 fireBallDirection.Normalize();
-                fireBall = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center/2, fireBallDirection, 500f);
+                fireBall = new Projectile(new Spritesheet("tile2", new Point(1, 1), new Rectangle(0, 0, 20, 20)), Position + Center + fireBallDirection * 50, fireBallDirection, 500f);
             }
         }
 

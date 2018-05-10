@@ -20,7 +20,7 @@ namespace CoT
         public Enemy(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             Scale = 0.1f;
-            LayerDepth = 0.7f;
+            LayerDepth = 0.2f;
             path = new Position[0];
 
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
@@ -117,7 +117,7 @@ namespace CoT
                     //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
                 }
 
-                Camera.ScreenShake(0.1f, 20);
+                Camera.ScreenShake(0.15f, 20);
             }
         }
 
@@ -130,7 +130,7 @@ namespace CoT
                 //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                 //    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
             }
-
+            Camera.ScreenShake(0.15f, 20);
             base.OnRemove();
         }
 

@@ -82,14 +82,22 @@ namespace CoT
             base.Unload();
         }
 
+        private float particleTimer = 0;
+
         public override void Update()
         {
-            ParticleManager.CreateStandard(new Vector2(Game1.MonitorWidth / 4, Game1.MonitorHeight / 4.2f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(255, 100, 100, 50), 1000f, 1f);
-            ParticleManager.CreateStandard(new Vector2(Game1.MonitorWidth / 1.5f, Game1.MonitorHeight / 4.2f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(255, 100, 100, 50), 1000f, 1f);
+            particleTimer += Time.DeltaTime * 20;
+            if (particleTimer > 1)
+            {
+                particleTimer = 0;
+                ParticleManager.CreateStandard(new Vector2(Game1.ScreenWidth / 3.4f, Game1.ScreenHeight / 3f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(255, 100, 100, 70), 300f, 1f, 0.5f);
+                ParticleManager.CreateStandard(new Vector2(Game1.ScreenWidth / 1.4f, Game1.ScreenHeight / 3f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(255, 100, 100, 70), 300f, 1f, 0.5f);
 
-            ParticleManager.CreateStandard(new Vector2(Game1.MonitorWidth / 2.2f, Game1.MonitorHeight / 1.6f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(200, 200, 200, 50), 300, 2f);
+                if (Game1.Random.Next(0, 5) == 0)
+                ParticleManager.CreateStandard(new Vector2(Game1.ScreenWidth / 2f, Game1.ScreenHeight / 1.4f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-1, 1), Game1.Random.NextFloat(-1, 1)), new Color(100, 100, 255, 255), 100, 5f, 4);
 
-            ParticleManager.CreateStandard(new Vector2(Game1.Random.Next(0, Game1.MonitorWidth), Game1.MonitorHeight / 1.3f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-0.5f, 0.5f), Game1.Random.NextFloat(-1f, 0)), new Color(70, 50, 50), 500, 0.1f, 3f);
+                ParticleManager.CreateStandard(new Vector2(Game1.Random.Next(0, Game1.ScreenWidth), Game1.ScreenHeight / 0.9f).ScreenToWorld(), new Vector2(Game1.Random.NextFloat(-0.5f, 0.5f), Game1.Random.NextFloat(-1f, 0)), new Color(140, 90, 60), 300, 0.5f, 4f);
+            }
             base.Update();
         }
 

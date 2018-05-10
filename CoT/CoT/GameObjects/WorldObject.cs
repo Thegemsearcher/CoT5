@@ -28,18 +28,20 @@ namespace CoT.GameObjects
             {
                 LayerDepth = (Position.Y + DepthSortingOffset.Y).Normalize(short.MinValue, short.MaxValue);
             }
-            
-            if (GameplayScreen.Instance.Player.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
+
+            for (int i = 0; i < CreatureManager.Instance.Creatures.Count; i++)
             {
-                if (LayerDepth > GameplayScreen.Instance.Player.LayerDepth)
+                Creature c = CreatureManager.Instance.Creatures[i];
+                if (c.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
                 {
-                    if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                    if (LayerDepth > c.LayerDepth)
+                    {
+                        if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                    }
                 }
             }
-            else
-            {
-                if (Transparency < 1f) Transparency += Time.DeltaTime;
-            }
+
+            if (Transparency < 1f) Transparency += Time.DeltaTime / 2;
 
             base.Update();
         }
