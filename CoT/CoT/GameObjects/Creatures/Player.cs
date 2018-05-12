@@ -41,7 +41,7 @@ namespace CoT
             attackRange = 150;
 
             light = new PointLight();
-            light.Scale = new Vector2(5000, 5000).ToCartesian();
+            light.Scale = new Vector2(1000, 1500).ToCartesian();
             light.Intensity = 1f;
             light.ShadowType = ShadowType.Solid;
             GameManager.Instance.Penumbra.Lights.Add(light);
