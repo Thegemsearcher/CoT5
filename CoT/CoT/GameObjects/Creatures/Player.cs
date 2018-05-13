@@ -63,6 +63,7 @@ namespace CoT
                 GameplayScreen.Instance.ChangeToNextLevel();
                 Map = GameplayScreen.Instance.Map;
                 Grid = Map.Grid;
+                currentPlayerState = PlayerState.Idle;
             }
             base.Update();
             if (Stats.Health <= 0)
@@ -80,7 +81,7 @@ namespace CoT
                 if ((int)TargetTileIndex.X >= 0 && (int)TargetTileIndex.X <= Map.TileMap.GetLength(0) &&
                     (int)TargetTileIndex.Y >= 0 && (int)TargetTileIndex.Y <= Map.TileMap.GetLength(1))
                 {
-                    if (Map.TileMap[(int)TargetTileIndex.X, (int)TargetTileIndex.Y].TileType == TileType.Ground)
+                    if (Map.TileMap[(int)TargetTileIndex.X, (int)TargetTileIndex.Y].TileType == TileType.Ground || Map.TileMap[(int)TargetTileIndex.X, (int)TargetTileIndex.Y].TileType == TileType.Teleport)
                     {
                         direction = GetDirection(GroundPosition, targetPos);
                         path = Pathing(targetPos);
@@ -174,10 +175,14 @@ namespace CoT
                     castingFireBall = false;
                     return;
                 }
-                currentPlayerState = PlayerState.Attacking;
-                attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
-                DecideEnemiesInRange(attackDirection);
+                else
+                {
 
+                    attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
+                    DecideEnemiesInRange(attackDirection);
+
+                }
+                currentPlayerState = PlayerState.Attacking;
 
                 for (int i = 0; i < 20; i++)
                 {
