@@ -390,8 +390,8 @@ namespace CoT
         public override void Draw(SpriteBatch sb)
         {
 
-            sb.Draw(ResourceManager.Get<Texture2D>("tile1"), Input.CurrentMousePosition.ToIsometric(), new Rectangle(0, 0, 100, 100)
-                , Color.Red, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 1f);
+            //sb.Draw(ResourceManager.Get<Texture2D>("tile1"), Input.CurrentMousePosition.ToCartesian(), new Rectangle(0, 0, 100, 100)
+            //    , Color.Red, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 1f);
 
             //Debug
             //FullHitbox
