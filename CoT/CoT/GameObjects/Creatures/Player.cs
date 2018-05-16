@@ -305,6 +305,27 @@ namespace CoT
                         }
                     }
                 }
+                //Fireballen ska inte gå igenom väggar
+                Vector2 cartesianTileWorldPos = new Vector2(0, 0);
+                cartesianTileWorldPos.X = fireBall.Position.X / Map.TileSize.Y;
+                cartesianTileWorldPos.Y = fireBall.Position.Y / Map.TileSize.Y;
+                Tile t;
+                Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
+                for (int i = 0; i < Map.TileMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Map.TileMap.GetLength(1); j++)
+                    {
+                        t = Map.TileMap[i, j];
+                        if (isometricScreenTile == new Point(i, j))
+                        {
+                            if (t.TileType == TileType.Collision)
+                            {
+                                fireBall = null;
+                                return;
+                            }
+                        }
+                    }
+                }
                 if (Vector2.Distance(fireBall.Position, Position) > 1200)
                     fireBall = null;
             }
@@ -368,7 +389,10 @@ namespace CoT
 
         public override void Draw(SpriteBatch sb)
         {
-            
+
+            sb.Draw(ResourceManager.Get<Texture2D>("tile1"), Input.CurrentMousePosition.ToIsometric(), new Rectangle(0, 0, 100, 100)
+                , Color.Red, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 1f);
+
             //Debug
             //FullHitbox
             //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), Hitbox/*new Rectangle((int)Hitbox.Position.X, (int)Hitbox.Position.Y, (int)Hitbox.Size.X, (int)Hitbox.Size.Y)*/, Color.Red * 0.5f);
