@@ -97,6 +97,25 @@ namespace CoT
                 Console.WriteLine("Detected Pickup Attempt");
                 Pickup();
             }
+
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.D)
+                && Input.LastKeyboard.IsKeyUp(Keys.D)
+                && rectItemInv.Contains(Input.CurrentMousePosition)
+                && isInBag
+                && Inventory.Instance.IsActive)
+            {
+                Console.WriteLine("Detected Item deletion attempt");
+                IsActive = false;
+            }
+
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.F)
+                && Input.LastKeyboard.IsKeyUp(Keys.F)
+                && rectItemInv.Contains(Input.CurrentMousePosition)
+                && isInBag
+                && Inventory.Instance.IsActive) {
+                Console.WriteLine("Detected Item consumption attempt");
+                Use();
+            }
         }
 
         public override void Draw(SpriteBatch sb)

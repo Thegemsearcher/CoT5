@@ -79,16 +79,38 @@ namespace CoT
         public override void Use()
         {
             base.Use();
+            bool consumptionAllowed = true;
             switch (currentPotionType)
             {
                 case PotionType.HealthSmall:
-                    //GameplayScreen.Instance.Player.Health += 50; <-- Health-variabelns kan inte ändras, 'set' är 'protected'
+                    int health = GameplayScreen.Instance.Player.Health;
+                    if (health >= 200)
+                    {
+                        consumptionAllowed = false;
+                        Console.WriteLine("health is already full or overhealed");
+                    }
+                    else
+                    {
+                        Console.WriteLine("old: " + health);
+                        health += 50;
+                        if (health > 200)
+                            health = 200;
+                        Console.WriteLine("new: " + health);
+                    }
+                    //OBS Health-variabelns kunde inte ändras, Health i Creature.cs, 'set' var 'protected', togs bort.
+
+                    GameplayScreen.Instance.Player.Health = health;
                     break;
                 case PotionType.ExplosiveMedium:
                     break;
                 default:
                     break;
             }
+            if (consumptionAllowed)
+            {
+                IsActive = false;
+            }
+            
         }
 
         public override void Draw(SpriteBatch sb)

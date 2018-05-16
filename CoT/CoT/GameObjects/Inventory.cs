@@ -60,8 +60,6 @@ namespace CoT
 
         public void CreateTiles()
         {
-            
-
             for (int i = 0; i < invTiles.GetLength(0); i++)
             {
                 for (int j = 0; j < invTiles.GetLength(1); j++)

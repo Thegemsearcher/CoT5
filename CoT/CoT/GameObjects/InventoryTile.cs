@@ -24,7 +24,17 @@ namespace CoT
 
         public override void Update()
         {
-
+            bool itemIsOccupying = false;
+            foreach (Item item in ItemManager.Instance.Items)
+            {
+                if (rectangle.Intersects(item.rectItemInv))
+                {
+                    itemIsOccupying = true;
+                }
+            }
+            if (!itemIsOccupying)
+                occupied = false;
+            else occupied = true;
         }
 
         public override void Draw(SpriteBatch sb)

@@ -39,6 +39,15 @@ namespace CoT
             {
                 Items.Add(new Potion("potionSheet", Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1,1,1,1), false, Potion.PotionType.HealthSmall));
             }
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (!Items[i].IsActive)
+                {
+                    Items.RemoveAt(i);
+                    break;
+                }
+            }
         }
 
         public void Draw(SpriteBatch sb)
@@ -57,11 +66,6 @@ namespace CoT
 
         public void DrawUserInterface(SpriteBatch spriteBatch)
         {
-            //foreach (Item item in Items)
-            //{
-            //    if (item.isInBag)
-            //        item.Draw(spriteBatch);
-            //}
         }
     }
 }

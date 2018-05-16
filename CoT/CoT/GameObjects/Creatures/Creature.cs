@@ -22,7 +22,7 @@ namespace CoT
         protected bool attacking = false, dealtDamage = false, invulnerability = false;
         protected int attackTimer = 0/*Tiden det tar att utföra en attack.*/, invTimer = 0;/*Invulnerability efter att karaktären blivit attackerad.*/
         public Vector2 PositionOfFeet { get; protected set; }
-        public int Health { get; protected set; }
+        public int Health { get; set; }
         public int AttackStat { get; protected set; }
         public int Defense { get; protected set; }
         public Map map;
@@ -39,6 +39,7 @@ namespace CoT
 
         public override void OnRemove()
         {
+            ItemManager.Instance.Items.Add(new Potion("potionSheet", PositionOfFeet, new Rectangle(1, 1, 1, 1), false, Potion.PotionType.HealthSmall));
         }
 
         protected Position[] Pathing(Vector2 destination)
