@@ -10,7 +10,7 @@ namespace CoT
 {
     public class Player : Creature
     {
-        private Vector2 nextPosition, targetPos, hitboxPosOffset = new Vector2(33, 26), hitboxSize = new Vector2(28, 47);
+        private Vector2 nextPosition, targetPos, hitboxPosOffset = new Vector2(105, 72), hitboxSize = new Vector2(28, 47);
         private Position[] path;
         private Position nextTileInPath;
         private FloatRectangle bottomHitBox;

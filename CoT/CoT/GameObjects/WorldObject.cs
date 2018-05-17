@@ -32,6 +32,16 @@ namespace CoT.GameObjects
             for (int i = 0; i < CreatureManager.Instance.Creatures.Count; i++)
             {
                 Creature c = CreatureManager.Instance.Creatures[i];
+                if (c is Player)
+                {
+                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y)).Intersects(Hitbox) && GetType().Name == "WorldObject")
+                    {
+                        if (LayerDepth > c.LayerDepth)
+                        {
+                            if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                        }
+                    }
+                }
                 if (c.Hitbox.Intersects(Hitbox) && GetType().Name == "WorldObject")
                 {
                     if (LayerDepth > c.LayerDepth)
