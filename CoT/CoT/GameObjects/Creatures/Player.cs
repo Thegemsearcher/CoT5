@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Penumbra;
-using Console = System.Console;
 using RoyT.AStar;
-using System.Threading;
-using CoT.Helpers;
+using System;
+using Console = System.Console;
 
 namespace CoT
 {
     public class Player : Creature
     {
-        private Vector2 nextPosition, targetPos;
+        private Vector2 nextPosition, targetPos, hitboxPosOffset = new Vector2(33, 26), hitboxSize = new Vector2(28, 47);
         private Position[] path;
         private Position nextTileInPath;
         private FloatRectangle bottomHitBox;
@@ -66,6 +60,8 @@ namespace CoT
                 currentPlayerState = PlayerState.Idle;
             }
             base.Update();
+            Hitbox.Position = Position + hitboxPosOffset;
+            Hitbox.Size = hitboxSize * Scale;
             if (Stats.Health <= 0)
             {
                 return;

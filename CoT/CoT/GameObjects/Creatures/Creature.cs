@@ -37,7 +37,7 @@ namespace CoT
         protected int invTimer;
         protected int invTimeTotal = 40; // Hur lång invulnerability ska vara efter tagit skada
         protected int deathTimer = 0;
-        protected int deathTimeTotal = 100;
+        protected int deathTimeTotal = 1;
 
         public Vector2 GroundPosition { get; protected set; }
         public Stats Stats { get; protected set; }
