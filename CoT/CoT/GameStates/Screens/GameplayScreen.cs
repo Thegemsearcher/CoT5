@@ -67,7 +67,9 @@ namespace CoT
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation2"), "playerAnimation");
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
-                Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1)), Vector2.Zero);
+                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("potions"), "potionSheet");
+            //Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1), Vector2.Zero));
+                Inventory = new Inventory(new Spritesheet("potions", new Point(1, 1), new Rectangle(1, 1, 1, 1)), Vector2.Zero);
 
             //Map = new Map(new Point(160, 80)).Load("Map1.dat");
             //worldCreator = new WorldCreator(Map);
@@ -82,7 +84,7 @@ namespace CoT
             //Console.WriteLine($"texture: {item.Texture}, color: {item.Color}");
 
             //GameObject obj = new Item("test", new Vector2(100, 100), new Rectangle(0, 0, 50, 200));
-            
+
 
             Map = new Map(new Point(160, 80));
             Map["tile1"] = new Tile(TileType.Ground, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));

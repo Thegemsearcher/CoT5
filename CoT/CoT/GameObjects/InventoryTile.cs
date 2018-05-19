@@ -9,24 +9,37 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    class InventoryTile : GameObject
+    public class InventoryTile : GameObject
     {
-        Texture2D pixel;
-        Rectangle rectangle;
+        private Texture2D pixel;
+        public Rectangle rectangle;
 
-        public InventoryTile(Spritesheet spritesheet, Vector2 position, int tileSize, Texture2D pixel) : base(spritesheet, position)
+        public bool occupied = false;
+
+        public InventoryTile(Vector2 position, int tileSize, Texture2D pixel, Spritesheet texture) : base(texture, position)
         {
             this.pixel = pixel;
             rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
         }
 
-        public void Update()
+        public override void Update()
         {
+            bool itemIsOccupying = false;
+            foreach (Item item in ItemManager.Instance.Items)
+            {
+                if (rectangle.Intersects(item.rectItemInv))
+                {
+                    itemIsOccupying = true;
+                }
+            }
+            if (!itemIsOccupying)
+                occupied = false;
+            else occupied = true;
         }
 
-        public void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(pixel, rectangle, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1);
+            sb.Draw(pixel, rectangle, null, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, 0.4f);
         }
 
         public override void OnRemove()
