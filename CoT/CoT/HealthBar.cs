@@ -46,8 +46,8 @@ namespace CoT
         }
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, backgroundBox, Color.Gray);
-            sb.Draw(texture, drawBox, hpState);
+            sb.Draw(texture, backgroundBox, new Rectangle(0, 0, texture.Width, texture.Height), Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+            sb.Draw(texture, drawBox, new Rectangle(0, 0, texture.Width, texture.Height), hpState, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
         }
     }
 }
