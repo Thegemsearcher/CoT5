@@ -11,12 +11,14 @@ namespace CoT
         public int Health { get; set; }
         public int Defense { get; set; }
         public int Attack { get; set; }
+        public int MaxHealth { get; set; }
 
         public Stats(int health, int defense, int attack)
         {
             Health = health;
             Defense = defense;
             Attack = attack;
+            MaxHealth = health;
         }
     }
 }
