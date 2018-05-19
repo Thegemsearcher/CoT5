@@ -227,6 +227,7 @@ namespace CoT
 
         public void UpdateVariables() //Samlar uppdatering av variabler
         {
+            hpBar.UpdateHP(Stats.Health, Stats.MaxHealth);
             light.Position = GroundPosition;
             Camera.Focus = GroundPosition;
             float bottomHitBoxWidth = Spritesheet.SourceRectangle.Width * Scale / 5;
@@ -429,6 +430,10 @@ namespace CoT
 
             base.Draw(sb);
 
+        }
+        public void DrawHPBar(SpriteBatch sb)
+        {
+            hpBar.Draw(sb);
         }
     }
 }
