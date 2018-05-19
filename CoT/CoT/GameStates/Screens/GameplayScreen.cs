@@ -99,7 +99,7 @@ namespace CoT
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
             Console.WriteLine(generation.PlayerStartPosition);
-            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(150, 300), new Stats(100, 100, 100), Map, Map.Grid, Player);
+            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(150, 300), new Stats(100, 5, 25), Map, Map.Grid, Player);
             CreatureManager.Instance.Creatures.Add(Player);
           
 
@@ -125,12 +125,12 @@ namespace CoT
 
                 if (r == 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10,3 * i, i * 10), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
            
@@ -170,12 +170,12 @@ namespace CoT
 
                 if (r == 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, 3 * i, i * 10), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(5, 25, 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
             }
@@ -215,6 +215,7 @@ namespace CoT
         public override void DrawUserInterface(SpriteBatch spriteBatch)
         {
             Inventory.Draw(spriteBatch);
+            Player.DrawHPBar(spriteBatch);
             base.DrawUserInterface(spriteBatch);
         }
     }
