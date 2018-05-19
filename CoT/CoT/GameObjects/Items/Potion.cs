@@ -18,9 +18,12 @@ namespace CoT
         private Rectangle rectCurrentSprite;
         private int currentSpriteID = 0, spriteUpdateDelay = 50, spriteUpdateDelayCounter = 0;
 
-        public Potion(Spritesheet texture, Vector2 position, Rectangle sourceRectangle, bool putInBag, PotionType potionType) : base(texture, position, sourceRectangle, putInBag)
+        public Potion(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag, PotionType potionType) : base(spritesheet, position, sourceRectangle, putInBag)
         {
-            texItem = ResourceManager.Get<Texture2D>("potions");
+            spritesheet.SetFrameCount(new Point(1, 1));
+            spritesheet.Interval = 100;
+
+            texItem = ResourceManager.Get<Texture2D>("potionSheet");
             verticalSize = 1;
             currentPotionType = potionType;
             rectItemDrop = new Rectangle((int)position.X, (int)position.Y, 28, 44);
@@ -84,16 +87,18 @@ namespace CoT
             {
                 case PotionType.HealthSmall:
                     int health = GameplayScreen.Instance.Player.Stats.Health;
-                    if (health >= 200)
+                    int maxHealth = GameplayScreen.Instance.Player.Stats.MaxHealth;
+                    if (health >= maxHealth)
                     {
                         consumptionAllowed = false;
                         Console.WriteLine("health is already full or overhealed");
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("old: " + health);
-                        health += 50;
-                        if (health > 200)
-                            health = 200;
+                        health += 20;
+                        if (health > maxHealth)
+                            health = maxHealth;
                         Console.WriteLine("new: " + health);
                     }
 

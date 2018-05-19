@@ -45,8 +45,11 @@ namespace CoT
             invTileTotalWidth = (invTileSize + invTileLeftMargin) * invTiles.GetLength(0),
             invTileTotalHeight = (invTileSize + invTileTopMargin) * invTiles.GetLength(1);
 
-        public Inventory(Spritesheet texture, Vector2 position) : base(texture, position)
+        public Inventory(Spritesheet spritesheet, Vector2 position) : base(spritesheet, position)
         {
+            spritesheet.SetFrameCount(new Point(5, 1));
+            spritesheet.Interval = 100;
+
             pixelMain.SetData(colorDataMain);
             pixelLayer1.SetData(colorDataLayer1);
             pixelInvTile.SetData(colorDataInvTile);
@@ -102,7 +105,7 @@ namespace CoT
 
                 foreach (Item item in GameManager.Instance.ItemManager.Items)
                     if (item.isInBag)
-                        sb.Draw(ResourceManager.Get<Texture2D>("potions"/*item.Texture*/), item.rectItemInv, item.sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+                        sb.Draw(ResourceManager.Get<Texture2D>("potionSheet"/*item.Texture*/), item.rectItemInv, item.sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
             }
         }
 

@@ -69,7 +69,7 @@ namespace CoT
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
                 ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("potions"), "potionSheet");
             //Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1), Vector2.Zero));
-                Inventory = new Inventory(new Spritesheet("potions", new Point(1, 1), new Rectangle(1, 1, 1, 1)), Vector2.Zero);
+                Inventory = new Inventory(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)), Vector2.Zero);
 
             //Map = new Map(new Point(160, 80)).Load("Map1.dat");
             //worldCreator = new WorldCreator(Map);
