@@ -12,13 +12,7 @@ namespace CoT
     {
         private Texture2D texture;
         private Vector2 position;
-        private enum HPState
-        {
-            green,
-            yellow,
-            red
-        }
-        private HPState hpState;
+        private Color hpState;
         private int maxHP, currentHP;
         private float percent = 1;
         Rectangle drawBox;
@@ -27,7 +21,7 @@ namespace CoT
         {
             this.maxHP = maxHP;
             currentHP = maxHP;
-            hpState = HPState.green;
+            hpState = Color.Green;
             drawBox = new Rectangle((int)position.X, (int)position.Y,100 * (int)percent, 10);
         }
         public void UpdateHP(int hp, int maxHealth)
@@ -39,16 +33,19 @@ namespace CoT
 
             if (percent < 0.2)
             {
-                hpState = HPState.red;
+                hpState = Color.Red;
             }
             else if (percent < 0.5)
             {
-                hpState = HPState.yellow;
+                hpState = Color.Yellow;
+            } else if (percent > 0.5)
+            {
+                hpState = Color.Green;
             }
         }
         public void draw(SpriteBatch sb)
         {
-           
+            sb.Draw(texture, drawBox, hpState);
         }
     }
 }

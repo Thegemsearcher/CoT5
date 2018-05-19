@@ -18,6 +18,7 @@ namespace CoT
         //private float frameTimer = 100, frameInterval = 100;
         private bool castingFireBall = false;
         private Projectile fireBall = null;
+        private HealthBar hpBar;
         enum PlayerState 
         {
             Idle,
@@ -47,7 +48,7 @@ namespace CoT
 
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
-          
+            hpBar = new HealthBar(stats.MaxHealth, new Vector2(10, 10));
         }
 
         public override void Update()
