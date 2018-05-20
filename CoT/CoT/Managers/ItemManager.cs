@@ -35,17 +35,20 @@ namespace CoT
         {
             Items.ForEach(x => x.Update());
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.A) && Input.LastKeyboard.IsKeyUp(Keys.A))
+            if (GameDebugger.Debug)
             {
-                Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                    Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                    false, Potion.PotionType.HealthSmall));
-            }
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.Z) && Input.LastKeyboard.IsKeyUp(Keys.Z))
-            {
-                Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                    Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                    false, Potion.PotionType.FireBall));
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.A) && Input.LastKeyboard.IsKeyUp(Keys.A))
+                {
+                    Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                        Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                        false, Potion.PotionType.HealthSmall));
+                }
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.Z) && Input.LastKeyboard.IsKeyUp(Keys.Z))
+                {
+                    Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                        Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                        false, Potion.PotionType.FireBall));
+                }
             }
             for (int i = 0; i < Items.Count; i++)
             {
