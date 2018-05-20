@@ -98,7 +98,7 @@ namespace CoT
                     for (int i = 0; i< 10; i++)
                         ParticleManager.CreateStandard(Position + Center, (Player.Position + Player.Center) - (Position + Center), Color.Green, 200, 2, 0.3f);
                 }
-                if (attackTimer == 15)
+                if (attackTimer == 35)
                 {
                     DamageToPlayer();
                 }
@@ -135,17 +135,17 @@ namespace CoT
             {
                 ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
             }
-            Random rng = new Random((int)Position.X);
-            int rngN = rng.Next(0, 3);
-            if (rngN == 1)
+            
+            int rngN = Game1.Random.Next(0,3);
+            if (rngN == 2)
             {
                 ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                Position + Center, new Rectangle(1, 1, 1, 1),
                 false, Potion.PotionType.HealthSmall));
-            } else if (rngN == 2)
+            } else if (rngN ==1)
             {
                 ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                Position + Center, new Rectangle(1, 1, 1, 1),
                 false, Potion.PotionType.FireBall));
             }
             Camera.ScreenShake(0.15f, 20);
