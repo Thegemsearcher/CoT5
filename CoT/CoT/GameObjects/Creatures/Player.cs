@@ -89,7 +89,7 @@ namespace CoT
                 }
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.F) && Input.LastKeyboard.IsKeyUp(Keys.F) && CanFireBall)
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.D1) && Input.LastKeyboard.IsKeyUp(Keys.D1) && CanFireBall)
             {
                 if (castingFireBall)
                     castingFireBall = false;
