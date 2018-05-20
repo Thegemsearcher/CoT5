@@ -12,7 +12,7 @@ namespace CoT
     public class Potion : Item
     {
 
-        public enum PotionType { HealthSmall, ExplosiveMedium }
+        public enum PotionType { HealthSmall, ExplosiveMedium, FireBall }
         public PotionType currentPotionType;
 
         private Rectangle rectCurrentSprite;
@@ -34,6 +34,9 @@ namespace CoT
                     sourceRectSprite = new Rectangle(29, 121, 14, 22);
                     break;
                 case PotionType.ExplosiveMedium:
+                    break;
+                case PotionType.FireBall:
+                    sourceRectSprite = new Rectangle(29, 49, 14, 22);
                     break;
                 default:
                     break;
@@ -62,6 +65,9 @@ namespace CoT
                         rectCurrentSprite.X = 29 + (currentSpriteID * 24); //Flyttar 24 pixlar(X) för nästa sprite
                         break;
                     case PotionType.ExplosiveMedium:
+                        break;
+                    case PotionType.FireBall:
+                        rectCurrentSprite.X = 29 + (currentSpriteID * 24);
                         break;
                     default:
                         break;
@@ -105,6 +111,9 @@ namespace CoT
                     GameplayScreen.Instance.Player.Stats.Health = health;
                     break;
                 case PotionType.ExplosiveMedium:
+                    break;
+                case PotionType.FireBall:
+                    GameplayScreen.Instance.Player.CanFireBall = true;
                     break;
                 default:
                     break;

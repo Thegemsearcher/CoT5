@@ -19,6 +19,7 @@ namespace CoT
         private bool castingFireBall = false;
         private Projectile fireBall = null;
         private HealthBar hpBar;
+        public bool CanFireBall { get; set; }
         enum PlayerState 
         {
             Idle,
@@ -46,6 +47,7 @@ namespace CoT
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
+            CanFireBall = false;
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
             hpBar = new HealthBar(stats.MaxHealth, new Vector2(10, 10));
@@ -87,7 +89,7 @@ namespace CoT
                 }
             }
 
-            if (Input.IsKeyPressed(Keys.F))
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.F) && Input.LastKeyboard.IsKeyUp(Keys.F) && CanFireBall)
             {
                 if (castingFireBall)
                     castingFireBall = false;
@@ -170,14 +172,13 @@ namespace CoT
                 {
                     FireBall();
                     castingFireBall = false;
+                    CanFireBall = false;
                     return;
                 }
                 else
                 {
-
                     attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
                     DecideEnemiesInRange(attackDirection);
-
                 }
                 currentPlayerState = PlayerState.Attacking;
 

@@ -40,6 +40,9 @@ namespace CoT
                 Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
                     Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
                     false, Potion.PotionType.HealthSmall));
+                //Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                //    Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                //    false, Potion.PotionType.FireBall));
             }
 
             for (int i = 0; i < Items.Count; i++)
