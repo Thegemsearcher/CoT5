@@ -92,8 +92,16 @@ namespace CoT
                 }
             } else
             {
-                DamageToPlayer();
                 attackTimer++;
+                if (attackTimer == 5)
+                {
+                    for (int i = 0; i< 10; i++)
+                        ParticleManager.CreateStandard(Position + Center, (Player.Position + Player.Center) - (Position + Center), Color.Green, 200, 2, 0.3f);
+                }
+                if (attackTimer == 15)
+                {
+                    DamageToPlayer();
+                }
                 if (attackTimer == 100)
                 {
                     attackTimer = 0;
@@ -126,22 +134,19 @@ namespace CoT
             for (int i = 0; i < 25; i++)
             {
                 ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
-                //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Position,
-                //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
-                //    Helper.RandomDirection(), 300f, 2f, Color.Orange, 0f, 0.3f));
-                Random rng = new Random((int)Position.X);
-                int rngN = rng.Next(0, 3);
-                if (rngN == 1)
-                {
-                    ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                    Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                    false, Potion.PotionType.HealthSmall));
-                } else if (rngN == 2)
-                {
-                    ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                    Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                    false, Potion.PotionType.FireBall));
-                }
+            }
+            Random rng = new Random((int)Position.X);
+            int rngN = rng.Next(0, 3);
+            if (rngN == 1)
+            {
+                ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                false, Potion.PotionType.HealthSmall));
+            } else if (rngN == 2)
+            {
+                ItemManager.Instance.Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
+                false, Potion.PotionType.FireBall));
             }
             Camera.ScreenShake(0.15f, 20);
             base.OnRemove();
