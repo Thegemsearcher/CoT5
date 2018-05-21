@@ -62,6 +62,7 @@ namespace CoT
                 Grid = Map.Grid;
                 currentPlayerState = PlayerState.Idle;
             }
+            hpBar.UpdateHP(Stats.Health, Stats.MaxHealth);
             base.Update();
             Hitbox.Position = Position + hitboxPosOffset;
             Hitbox.Size = hitboxSize * Scale;
@@ -143,19 +144,19 @@ namespace CoT
             InputAttack();
             UpdateVariables();
         }
-        public override void Die()
-        {
-            deathTimeTotal = 10;
-            ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
-            deathTimer++;
-            if (deathTimer > deathTimeTotal)
-            {
-                deathTimer = 0;
-                Remove = true;
-                //ScreenManager.ChangeScreen(new MainMenuScreen(false));
-                ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
-            }
-        }
+        //public override void Die()
+        //{
+        //    deathTimeTotal = 10;
+        //    ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
+        //    deathTimer++;
+        //    if (deathTimer > deathTimeTotal)
+        //    {
+        //        deathTimer = 0;
+        //        Remove = true;
+        //        ////ScreenManager.ChangeScreen(new MainMenuScreen(false));
+        //        //ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
+        //    }
+        //}
         private void PathMoving()
         {
             path = Pathing(targetPos);
@@ -240,7 +241,6 @@ namespace CoT
 
         public void UpdateVariables() //Samlar uppdatering av variabler
         {
-            hpBar.UpdateHP(Stats.Health, Stats.MaxHealth);
             light.Position = GroundPosition;
             Camera.Focus = GroundPosition;
             float bottomHitBoxWidth = Spritesheet.SourceRectangle.Width * Scale / 5;
