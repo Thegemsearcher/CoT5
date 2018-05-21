@@ -16,9 +16,9 @@ namespace CoT
             pixelLayer1 = new Texture2D(Game1.Game.GraphicsDevice, 1, 1),
             pixelInvTile = new Texture2D(Game1.Game.GraphicsDevice, 1, 1);
         private Color[]
-            colorDataMain = { Color.DarkGray },
-            colorDataLayer1 = { Color.Gray },
-            colorDataInvTile = { Color.Black };
+            colorDataDGray = { Color.DarkGray },
+            colorDataGray = { Color.Gray },
+            colorDataBlack = { Color.Black };
         public static Rectangle
             rectMain,
             rectLayer1;
@@ -50,9 +50,9 @@ namespace CoT
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
 
-            pixelMain.SetData(colorDataMain);
-            pixelLayer1.SetData(colorDataLayer1);
-            pixelInvTile.SetData(colorDataInvTile);
+            pixelMain.SetData(colorDataDGray);
+            pixelLayer1.SetData(colorDataGray);
+            pixelInvTile.SetData(colorDataBlack);
             IsActive = false;
             rectMain = new Rectangle(Game1.ScreenWidth - invMainWidth - invMainMarginX, invMainMarginY, invMainWidth, Game1.ScreenHeight - invMainMarginY * 2);
             rectLayer1 = new Rectangle(rectMain.X + invLayer1MarginX, rectMain.Y + invLayer1MarginY, rectMain.Width - invLayer1MarginX * 2, rectMain.Height - invLayer1MarginY * 2);
@@ -68,7 +68,7 @@ namespace CoT
                 for (int j = 0; j < invTiles.GetLength(1); j++)
                 {
                     invTiles[i, j] = new InventoryTile(
-                        new Vector2(rectLayer1.X + rectLayer1.Width / 2 - invTileTotalWidth / 2 + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + rectLayer1.Height / 2 - invTileTotalHeight / 2 + invTileTopMargin * (j + 1) + invTileSize * j/*rectLayer1.X + invLayer1PaddingX + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + invLayer1PaddingY + invTileTopMargin * (j + 1) + invTileSize * j*/),
+                        new Vector2(rectLayer1.X + rectLayer1.Width / 2 - invTileTotalWidth / 2 + invTileLeftMargin * (i + 1) + invTileSize * i, rectLayer1.Y + rectLayer1.Height / 2 - invTileTotalHeight / 2 + invTileTopMargin * (j + 1) + invTileSize * j),
                         invTileSize,
                         pixelInvTile,
                         Spritesheet);
@@ -81,9 +81,9 @@ namespace CoT
             if (Input.CurrentKeyboard.IsKeyDown(Keys.I) && Input.LastKeyboard.IsKeyUp(Keys.I))
             {
                 if (IsActive)
-                {
                     IsActive = false;
-                } else IsActive = true;
+                else
+                    IsActive = true;
             }
 
             foreach (InventoryTile tile in invTiles)
@@ -105,7 +105,7 @@ namespace CoT
 
                 foreach (Item item in GameManager.Instance.ItemManager.Items)
                     if (item.isInBag)
-                        sb.Draw(ResourceManager.Get<Texture2D>("potionSheet"/*item.Texture*/), item.rectItemInv, item.sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+                        sb.Draw(ResourceManager.Get<Texture2D>("potionSheet"), item.rectItemInv, item.sourceRectSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
             }
         }
 

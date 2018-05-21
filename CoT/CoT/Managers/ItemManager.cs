@@ -37,18 +37,14 @@ namespace CoT
 
             if (GameDebugger.Debug)
             {
-                if (Input.CurrentKeyboard.IsKeyDown(Keys.A) && Input.LastKeyboard.IsKeyUp(Keys.A))
-                {
-                    Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                        Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                        false, Potion.PotionType.HealthSmall));
-                }
                 if (Input.CurrentKeyboard.IsKeyDown(Keys.Z) && Input.LastKeyboard.IsKeyUp(Keys.Z))
-                {
-                    Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
-                        Input.CurrentMousePosition.ScreenToWorld(), new Rectangle(1, 1, 1, 1),
-                        false, Potion.PotionType.FireBall));
-                }
+                    CreatePotion(Potion.PotionType.FireBall, Input.CurrentMousePosition.ScreenToWorld(), false);
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.A) && Input.LastKeyboard.IsKeyUp(Keys.A))
+                    CreatePotion(Potion.PotionType.HealthSmall, Input.CurrentMousePosition.ScreenToWorld(), false);
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.X) && Input.LastKeyboard.IsKeyUp(Keys.X))
+                    CreatePotion(Potion.PotionType.HealthMedium, Input.CurrentMousePosition.ScreenToWorld(), false);
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.C) && Input.LastKeyboard.IsKeyUp(Keys.C))
+                    CreatePotion(Potion.PotionType.HealthLarge, Input.CurrentMousePosition.ScreenToWorld(), false);
             }
             for (int i = 0; i < Items.Count; i++)
             {
@@ -58,6 +54,13 @@ namespace CoT
                     break;
                 }
             }
+        }
+
+        public void CreatePotion(Potion.PotionType potionType, Vector2 position, bool putInBag)
+        {
+            Items.Add(new Potion(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)),
+                        position, new Rectangle(1, 1, 1, 1),
+                        putInBag, potionType));
         }
 
         public void Draw(SpriteBatch sb)

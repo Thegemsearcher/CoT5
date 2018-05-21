@@ -12,10 +12,10 @@ namespace CoT
     public class Potion : Item
     {
 
-        public enum PotionType { HealthSmall, ExplosiveMedium, FireBall }
+        public enum PotionType { HealthSmall, HealthMedium, HealthLarge, FireBall }
         public PotionType currentPotionType;
 
-        private Rectangle rectCurrentSprite;
+        private Rectangle rectCurrentSprite, rectFirstSprite;
         private int currentSpriteID = 0, spriteUpdateDelay = 50, spriteUpdateDelayCounter = 0;
 
         public Potion(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag, PotionType potionType) : base(spritesheet, position, sourceRectangle, putInBag)
@@ -24,25 +24,30 @@ namespace CoT
             spritesheet.Interval = 100;
 
             texItem = ResourceManager.Get<Texture2D>("potionSheet");
-            verticalSize = 1;
+            verticalTileSlotSize = 1;
             currentPotionType = potionType;
-            rectItemDrop = new Rectangle((int)position.X, (int)position.Y, 28, 44);
-
+            rectItemDrop = new Rectangle((int)position.X, (int)position.Y, 48, 48);
+            
             switch (currentPotionType)
             {
                 case PotionType.HealthSmall:
-                    sourceRectSprite = new Rectangle(29, 121, 14, 22);
+                    sourceRectSprite = new Rectangle(24, 120, 24, 24);
                     break;
-                case PotionType.ExplosiveMedium:
+                case PotionType.HealthMedium:
+                    sourceRectSprite = new Rectangle(240, 120, 24, 24);
+                    break;
+                case PotionType.HealthLarge:
+                    sourceRectSprite = new Rectangle(240, 264, 24, 24);
                     break;
                 case PotionType.FireBall:
-                    sourceRectSprite = new Rectangle(29, 49, 14, 22);
+                    sourceRectSprite = new Rectangle(24, 48, 24, 24);
                     break;
                 default:
                     break;
             }
 
             rectCurrentSprite = sourceRectSprite;
+            rectFirstSprite = sourceRectangle;
         }
 
         public override void Update()
@@ -59,20 +64,9 @@ namespace CoT
 
             if (spriteUpdateDelayCounter >= spriteUpdateDelay)
             {
-                switch (currentPotionType)
-                {
-                    case PotionType.HealthSmall:
-                        rectCurrentSprite.X = 29 + (currentSpriteID * 24); //Flyttar 24 pixlar(X) för nästa sprite
-                        break;
-                    case PotionType.ExplosiveMedium:
-                        break;
-                    case PotionType.FireBall:
-                        rectCurrentSprite.X = 29 + (currentSpriteID * 24);
-                        break;
-                    default:
-                        break;
-                }
+                rectCurrentSprite.X = sourceRectSprite.X + (currentSpriteID * 24);
                 currentSpriteID += 1;
+
                 if (currentSpriteID >= 7)
                     currentSpriteID = 0;
 
@@ -89,31 +83,23 @@ namespace CoT
         {
             base.Use();
             bool consumptionAllowed = true;
+            
             switch (currentPotionType)
             {
                 case PotionType.HealthSmall:
-                    int health = GameplayScreen.Instance.Player.Stats.Health;
-                    int maxHealth = GameplayScreen.Instance.Player.Stats.MaxHealth;
-                    if (health >= maxHealth)
-                    {
-                        consumptionAllowed = false;
-                        Console.WriteLine("health is already full or overhealed");
-                    }
-                    else
-                    {
-                        Console.WriteLine("old: " + health);
-                        health += 20;
-                        if (health > maxHealth)
-                            health = maxHealth;
-                        Console.WriteLine("new: " + health);
-                    }
-
-                    GameplayScreen.Instance.Player.Stats.Health = health;
+                    consumptionAllowed = RestoredHealth(20); //Metoden försöker addera spelarens health, retunerar bool-värdet 'false' om spelarens health är redan full.
                     break;
-                case PotionType.ExplosiveMedium:
+                case PotionType.HealthMedium:
+                    consumptionAllowed = RestoredHealth(40);
+                    break;
+                case PotionType.HealthLarge:
+                    consumptionAllowed = RestoredHealth(80);
                     break;
                 case PotionType.FireBall:
-                    GameplayScreen.Instance.Player.CanFireBall = true;
+                    if (!GameplayScreen.Instance.Player.CanFireBall)
+                        GameplayScreen.Instance.Player.CanFireBall = true;
+                    else
+                        consumptionAllowed = false;
                     break;
                 default:
                     break;
@@ -122,7 +108,32 @@ namespace CoT
             {
                 IsActive = false;
             }
+        }
 
+        protected bool RestoredHealth(int nrOfHealth)
+        {
+            int health = GameplayScreen.Instance.Player.Stats.Health;
+            int maxHealth = GameplayScreen.Instance.Player.Stats.MaxHealth;
+
+            bool isConsumed = true;
+
+            if (health >= maxHealth)
+            {
+                isConsumed = false;
+                Console.WriteLine("health is already full or overhealed");
+            }
+            else
+            {
+                Console.WriteLine("old: " + health);
+                health += nrOfHealth;
+                if (health > maxHealth)
+                    health = maxHealth;
+                Console.WriteLine("new: " + health);
+            }
+
+            GameplayScreen.Instance.Player.Stats.Health = health;
+
+            return isConsumed;
         }
 
         public override void Draw(SpriteBatch sb)

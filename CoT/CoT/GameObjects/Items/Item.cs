@@ -16,7 +16,7 @@ namespace CoT
         protected Texture2D texItem;
         public Rectangle rectItemDrop, rectItemInv, sourceRectSprite;
 
-        public int verticalSize;
+        public int verticalTileSlotSize;
         public bool isInBag;
 
         public Item(Spritesheet texture, Vector2 position, Rectangle sourceRectangle, bool putInBag) : base(texture, position)
@@ -39,7 +39,7 @@ namespace CoT
 
                     if (!currentTile.occupied)
                     {
-                        if (verticalSize == 2 && j != 7)
+                        if (verticalTileSlotSize == 2 && j != 7)
                         {
                             if (!Inventory.invTiles[i, j + 1].occupied)
                             {
@@ -48,7 +48,7 @@ namespace CoT
                                 currentTile.occupied = true;
                                 Inventory.invTiles[i, j + 1].occupied = true;
                             }
-                        } else if (verticalSize == 1)
+                        } else if (verticalTileSlotSize == 1)
                         {
                             roomAvailable = true;
                             rectItemInv = currentTile.rectangle;
