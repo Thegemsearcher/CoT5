@@ -19,7 +19,7 @@ namespace CoT
         private bool castingFireBall = false;
         private Projectile fireBall = null;
         private HealthBar hpBar;
-        public bool CanFireBall { get; set; }
+        public int CanFireBall { get; set; }
         public float SpeedBoostTimer { get; set; }
         enum PlayerState 
         {
@@ -48,7 +48,7 @@ namespace CoT
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
-            CanFireBall = false;
+            CanFireBall = 0;
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
             hpBar = new HealthBar(stats.MaxHealth, new Vector2(10, 10));
@@ -92,7 +92,7 @@ namespace CoT
                 }
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.D1) && Input.LastKeyboard.IsKeyUp(Keys.D1) && CanFireBall)
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.D1) && Input.LastKeyboard.IsKeyUp(Keys.D1) && CanFireBall > 0)
             {
                 if (castingFireBall)
                     castingFireBall = false;
@@ -195,7 +195,7 @@ namespace CoT
                 {
                     FireBall();
                     castingFireBall = false;
-                    CanFireBall = false;
+                    CanFireBall--;
                     return;
                 }
                 else
