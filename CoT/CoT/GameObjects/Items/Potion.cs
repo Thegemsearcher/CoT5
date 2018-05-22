@@ -12,7 +12,7 @@ namespace CoT
     public class Potion : Item
     {
 
-        public enum PotionType { HealthSmall, HealthMedium, HealthLarge, FireBall }
+        public enum PotionType { HealthSmall, HealthMedium, HealthLarge, SpeedPotion, FireBall }
         public PotionType currentPotionType;
 
         private Rectangle rectCurrentSprite, rectFirstSprite;
@@ -38,6 +38,9 @@ namespace CoT
                     break;
                 case PotionType.HealthLarge:
                     sourceRectSprite = new Rectangle(240, 264, 24, 24);
+                    break;
+                case PotionType.SpeedPotion:
+                    sourceRectSprite = new Rectangle(24, 168, 24, 24);
                     break;
                 case PotionType.FireBall:
                     sourceRectSprite = new Rectangle(24, 48, 24, 24);
@@ -94,6 +97,9 @@ namespace CoT
                     break;
                 case PotionType.HealthLarge:
                     consumptionAllowed = RestoredHealth(80);
+                    break;
+                case PotionType.SpeedPotion:
+                    GameplayScreen.Instance.Player.SpeedBoostTimer += 10;
                     break;
                 case PotionType.FireBall:
                     if (!GameplayScreen.Instance.Player.CanFireBall)

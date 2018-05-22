@@ -27,7 +27,7 @@ namespace CoT
             bool itemIsOccupying = false;
             foreach (Item item in ItemManager.Instance.Items)
             {
-                if (rectangle.Intersects(item.rectItemInv))
+                if (rectangle.Intersects(item.rectItemInv) && !item.dragMode && item.isInBag)
                 {
                     itemIsOccupying = true;
                 }

@@ -27,6 +27,8 @@ namespace CoT
 
         public static Inventory Instance { get; set; }
 
+        public static bool DragMode { get; set; }
+
         private int
             //Main layer
             invMainWidth = 400,
@@ -54,6 +56,7 @@ namespace CoT
             pixelLayer1.SetData(colorDataGray);
             pixelInvTile.SetData(colorDataBlack);
             IsActive = false;
+            DragMode = false;
             rectMain = new Rectangle(Game1.ScreenWidth - invMainWidth - invMainMarginX, invMainMarginY, invMainWidth, Game1.ScreenHeight - invMainMarginY * 2);
             rectLayer1 = new Rectangle(rectMain.X + invLayer1MarginX, rectMain.Y + invLayer1MarginY, rectMain.Width - invLayer1MarginX * 2, rectMain.Height - invLayer1MarginY * 2);
             

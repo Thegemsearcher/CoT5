@@ -20,6 +20,7 @@ namespace CoT
         private Projectile fireBall = null;
         private HealthBar hpBar;
         public bool CanFireBall { get; set; }
+        public float SpeedBoostTimer { get; set; }
         enum PlayerState 
         {
             Idle,
@@ -71,9 +72,10 @@ namespace CoT
                 return;
             }
 
+            if (!Inventory.Instance.IsActive || Inventory.Instance.IsActive && !Inventory.rectMain.Contains(Input.CurrentMousePosition))
             if (Input.IsRightClickPressed && currentPlayerState != PlayerState.Attacking) //Vid musklick får spelaren en ny måldestination och börjar röra sig,
-                                                                                          //spelaren kan inte röra sig under tiden det tar att utföra en attack. Musklickspositionen måste vara
-                                                                                          //på en giltig groundtile innanför kartan
+                                                                                               //spelaren kan inte röra sig under tiden det tar att utföra en attack. Musklickspositionen måste vara
+                                                                                               //på en giltig groundtile innanför kartan
             {
                 targetPos = Input.CurrentMousePosition.ScreenToWorld();
                 Vector2 TargetTileIndex = Map.GetTileIndex(targetPos);
@@ -98,6 +100,13 @@ namespace CoT
                     castingFireBall = true;
             }
             Animation();
+
+            if (SpeedBoostTimer > 0)
+            {
+                speed = 400f;
+                SpeedBoostTimer -= (float)Time.GameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else speed = 200f;
 
             switch (currentPlayerState)
             {
@@ -179,8 +188,9 @@ namespace CoT
         {
             Vector2 attackDirection;
 
-            if (Input.IsLeftClickPressed && currentPlayerState != PlayerState.Attacking)
-            {
+            if (!Inventory.Instance.IsActive || Inventory.Instance.IsActive && !Inventory.rectMain.Contains(Input.CurrentMousePosition))
+                if (Input.IsLeftClickPressed && currentPlayerState != PlayerState.Attacking)
+                {
                 if (castingFireBall == true)
                 {
                     FireBall();
@@ -201,7 +211,7 @@ namespace CoT
                 }
 
                 Camera.ScreenShake(0.1f, 10);
-            }
+                }
         }
 
         public void AttackLockTimer() //Låser spelaren i en attack under 30 frames

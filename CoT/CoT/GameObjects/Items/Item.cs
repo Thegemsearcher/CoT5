@@ -14,10 +14,10 @@ namespace CoT
     {
         //protected Texture2D texItemDrop, texItemInv;
         protected Texture2D texItem;
-        public Rectangle rectItemDrop, rectItemInv, sourceRectSprite;
+        public Rectangle rectItemDrop, rectItemInv, sourceRectSprite, oldRectBeforeDrag;
 
         public int verticalTileSlotSize;
-        public bool isInBag;
+        public bool isInBag, dragMode;
 
         public Item(Spritesheet texture, Vector2 position, Rectangle sourceRectangle, bool putInBag) : base(texture, position)
         {
@@ -25,6 +25,8 @@ namespace CoT
                 Pickup();
             else
                 isInBag = false;
+
+            dragMode = false;
         }
 
         public virtual void Pickup()
@@ -71,10 +73,39 @@ namespace CoT
 
         public virtual void Drop()
         {
+            isInBag = false;
+            foreach (Player player in CreatureManager.Instance.Creatures.OfType<Player>())
+            {
+                rectItemDrop.X = (int)player.GroundPosition.X;
+                rectItemDrop.Y = (int)player.GroundPosition.Y;
+            }
         }
 
         public virtual void Drag()
         {
+            rectItemInv = new Rectangle((int)Input.CurrentMousePosition.X - rectItemInv.Width / 2, (int)Input.CurrentMousePosition.Y - rectItemInv.Height / 2,
+                    rectItemInv.Width, rectItemInv.Height);
+
+            if (Input.IsLeftClickReleased)
+            {
+                bool draggedToEmptyTile = false;
+                foreach (InventoryTile tile in Inventory.invTiles)
+                {
+                    if (!tile.occupied && tile.rectangle.Contains(Input.CurrentMousePosition))
+                    {
+                        rectItemInv = tile.rectangle;
+                        draggedToEmptyTile = true;
+                        break;
+                    }
+                }
+
+                if (!Inventory.rectMain.Contains(Input.CurrentMousePosition))
+                    Drop();
+                else if (!draggedToEmptyTile)
+                    rectItemInv = oldRectBeforeDrag;
+
+                dragMode = false;
+            }
         }
 
         public virtual void Use()
@@ -117,6 +148,16 @@ namespace CoT
                 Console.WriteLine("Detected Item consumption attempt");
                 Use();
             }
+
+            if (!dragMode && rectItemInv.Contains(Input.CurrentMousePosition)
+                && Input.LastMouse.LeftButton == ButtonState.Released && Input.IsLeftClickPressed)
+            {
+                dragMode = true;
+                oldRectBeforeDrag = rectItemInv;
+            }
+
+            if (dragMode)
+                Drag();
         }
 
         public override void Draw(SpriteBatch sb)

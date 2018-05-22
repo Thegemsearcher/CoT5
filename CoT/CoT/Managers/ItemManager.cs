@@ -45,6 +45,8 @@ namespace CoT
                     CreatePotion(Potion.PotionType.HealthMedium, Input.CurrentMousePosition.ScreenToWorld(), false);
                 if (Input.CurrentKeyboard.IsKeyDown(Keys.C) && Input.LastKeyboard.IsKeyUp(Keys.C))
                     CreatePotion(Potion.PotionType.HealthLarge, Input.CurrentMousePosition.ScreenToWorld(), false);
+                if (Input.CurrentKeyboard.IsKeyDown(Keys.V) && Input.LastKeyboard.IsKeyUp(Keys.V))
+                    CreatePotion(Potion.PotionType.SpeedPotion, Input.CurrentMousePosition.ScreenToWorld(), false);
             }
             for (int i = 0; i < Items.Count; i++)
             {

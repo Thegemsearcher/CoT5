@@ -136,8 +136,10 @@ namespace CoT
                 ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
             }
             
-            int rngN = Game1.Random.Next(0,5);
-            if (rngN == 4)
+            int rngN = Game1.Random.Next(0,6);
+            if (rngN == 5)
+                ItemManager.Instance.CreatePotion(Potion.PotionType.SpeedPotion, Position + Center, false);
+            else if (rngN == 4)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.HealthLarge, Position + Center, false);
             else if (rngN == 3)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.HealthMedium, Position + Center, false);
