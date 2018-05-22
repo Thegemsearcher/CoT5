@@ -11,26 +11,29 @@ namespace CoT
     class HealthBar
     {
         private Texture2D texture = ResourceManager.Get<Texture2D>("rectangle");
-        private Vector2 position;
+        private Vector2 size;
+        public Vector2 Position { get; set; }
         private Color hpState;
         private int maxHP, currentHP;
         private float percent = 1;
-        Rectangle drawBox, backgroundBox;
+        private Rectangle drawBox, backgroundBox;
 
-        public HealthBar(int maxHP, Vector2 position)
+        public HealthBar(int maxHP, Vector2 size, Vector2 position)
         {
+            Position = position;
             this.maxHP = maxHP;
+            this.size = size;
             currentHP = maxHP;
             hpState = Color.Green;
-            drawBox = new Rectangle(50 , 50,200 * (int)percent, 25);
-            backgroundBox = new Rectangle(49, 49, 202, 27);
+            drawBox = new Rectangle((int) position.X ,(int)position.Y,(int)size.X * (int)percent, (int)size.Y);
+            backgroundBox = new Rectangle((int)position.X - 1, (int)position.Y - 1, (int)size.X * (int)percent + 2, (int)size.Y + 2);
         }
         public void UpdateHP(int hp, int maxHealth)
         {
             maxHP = maxHealth;
             currentHP = hp;
             percent = (float)hp / (float)maxHP;
-            drawBox.Width = (int)(200 * percent);
+            drawBox.Width = (int)(size.X * percent);
 
             if (percent < 0.3)
             {

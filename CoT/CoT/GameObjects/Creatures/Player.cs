@@ -51,7 +51,7 @@ namespace CoT
             CanFireBall = 0;
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
-            hpBar = new HealthBar(stats.MaxHealth, new Vector2(10, 10));
+            hpBar = new HealthBar(stats.MaxHealth, new Vector2(200, 25), new Vector2(50,50));
         }
 
         public override void Update()
