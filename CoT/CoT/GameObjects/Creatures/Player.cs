@@ -416,7 +416,7 @@ namespace CoT
             {
                 Spritesheet.SetFrameCount(new Point(5, 10));
                 Spritesheet.SetCurrentFrame(45);
-                Spritesheet.Interval = 30;
+                Spritesheet.Interval = 50;
 
                 if (Spritesheet.CurrentFrame >= 49)
                 {
