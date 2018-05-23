@@ -7,7 +7,7 @@ namespace CoT
     {
         private Player player;
         private SpriteFont font = ResourceManager.Get<SpriteFont>("font1");
-        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(10,70);
+        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(10,70), drawFireballCount = new Vector2(50, 200);
         private bool hoverOverOnGround = false;
         private Vector2 infoPosition = new Vector2(0,0), textAtMouse = new Vector2(0,0);
         private GameObject gameObject;//det gameobject som vi vill visa info från
@@ -66,7 +66,6 @@ namespace CoT
                 if (c.Hitbox.Contains(Input.CurrentMousePosition.ScreenToWorld()) && c is Enemy e)
                 {
                     gameObject = e;
-
                 }
             }
 
@@ -78,10 +77,6 @@ namespace CoT
         }
         public void Draw(SpriteBatch sb)
         {
-            //if (gameObject != null) {
-            //    sb.DrawString(font, "" + gameObject.Hitbox.Size.X + "    " + gameObject.Hitbox.Size.Y, position, Color.Yellow, 0, new Vector2(0, 0), 0.8f, SpriteEffects.None, 0.9f);
-            //}
-            //sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), mouseHitBox, null, Color.Magenta * 0.3f, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
             sb.DrawString(font, fullInfoBox, infoPosition, Color.Yellow, 0, new Vector2(0,0), 0.8f, SpriteEffects.None, 0.9f);
             if (hoverOverOnGround)
             {
@@ -90,6 +85,10 @@ namespace CoT
             if (gameObject is Enemy e)
             {
                 e.HpBar.Draw(sb);
+            }
+            if (GameplayScreen.Instance.Player.CanFireBall > 0)
+            {
+                sb.DrawString(font, "Press 1 and click to throw a fireball\nYou currently have " + GameplayScreen.Instance.Player.CanFireBall + " Fireballs", drawFireballCount, Color.Yellow, 0, new Vector2(0, 0), 0.7f, SpriteEffects.None, 0.8f);
             }
         }
         public void PickUpInstruction()
