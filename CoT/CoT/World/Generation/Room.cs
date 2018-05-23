@@ -19,13 +19,12 @@ namespace CoT
 
         }
 
-
         public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight)
         {
             Width = widthRange.Random;
             Height = heightRange.Random;
 
-            Position = new Point(Convert.ToInt32(mapWidth / 2f - Width / 2f), Convert.ToInt32(mapHeight / 2f - Height / 2f));
+            Position = new Point(Convert.ToInt32(mapWidth / 2f - Width), Convert.ToInt32(mapHeight / 2f - Height));
             return this;
         }
         public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight, Corridor corridor)

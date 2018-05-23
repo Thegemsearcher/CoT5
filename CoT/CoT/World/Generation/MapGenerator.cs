@@ -64,20 +64,16 @@ namespace CoT
                     {
                         int yPos = room.Position.Y + k;
 
-                        if (yPos >= MapHeight)
-                        {
-                            yPos = MapHeight - 1;
-                        }
-                        else if (xPos >= MapWidth)
-                        {
-                            xPos = MapWidth - 1;
-                        }
+                        //if (yPos >= MapHeight)
+                        //{
+                        //    yPos = MapHeight - 1;
+                        //}
+                        //else if (xPos >= MapWidth)
+                        //{
+                        //    xPos = MapWidth - 1;
+                        //}
                         
                         MapData[xPos, yPos] = "tile1";
-
-                     
-
-
                     }
                 }
             }
@@ -94,27 +90,27 @@ namespace CoT
                     switch (corridor.Direction)
                     {
                         case Direction.North:
-                            yPos += j;
+                            yPos -= j;
                             break;
                         case Direction.East:
                             xPos += j;
                             break;
                         case Direction.South:
-                            yPos -= j;
+                            yPos += j;
                             break;
                         case Direction.West:
                             xPos -= j;
                             break;
                     }
 
-                    if (yPos > MapHeight - 1)
-                    {
-                        yPos = MapHeight - 1;
-                    }
-                    else if (xPos > MapWidth - 1)
-                    {
-                        xPos = MapWidth - 1;
-                    }
+                    //if (yPos > MapHeight - 1)
+                    //{
+                    //    yPos = MapHeight - 1;
+                    //}
+                    //else if (xPos > MapWidth - 1)
+                    //{
+                    //    xPos = MapWidth - 1;
+                    //}
 
                     MapData[xPos, yPos] = "tile1";
                 }

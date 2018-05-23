@@ -153,19 +153,21 @@ namespace CoT
             InputAttack();
             UpdateVariables();
         }
-        //public override void Die()
-        //{
-        //    deathTimeTotal = 10;
-        //    ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
-        //    deathTimer++;
-        //    if (deathTimer > deathTimeTotal)
-        //    {
-        //        deathTimer = 0;
-        //        Remove = true;
-        //        ////ScreenManager.ChangeScreen(new MainMenuScreen(false));
-        //        //ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
-        //    }
-        //}
+        public override void Die()
+        {
+            deathTimeTotal = 10;
+            ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
+            deathTimer++;
+            if (deathTimer > deathTimeTotal)
+            {
+                deathTimer = 0;
+                Remove = true;
+                ////ScreenManager.ChangeScreen(new MainMenuScreen(false));
+                //ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
+                //CreatureManager.Instance.Creatures.Clear();
+                ScreenManager.Instance.AddScreen(new PauseMenuScreen(true, true));
+            }
+        }
         private void PathMoving()
         {
             path = Pathing(targetPos);
