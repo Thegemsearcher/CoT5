@@ -8,7 +8,7 @@ namespace CoT
         private Player player;
         private SpriteFont font = ResourceManager.Get<SpriteFont>("font1");
         private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(10,70), drawFireballCount = new Vector2(50, 200);
-        private bool hoverOverOnGround = false;
+        private bool hoverOverOnGround = false, hoverOverInBag = false;
         private Vector2 infoPosition = new Vector2(0,0), textAtMouse = new Vector2(0,0);
         private GameObject gameObject;//det gameobject som vi vill visa info från
         private string fullInfoBox = "";
@@ -31,10 +31,9 @@ namespace CoT
                     if (!item.isInBag)
                     {
                         PickUpInstruction();
-                    }
-                    else
+                    } else
                     {
-                        hoverOverOnGround = false;
+                        UseInstruction();
                     }
                     if (item is Potion p)
                     {
@@ -68,11 +67,20 @@ namespace CoT
                     gameObject = e;
                 }
             }
-
             if (gameObject is Enemy enemy)
             {
                 enemy.HpBar.Position = enemy.Position.WorldToScreen() + hpBarOffset;
                 enemy.HpBar.UpdateHP(enemy.Stats.Health, enemy.Stats.MaxHealth);
+            }
+            if (gameObject is Item i){
+                if (!mouseHitBox.Contains(i.Position.WorldToScreen()))
+                {
+                    hoverOverOnGround = false;
+                }
+                if (!mouseHitBox.Contains(new Vector2(i.rectItemInv.X, i.rectItemInv.Y)))
+                {
+                    hoverOverInBag = false;
+                }
             }
         }
         public void Draw(SpriteBatch sb)
@@ -90,11 +98,21 @@ namespace CoT
             {
                 sb.DrawString(font, "Press 1 and click to throw a fireball\nYou currently have " + GameplayScreen.Instance.Player.CanFireBall + " Fireballs", drawFireballCount, Color.Yellow, 0, new Vector2(0, 0), 0.7f, SpriteEffects.None, 0.8f);
             }
+            if (hoverOverInBag)
+            {
+                sb.DrawString(font, "RIGHT CLICK to use", textAtMouse, Color.Yellow, 0, new Vector2(0, 0), 0.6f, SpriteEffects.None, 0.8f);
+            }
         }
         public void PickUpInstruction()
         {
             hoverOverOnGround = true;
-            textAtMouse.X = Input.CurrentMousePosition.X + 25;
+            textAtMouse.X = Input.CurrentMousePosition.X + 20;
+            textAtMouse.Y = Input.CurrentMousePosition.Y;
+        }
+        public void UseInstruction()
+        {
+            hoverOverInBag = true;
+            textAtMouse.X = Input.CurrentMousePosition.X + 20;
             textAtMouse.Y = Input.CurrentMousePosition.Y;
         }
     }
