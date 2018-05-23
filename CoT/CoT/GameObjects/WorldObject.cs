@@ -34,7 +34,7 @@ namespace CoT.GameObjects
                 Creature c = CreatureManager.Instance.Creatures[i];
                 if (c is Player)
                 {
-                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y)).Intersects(Hitbox) && GetType().Name == "WorldObject")
+                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y) * Scale).Intersects(Hitbox) && GetType().Name == "WorldObject")
                     {
                         if (LayerDepth > c.LayerDepth)
                         {
