@@ -15,10 +15,6 @@ namespace CoT
         public RangeInt RoomWidthRange { get; set; } = new RangeInt(7, 15);
         public RangeInt RoomHeightRange { get; set; } = new RangeInt(7, 15);
         public RangeInt CorridorLengthRange { get; set; } = new RangeInt(5, 10);
-        bool correctMinimumX = false;
-        bool correctMinimumY = false;
-        bool correctMaximumX = false;
-        bool correctMaximumY = false;
 
 
         public Room[] Rooms { get; set; }
@@ -42,18 +38,18 @@ namespace CoT
             Rooms = new Room[RoomCountRange.Random];
             Corridors = new Corridor[Rooms.Length - 1];
 
-            Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight);
+            Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20);
             Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, true);
 
             PlayerStartPosition = new Vector2(Rooms[0].Position.X + 1, Rooms[0].Position.Y);
 
             for (int i = 1; i < Rooms.Length; i++)
             {
-                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, Corridors[i - 1]);
+                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20, Corridors[i - 1]);
 
                 if (i < Corridors.Length)
                 {
-                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, false);
+                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20, false);
                 }
             }
 
@@ -79,7 +75,7 @@ namespace CoT
                                 
                             }
                         }
-                        else if (xPos >= MapWidth)
+                        if (xPos >= MapWidth)
                         {
                             xPos = MapWidth - 1;
                             
@@ -91,15 +87,11 @@ namespace CoT
                             if (xPos <= 0)
                             {
                                 xPos++;
-                                
-
                             }
                         }
-                        else if (xPos <= 0)
+                        if (xPos <= 0)
                         {
-                            xPos++;
-                            
-
+                            xPos++;                           
                         }
 
                         MapData[xPos, yPos] = "tile1";
@@ -140,9 +132,17 @@ namespace CoT
                     {
                         yPos = MapHeight - 1;
                     }
-                    else if (xPos > MapWidth - 1)
+                    if (xPos > MapWidth - 1)
                     {
                         xPos = MapWidth - 1;
+                    }
+                    if (yPos <= 0)
+                    {
+                        yPos += 2;
+                    }
+                    if (xPos > MapWidth - 1)
+                    {
+                        xPos += 2;
                     }
 
                     MapData[xPos, yPos] = "tile1";
