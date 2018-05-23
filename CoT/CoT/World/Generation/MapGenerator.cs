@@ -9,12 +9,17 @@ namespace CoT
 {
     class MapGenerator
     {
-        public int MapWidth { get; set; } = 100;
-        public int MapHeight { get; set; } = 100;
+        public int MapWidth { get; set; } = 120;
+        public int MapHeight { get; set; } = 120;
         public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 10);
         public RangeInt RoomWidthRange { get; set; } = new RangeInt(7, 15);
         public RangeInt RoomHeightRange { get; set; } = new RangeInt(7, 15);
         public RangeInt CorridorLengthRange { get; set; } = new RangeInt(5, 10);
+        bool correctMinimumX = false;
+        bool correctMinimumY = false;
+        bool correctMaximumX = false;
+        bool correctMaximumY = false;
+
 
         public Room[] Rooms { get; set; }
         public Corridor[] Corridors { get; set; }
@@ -67,12 +72,36 @@ namespace CoT
                         if (yPos >= MapHeight)
                         {
                             yPos = MapHeight - 1;
+                           
+                            if (xPos >= MapWidth)
+                            {
+                                xPos = MapWidth - 1;
+                                
+                            }
                         }
                         else if (xPos >= MapWidth)
                         {
                             xPos = MapWidth - 1;
+                            
                         }
-                        
+                        if (yPos <= 0)
+                        {
+                            yPos++;
+                           
+                            if (xPos <= 0)
+                            {
+                                xPos++;
+                                
+
+                            }
+                        }
+                        else if (xPos <= 0)
+                        {
+                            xPos++;
+                            
+
+                        }
+
                         MapData[xPos, yPos] = "tile1";
 
                      
@@ -106,7 +135,7 @@ namespace CoT
                             xPos -= j;
                             break;
                     }
-
+                    
                     if (yPos > MapHeight - 1)
                     {
                         yPos = MapHeight - 1;
