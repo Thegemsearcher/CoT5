@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using CoT.GameObjects.Creatures;
-using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -200,7 +199,7 @@ namespace CoT
             Map.Update();
             if (Input.IsKeyPressed(Keys.Escape))
             {
-                ScreenManager.AddScreen(new PauseMenuScreen(false));
+                ScreenManager.AddScreen(new PauseMenuScreen(false, false));
             }
 
             base.Update();
