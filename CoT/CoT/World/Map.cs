@@ -186,6 +186,10 @@ namespace CoT
                         {
                             sb.Draw(ResourceManager.Get<Texture2D>(t.Spritesheet.Texture), tempPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                         }
+                        else if (t.TileType == TileType.Teleport)
+                        {
+                            ParticleManager.CreateStandard(tempPos, new Vector2(0, -1), Color.WhiteSmoke);
+                        }
                     }
  
                     //if (isometricScreenTile == new Point(i, j))
