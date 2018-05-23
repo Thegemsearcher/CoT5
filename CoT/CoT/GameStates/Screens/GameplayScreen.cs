@@ -54,8 +54,7 @@ namespace CoT
 
         public override void Load()
         {
-
-
+            
                 ContentManager content = Game1.Game.Content;
                 ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
                 ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
@@ -98,7 +97,8 @@ namespace CoT
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
 
             Console.WriteLine(generation.PlayerStartPosition);
-            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(70, 140), new Stats(100, 5, 25), Map, Map.Grid, Player);
+            Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(70, 140), 
+                new Stats(100, 2, 25), Map, Map.Grid, Player);
             CreatureManager.Instance.Creatures.Add(Player);
             hud = new HuD(Player);
 
@@ -124,12 +124,14 @@ namespace CoT
 
                 if (r == 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10,3 * i, i * 10), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f)
+                        , new Vector2(70, 140), new Stats(Game1.Level * 15,3 * Game1.Level, Game1.Level * 15), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f)
+                        , new Vector2(70, 140), new Stats(Game1.Level * 15, Game1.Level, Game1.Level * 10), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
            
@@ -146,6 +148,7 @@ namespace CoT
 
         public void ChangeToNextLevel()
         {
+            Game1.Level++;
             CreatureManager.Instance.Creatures.Clear();
 
             Map = new Map(new Point(160, 80));
@@ -156,6 +159,9 @@ namespace CoT
             MapGenerator generation = new MapGenerator();
 
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
+            Player.Stats.MaxHealth += 20;
+            Player.Stats.Health += 20;
+            Player.Stats.Attack += 2;
 
             //Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(0, 0), new Stats(100, 100, 100), Map, Map.Grid, Player);
             Player.Position = generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y;
@@ -169,12 +175,14 @@ namespace CoT
 
                 if (r == 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, 3 * i, i * 10), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f)
+                        , new Vector2(70, 140), new Stats(Game1.Level * 15, 3 * Game1.Level, Game1.Level * 15), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f)
+                        , new Vector2(70, 140), new Stats(Game1.Level * 15, Game1.Level, Game1.Level * 10), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
             }

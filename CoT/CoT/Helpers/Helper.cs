@@ -30,10 +30,10 @@ namespace CoT
             }
         }
 
-        public static Vector2 RandomDirection()
+        public static Vector2 RandomDirection(float inputFromInclusive = -1, float inputToExclusive = 1.1f)
         {
-            Vector2 vec = new Vector2(Game1.Random.NextFloat(-10, 11), Game1.Random.NextFloat(-10, 11));
-            vec = Vector2.Normalize(vec);
+            Vector2 vec = new Vector2(Game1.Random.NextFloat(inputFromInclusive, inputToExclusive), Game1.Random.NextFloat(inputFromInclusive, inputToExclusive));
+            //vec = Vector2.Normalize(vec);
             return vec;
         }
     }

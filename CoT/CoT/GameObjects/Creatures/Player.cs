@@ -10,7 +10,7 @@ namespace CoT
 {
     public class Player : Creature
     {
-        private Vector2 nextPosition, targetPos, hitboxPosOffset = new Vector2(105, 72), hitboxSize = new Vector2(28, 47);
+        private Vector2 nextPosition, targetPos, hitboxPosOffset = new Vector2(125, 87), hitboxSize = new Vector2(18, 42);
         private Position[] path;
         private Position nextTileInPath;
         private FloatRectangle bottomHitBox;
@@ -35,7 +35,7 @@ namespace CoT
 
         public Player(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            attackRange = 150;
+            attackRange = 200;
 
             light = new PointLight();
             light.Scale = new Vector2(1000, 1500).ToCartesian();
@@ -99,6 +99,8 @@ namespace CoT
                 else
                     castingFireBall = true;
             }
+            if (castingFireBall)
+                ParticleManager.CreateStandard(Position + Center + new Vector2(-20,0), Helper.RandomDirection(), Color.Orange,100,2,0.1f);
             Animation();
 
             if (SpeedBoostTimer > 0)
@@ -208,7 +210,7 @@ namespace CoT
 
                 for (int i = 0; i < 20; i++)
                 {
-                    ParticleManager.CreateStandard(Position + Center + attackDirection * 80, attackDirection + Helper.RandomDirection(), Color.BlueViolet, 1000, 3f, 0.5f);
+                    ParticleManager.CreateStandard(Position + Center + attackDirection * 80, attackDirection + Helper.RandomDirection(-0.5f,0.6f), Color.BlueViolet, 500, 2f, 0.2f);
                 }
 
                 Camera.ScreenShake(0.1f, 10);

@@ -13,7 +13,7 @@ namespace CoT.GameObjects.Creatures
     {
         public Treent(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
-            attackRange = 100;
+            attackRange = 90;
             aggroRange = 1000;
             speed = 100f;
         }

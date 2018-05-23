@@ -129,7 +129,14 @@ namespace CoT
                 Camera.ScreenShake(0.15f, 20);
             }
         }
-
+        public override void Die()
+        {
+            if (deathTimer > deathTimeTotal)
+            {
+                Player.Stats.Attack++;
+            }
+            base.Die();
+        }
         public override void OnRemove()
         {
             for (int i = 0; i < 25; i++)
@@ -137,14 +144,14 @@ namespace CoT
                 ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
             }
             
-            int rngN = Game1.Random.Next(0,6);
-            if (rngN == 5)
+            int rngN = Game1.Random.Next(0,3 + Game1.Level);
+            if (rngN == 2)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.SpeedPotion, Position + Center, false);
-            else if (rngN == 4)
+            else if (rngN == 5)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.HealthLarge, Position + Center, false);
-            else if (rngN == 3)
+            else if (rngN == 4)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.HealthMedium, Position + Center, false);
-            else if (rngN == 2)
+            else if (rngN == 3)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.HealthSmall, Position + Center, false);
             else if (rngN == 1)
                 ItemManager.Instance.CreatePotion(Potion.PotionType.FireBall, Position + Center, false);

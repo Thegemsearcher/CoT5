@@ -28,7 +28,7 @@ namespace CoT
         {
             attackRange = 500;
             aggroRange = 1200;
-            speed = 160f;
+            speed = 140f;
             isAttacking = false;
             Color = Color.Red;
             
@@ -57,11 +57,6 @@ namespace CoT
             }
             if (path.Length > 1)
             {
-                //if ((hasAggro && (Vector2.Distance(player.CenterMass, CenterMass) > attackSize || !VisionRange(CenterMass, player.CenterMass))) ||
-                //            (!attacking && (Vector2.Distance(player.CenterMass, CenterMass) < attackSize/* - (attackSize / 20)*/)))
-                //{
-                //    nextTileInPath = path[1];
-                //}
                 nextTileInPath = path[1];
             }
             CheckAttackDistance();

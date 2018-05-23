@@ -46,6 +46,7 @@ namespace CoT
         public GameManager GameManager { get; set; }
         public Desktop host = new Desktop();
         public bool IsLoaded { get; set; }
+        public static int Level { get; set; } 
 
         public static Random Random { get; set; } = new Random();
         #endregion
@@ -53,7 +54,7 @@ namespace CoT
         public Game1()
         {
             Console.WriteLine("Game1 - Constructor");
-
+            Level = 1;
             Game = this;
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
