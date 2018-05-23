@@ -47,16 +47,16 @@ namespace CoT
                                 fullInfoBox = "item type: Fireball Potion" + "\n" + "On Use: you get two fireballs which can be used by pressing 1 and then attacking" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
                                 break;
                             case Potion.PotionType.HealthLarge:
-                                fullInfoBox = "item type: Large Health Potion" + "\n" + " On Use: You gain 80 hp" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
+                                fullInfoBox = "item type: Large Health Potion" + "\n" + "On Use: You gain 80 hp" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
                                 break;
                             case Potion.PotionType.HealthMedium:
-                                fullInfoBox = "item type: Medium Health Potion \nOn Use: Uou gain 40 hp \nUse by hovering over the item and pressing RIGHT CLICK";
+                                fullInfoBox = "item type: Medium Health Potion\nOn Use: Uou gain 40 hp\nUse by hovering over the item and pressing RIGHT CLICK";
                                 break;
                             case Potion.PotionType.HealthSmall:
-                                fullInfoBox = "item type: Small Health Potion" + "\n" + " On Use: You gain 20 hp" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
+                                fullInfoBox = "item type: Small Health Potion" + "\n" + "On Use: You gain 20 hp" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
                                 break;
                             case Potion.PotionType.SpeedPotion:
-                                fullInfoBox = "item type: Speed Potion" + "\n" + " On Use: Your speed doubles, OBS: DOES NOT STACK" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
+                                fullInfoBox = "item type: Speed Potion" + "\n" + "On Use: Your speed doubles, OBS: DOES NOT STACK" + "\n" + "Use by hovering over the item and pressing RIGHT CLICK";
                                 break;
                             default:
                                 break;

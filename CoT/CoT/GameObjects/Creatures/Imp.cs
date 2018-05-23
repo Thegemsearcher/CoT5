@@ -138,10 +138,11 @@ namespace CoT
             {
                 if (Vector2.Distance(Position + Center, Player.Position + Player.Center) <= attackRange)
                 {
-                    if (VisionRange(Position + Center, Player.Position + Player.Center))
-                    {
-                        Attack((Position + Center) - (Player.Position + Player.Center));
-                    }
+                    Attack((Position + Center) - (Player.Position + Player.Center));
+                    //if (VisionRange(Position + Center, Player.Position + Player.Center))
+                    //{
+                        
+                    //}
                 }
             }
             else

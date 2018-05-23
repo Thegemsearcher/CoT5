@@ -30,7 +30,7 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(Player.Position + Player.Center, Position + Center) <= aggroRange) && VisionRange(Position + Center, Player.Position + Player.Center))
+            if (!hasAggro && (Vector2.Distance(Player.Position + Player.Center, Position + Center) <= aggroRange)/* && VisionRange(Position + Center, Player.Position + Player.Center)*/)
             {
                 return hasAggro = true;
             } else if (!hasAggro)
@@ -41,7 +41,7 @@ namespace CoT
 
         #region bresenham algoritm
 
-        public bool VisionRange(Vector2 start,Vector2 finish)
+        public bool VisionRange(Vector2 start, Vector2 finish)
         {
             Vector2 cartesianTileWorldPos = new Vector2(0, 0);
             List<Vector2> vision = BresenhamLine(start, finish);
@@ -167,8 +167,8 @@ namespace CoT
         {
             for (int i = 0; i < path.Length; i++) //Ritar ut pathen som fienden rör sig efter.
             {
-                sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Map.TileSize.Y,
-                path[i].Y * Map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
+                //sb.Draw(ResourceManager.Get<Texture2D>("tile1"), new Vector2(path[i].X * Map.TileSize.Y,
+                //path[i].Y * Map.TileSize.Y).ToIsometric(), null, Color.Gray * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
             }
             //sb.Draw(ResourceManager.Get<Texture2D>(Texture), destinationRectangle, SourceRectangle, Color * Transparency, Rotation, Vector2.Zero, SpriteEffects.None, 0.9f);
 
