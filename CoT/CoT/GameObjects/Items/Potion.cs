@@ -102,10 +102,8 @@ namespace CoT
                     GameplayScreen.Instance.Player.SpeedBoostTimer += 10;
                     break;
                 case PotionType.FireBall:
-                    if (!GameplayScreen.Instance.Player.CanFireBall)
-                        GameplayScreen.Instance.Player.CanFireBall = true;
-                    else
-                        consumptionAllowed = false;
+                    if (GameplayScreen.Instance.Player.CanFireBall > 0)
+                        GameplayScreen.Instance.Player.CanFireBall += 2;
                     break;
                 default:
                     break;

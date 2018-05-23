@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
-using CoT.GameStates.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
@@ -102,7 +101,8 @@ namespace CoT
         {
             if (!ScreenManager.ContainsScreenType(typeof(PauseMenuScreen)))
             {
-                CreatureManager.Update();
+                if (!ScreenManager.ContainsScreenType(typeof(MainMenuScreen)))
+                    CreatureManager.Update();
                 ItemManager.Update();
                 ProjectileManager.Update();
             }
