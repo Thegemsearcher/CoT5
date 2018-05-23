@@ -7,7 +7,7 @@ namespace CoT
     {
         private Player player;
         private SpriteFont font = ResourceManager.Get<SpriteFont>("font1");
-        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50);
+        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(-60,120);
         private bool hoverOverOnGround = false;
         private Vector2 infoPosition = new Vector2(0,0), textAtMouse = new Vector2(0,0);
         private GameObject gameObject;//det gameobject som vi vill visa info från
@@ -20,10 +20,7 @@ namespace CoT
         }
         public void Update()
         {
-
             mouseHitBox.Position = Input.CurrentMousePosition + hitBoxOffset;
-            //position.X = Input.CurrentMousePosition.X + 25;
-            //position.Y = Input.CurrentMousePosition.Y;
             foreach (Item item in ItemManager.Instance.Items)
             {
                 if (mouseHitBox.Contains(item.Position.WorldToScreen()) || mouseHitBox.Contains(new Vector2(item.rectItemInv.X,item.rectItemInv.Y)))
@@ -64,6 +61,15 @@ namespace CoT
                     }
                 }
             }
+            foreach (Creature c in CreatureManager.Instance.Creatures)
+            {
+                if (c.Hitbox.Contains(Input.CurrentMousePosition.ScreenToWorld()) && c is Enemy e)
+                {
+                    gameObject = e;
+                    e.HpBar.Position = e.Position + hpBarOffset;
+                    e.HpBar.UpdateHP(e.Stats.Health, e.Stats.MaxHealth);
+                }
+            }
         }
         public void Draw(SpriteBatch sb)
         {
@@ -75,6 +81,10 @@ namespace CoT
             if (hoverOverOnGround)
             {
                 sb.DrawString(font, "E to Pick up", textAtMouse, Color.Yellow, 0, new Vector2(0, 0), 0.6f, SpriteEffects.None, 0.8f);
+            }
+            if (gameObject is Enemy e)
+            {
+                e.HpBar.Draw(sb);
             }
         }
         public void PickUpInstruction()

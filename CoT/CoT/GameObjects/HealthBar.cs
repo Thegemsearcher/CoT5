@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CoT
 {
-    class HealthBar
+    public class HealthBar
     {
         private Texture2D texture = ResourceManager.Get<Texture2D>("rectangle");
         private Vector2 size;
@@ -30,6 +30,11 @@ namespace CoT
         }
         public void UpdateHP(int hp, int maxHealth)
         {
+            drawBox.X = (int)Position.X;
+            drawBox.Y = (int)Position.Y;
+            backgroundBox.X = (int)Position.X - 1;
+            backgroundBox.Y = (int)Position.Y - 1;
+
             maxHP = maxHealth;
             currentHP = hp;
             percent = (float)hp / (float)maxHP;
@@ -49,8 +54,8 @@ namespace CoT
         }
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, backgroundBox, new Rectangle(0, 0, texture.Width, texture.Height), Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-            sb.Draw(texture, drawBox, new Rectangle(0, 0, texture.Width, texture.Height), hpState, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+            sb.Draw(texture, backgroundBox, new Rectangle(0, 0, texture.Width, texture.Height), Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
+            sb.Draw(texture, drawBox, new Rectangle(0, 0, texture.Width, texture.Height), hpState, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
         }
     }
 }

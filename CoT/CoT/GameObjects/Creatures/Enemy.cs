@@ -16,13 +16,14 @@ namespace CoT
         protected float aggroRange;
         protected bool hasAggro = false;
         protected Vector2 nextPosition;
+        public HealthBar HpBar { get; set; }
 
         public Enemy(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             Scale = 0.1f;
             LayerDepth = 0.2f;
             path = new Position[0];
-
+            HpBar = new HealthBar(stats.MaxHealth,new Vector2(100,25), position);
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
             offsetAttackPosition = new Vector2(-spritesheet.SourceRectangle.Width * Scale / (float)4, -spritesheet.SourceRectangle.Height * Scale/ (float)4);
             //Ska flyttas.
