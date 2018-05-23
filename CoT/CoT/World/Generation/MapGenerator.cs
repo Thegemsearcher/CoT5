@@ -77,6 +77,7 @@ namespace CoT
                     }
                 }
             }
+            
 
             for (int i = 0; i < Corridors.Length; i++)
             {

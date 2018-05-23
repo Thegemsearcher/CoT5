@@ -20,6 +20,7 @@ namespace CoT
         private Projectile fireBall = null;
         private HealthBar hpBar;
         public int CanFireBall { get; set; }
+        private bool playAttackAnimation;
         public float SpeedBoostTimer { get; set; }
         enum PlayerState 
         {
@@ -206,6 +207,8 @@ namespace CoT
                     DecideEnemiesInRange(attackDirection);
                 }
                 currentPlayerState = PlayerState.Attacking;
+                playAttackAnimation = true;
+
 
                 for (int i = 0; i < 20; i++)
                 {
@@ -365,7 +368,7 @@ namespace CoT
 
         public void Animation()
         {
-            if (currentPlayerState != PlayerState.Idle)
+            if (currentPlayerState != PlayerState.Idle && currentPlayerState != PlayerState.Attacking)
             {
                 switch (facingDirection)
                 {
@@ -403,10 +406,27 @@ namespace CoT
                         break;
                 }
             }
-            else
+            else if (currentPlayerState == PlayerState.Idle && !playAttackAnimation)
             {
                 Spritesheet.SetFrameCount(new Point(5, 1));
                 Spritesheet.SetCurrentFrame(0);
+            }
+
+            if (playAttackAnimation)
+            {
+                Spritesheet.SetFrameCount(new Point(5, 10));
+                Spritesheet.SetCurrentFrame(45);
+                Spritesheet.Interval = 30;
+
+                if (Spritesheet.CurrentFrame >= 49)
+                {
+                    playAttackAnimation = false;
+                }
+            }
+
+            if (!playAttackAnimation)
+            {
+                Spritesheet.Interval = 100;
             }
         }
 
