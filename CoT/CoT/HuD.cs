@@ -7,7 +7,7 @@ namespace CoT
     {
         private Player player;
         private SpriteFont font = ResourceManager.Get<SpriteFont>("font1");
-        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(-60,120);
+        private Vector2 infoPos, hitBoxOffset = new Vector2(-50,-50), hpBarOffset = new Vector2(10,70);
         private bool hoverOverOnGround = false;
         private Vector2 infoPosition = new Vector2(0,0), textAtMouse = new Vector2(0,0);
         private GameObject gameObject;//det gameobject som vi vill visa info från
@@ -66,9 +66,14 @@ namespace CoT
                 if (c.Hitbox.Contains(Input.CurrentMousePosition.ScreenToWorld()) && c is Enemy e)
                 {
                     gameObject = e;
-                    e.HpBar.Position = e.Position + hpBarOffset;
-                    e.HpBar.UpdateHP(e.Stats.Health, e.Stats.MaxHealth);
+
                 }
+            }
+
+            if (gameObject is Enemy enemy)
+            {
+                enemy.HpBar.Position = enemy.Position.WorldToScreen() + hpBarOffset;
+                enemy.HpBar.UpdateHP(enemy.Stats.Health, enemy.Stats.MaxHealth);
             }
         }
         public void Draw(SpriteBatch sb)

@@ -23,7 +23,7 @@ namespace CoT
             Scale = 0.1f;
             LayerDepth = 0.2f;
             path = new Position[0];
-            HpBar = new HealthBar(stats.MaxHealth,new Vector2(100,25), position);
+            HpBar = new HealthBar(stats.MaxHealth,new Vector2(80,5), position);
             //Det behövdes en offset för att attacken skulle bli lika stor åt alla håll.
             offsetAttackPosition = new Vector2(-spritesheet.SourceRectangle.Width * Scale / (float)4, -spritesheet.SourceRectangle.Height * Scale/ (float)4);
             //Ska flyttas.
