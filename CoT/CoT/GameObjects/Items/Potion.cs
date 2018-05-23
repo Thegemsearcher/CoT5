@@ -56,7 +56,6 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-
             if (!isInBag)
                 UpdateSpriteAnimation();
         }

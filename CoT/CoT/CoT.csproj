@@ -55,6 +55,7 @@
     <Compile Include="GameObjects\HealthBar.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\TextureCreator.cs" />
+    <Compile Include="HuD.cs" />
     <Compile Include="Interfaces\IManager.cs" />
     <Compile Include="GameStates\GameScreen.cs" />
     <Compile Include="Managers\ScreenManager.cs" />

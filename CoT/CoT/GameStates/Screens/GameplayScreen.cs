@@ -22,7 +22,7 @@ namespace CoT
         public Map Map { get; set; }
         public Player Player { get; set; }
         bool assetsHaveBeenLoaded = false;
-
+        private HuD hud;
         public GameplayScreen(bool isPopup) : base(isPopup)
         {
             Instance = this;
@@ -100,7 +100,7 @@ namespace CoT
             Console.WriteLine(generation.PlayerStartPosition);
             Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(70, 140), new Stats(100, 5, 25), Map, Map.Grid, Player);
             CreatureManager.Instance.Creatures.Add(Player);
-          
+            hud = new HuD(Player);
 
 
             //for (int i = 0; i < 1; i++)
@@ -194,6 +194,7 @@ namespace CoT
 
         public override void Update()
         {
+            hud.Update();
             Inventory.Update();
             Camera.Update();
             Map.Update();
@@ -215,6 +216,7 @@ namespace CoT
         {
             Inventory.Draw(spriteBatch);
             Player.DrawHPBar(spriteBatch);
+            hud.Draw(spriteBatch);
             base.DrawUserInterface(spriteBatch);
         }
     }

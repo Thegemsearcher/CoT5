@@ -119,9 +119,9 @@ namespace CoT
         public override void Update()
         {
             base.Update();
-
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.S)
-                && Input.LastKeyboard.IsKeyUp(Keys.S)
+            
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.E)
+                && Input.LastKeyboard.IsKeyUp(Keys.E)
                 && rectItemDrop.Contains(Input.CurrentMousePosition.ScreenToWorld())
                 && !isInBag) 
             {
@@ -129,18 +129,17 @@ namespace CoT
                 Pickup();
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.D)
+            if ((Input.CurrentKeyboard.IsKeyDown(Keys.D)
                 && Input.LastKeyboard.IsKeyUp(Keys.D)
                 && rectItemInv.Contains(Input.CurrentMousePosition)
                 && isInBag
-                && Inventory.Instance.IsActive)
+                && Inventory.Instance.IsActive) && GameDebugger.Debug)
             {
                 Console.WriteLine("Detected Item deletion attempt");
                 IsActive = false;
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.F)
-                && Input.LastKeyboard.IsKeyUp(Keys.F)
+            if (Input.IsRightClickReleased
                 && rectItemInv.Contains(Input.CurrentMousePosition)
                 && isInBag
                 && Inventory.Instance.IsActive)
