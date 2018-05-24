@@ -131,7 +131,7 @@ namespace CoT
             DrawToWorldWithoutShader();
             SpriteBatch.End();
 
-            SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, null);
+            SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointWrap, null, null, null, null);
             DrawUserInterface();
             SpriteBatch.End();
 

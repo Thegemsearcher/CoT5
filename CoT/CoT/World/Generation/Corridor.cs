@@ -20,13 +20,13 @@ namespace CoT
                 switch (Direction)
                 {
                     case Direction.North:
-                        return new Point(Position.X, Position.Y + Length - 1);
+                        return new Point(Position.X, Position.Y - Length);
                     case Direction.East:
-                        return new Point(Position.X + Length - 1, Position.Y);
+                        return new Point(Position.X + Length, Position.Y);
                     case Direction.South:
-                        return new Point(Position.X, Position.Y - Length + 1);
+                        return new Point(Position.X, Position.Y + Length);
                     case Direction.West:
-                        return new Point(Position.X - Length + 1, Position.Y);
+                        return new Point(Position.X - Length, Position.Y);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -37,7 +37,7 @@ namespace CoT
         {
         }
 
-        public Corridor Create(Room room, RangeInt length, RangeInt roomWidth, RangeInt roomHeight, int mapWidth, int mapHeight, bool firstCorridor)
+        public void RandomDirection(Room room, RangeInt length, bool firstCorridor)
         {
             Direction = (Direction)Game1.Random.Next(0, 4);
 
@@ -52,32 +52,44 @@ namespace CoT
             }
 
             Length = length.Random;
+        }
 
-            int maxLength = length.Max;
-
-            switch (Direction)
+        public Corridor Create(Room room, RangeInt length, RangeInt roomWidth, RangeInt roomHeight, int mapWidth, int mapHeight, bool firstCorridor)
+        {
+            while (true)
             {
-                case Direction.North:
-                    Position = new Point(Game1.Random.Next(room.Position.X, room.Position.X + room.Width - 1), room.Position.Y + room.Height);
-                    maxLength = mapHeight - Position.Y - roomHeight.Min;
-                    break;
-                case Direction.East:
-                    Position = new Point(room.Position.X + room.Width, Game1.Random.Next(room.Position.Y, room.Position.Y + room.Height - 1));
-                    maxLength = mapWidth - Position.X - roomWidth.Min;
-                    break;
-                case Direction.South:
-                    Position = new Point(Game1.Random.Next(room.Position.X, room.Position.X + room.Width), room.Position.Y);
-                    maxLength = Position.Y - roomHeight.Min;
-                    break;
-                case Direction.West:
-                    Position = new Point(room.Position.X, Game1.Random.Next(room.Position.Y, room.Position.Y + room.Height));
-                    maxLength = Position.X - roomWidth.Min;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                RandomDirection(room, length, firstCorridor);
+                int maxLength = 0;
 
-            Length = MathHelper.Clamp(Length, 1, maxLength);
+                switch (Direction)
+                {
+                    case Direction.North:
+                        Position = new Point(Game1.Random.Next(room.Position.X + 1, room.Position.X + room.Width - 2), room.Position.Y);
+                        maxLength = Position.Y - roomHeight.Min;
+                        break;
+                    case Direction.East:
+                        Position = new Point(room.Position.X + room.Width - 1, Game1.Random.Next(room.Position.Y + 1, room.Position.Y + room.Height - 2));
+                        maxLength = mapWidth - Position.X - roomWidth.Min;
+                        break;
+                    case Direction.South:
+                        Position = new Point(Game1.Random.Next(room.Position.X + 1, room.Position.X + room.Width - 2), room.Position.Y + room.Height - 1);
+                        maxLength = mapHeight - Position.Y - roomHeight.Min;
+                        break;
+                    case Direction.West:
+                        Position = new Point(room.Position.X, Game1.Random.Next(room.Position.Y + 1, room.Position.Y + room.Height - 2));
+                        maxLength = Position.X - roomWidth.Min;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                Length = MathHelper.Clamp(Length, 0, maxLength);
+
+                if (maxLength > 10)
+                {
+                    break;
+                }
+            }
 
             return this;
         }

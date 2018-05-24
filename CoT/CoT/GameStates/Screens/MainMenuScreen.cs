@@ -38,21 +38,21 @@ namespace CoT
             };
             Grid.Widgets.Add(playButton);
 
-            Button optionButton = new Button
-            {
-                Text = "Options",
-                TextColor = Color.Red,
-                PaddingLeft = 20,
-                PaddingRight = 20,
-                PaddingBottom = 10,
-                PaddingTop = 10,
-                GridPositionX = 0,
-                GridPositionY = 1
-            };
-            optionButton.Up += (s, a) =>
-            {
-            };
-            Grid.Widgets.Add(optionButton);
+            //Button optionButton = new Button
+            //{
+            //    Text = "Options",
+            //    TextColor = Color.Red,
+            //    PaddingLeft = 20,
+            //    PaddingRight = 20,
+            //    PaddingBottom = 10,
+            //    PaddingTop = 10,
+            //    GridPositionX = 0,
+            //    GridPositionY = 1
+            //};
+            //optionButton.Up += (s, a) =>
+            //{
+            //};
+            //Grid.Widgets.Add(optionButton);
 
             Button exitButton = new Button
             {
@@ -108,7 +108,10 @@ namespace CoT
 
         public override void DrawUserInterface(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.Get<Texture2D>("cot"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+
+
+            spriteBatch.Draw(ResourceManager.Get<Texture2D>("cot"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
+            spriteBatch.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Crypt of Traitors", new Vector2(Game1.ScreenWidth / 5f, Game1.ScreenHeight / 15f), Color.Red, 0f, Vector2.Zero, 10f, SpriteEffects.None, 1f);
             base.DrawUserInterface(spriteBatch);
         }
     }

@@ -34,11 +34,11 @@ namespace CoT.GameObjects
                 Creature c = CreatureManager.Instance.Creatures[i];
                 if (c is Player)
                 {
-                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y) * Scale).Intersects(Hitbox) && GetType().Name == "WorldObject")
+                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y) * Scale * 2).Intersects(Hitbox) && GetType().Name == "WorldObject")
                     {
                         if (LayerDepth > c.LayerDepth)
                         {
-                            if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 2;
+                            if (Transparency > 0.25f) Transparency -= Time.DeltaTime * 3;
                         }
                     }
                 }

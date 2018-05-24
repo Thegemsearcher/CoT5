@@ -188,7 +188,7 @@ namespace CoT
                         }
                         else if (t.TileType == TileType.Teleport)
                         {
-                            ParticleManager.CreateStandard(tempPos, new Vector2(0, -1), Color.WhiteSmoke);
+                            ParticleManager.CreateStandard(tempPos, new Vector2(Game1.Random.NextFloat(-0.5f, 0.5f), -1),  new Color(Game1.Random.Next(30, 60), Game1.Random.Next(30, 60), Game1.Random.Next(30, 100), Game1.Random.Next(150, 255)), Game1.Random.Next(30, 300), Game1.Random.NextFloat(0.1f, 3f), Game1.Random.NextFloat(0.2f, 0.8f));
                         }
                     }
  

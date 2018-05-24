@@ -21,6 +21,7 @@ namespace CoT
         private HealthBar hpBar;
         public int CanFireBall { get; set; }
         public float SpeedBoostTimer { get; set; }
+        private bool playAttackAnimation;
         enum PlayerState 
         {
             Idle,
@@ -207,6 +208,7 @@ namespace CoT
                     DecideEnemiesInRange(attackDirection);
                 }
                 currentPlayerState = PlayerState.Attacking;
+                playAttackAnimation = true;
 
                 for (int i = 0; i < 20; i++)
                 {
@@ -240,7 +242,7 @@ namespace CoT
                         Vector2 directionToEnemy = GetDirection(Position + Center, e.Position + e.Center);
                         double angleBetweenEnemyAndAngleToAttack = Math.Acos(Vector2.Dot(direction, directionToEnemy));
 
-                        Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
+                        //Console.WriteLine(MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack));
                         float attackCone = MathHelper.ToDegrees((float)(Math.PI / 5));//attackkonen är en kon med 45 graders vinkel
 
                         if (MathHelper.ToDegrees((float)angleBetweenEnemyAndAngleToAttack) < attackCone)
@@ -366,8 +368,25 @@ namespace CoT
 
         public void Animation()
         {
-            if (currentPlayerState != PlayerState.Idle)
+            if (playAttackAnimation)
             {
+                Spritesheet.SetFrameCount(new Point(5, 10));
+                Spritesheet.SetCurrentFrame(45);
+                Spritesheet.Interval = 50;
+
+                if (Spritesheet.CurrentFrame >= 49)
+                {
+                    playAttackAnimation = false;
+                }
+            }
+            if (!playAttackAnimation)
+            {
+                Spritesheet.Interval = 100;
+            }
+
+            if (currentPlayerState != PlayerState.Idle && currentPlayerState != PlayerState.Attacking)
+            {
+                playAttackAnimation = false;
                 switch (facingDirection)
                 {
                     case FacingDirection.North:
@@ -404,7 +423,7 @@ namespace CoT
                         break;
                 }
             }
-            else
+            else if (currentPlayerState == PlayerState.Idle && !playAttackAnimation)
             {
                 Spritesheet.SetFrameCount(new Point(5, 1));
                 Spritesheet.SetCurrentFrame(0);

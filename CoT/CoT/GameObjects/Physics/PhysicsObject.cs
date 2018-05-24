@@ -20,7 +20,7 @@ namespace CoT
 
             Direction = Vector2.Normalize(Direction);
 
-            Console.WriteLine(Direction);
+            //Console.WriteLine(Direction);
         }
 
         public override void OnRemove()

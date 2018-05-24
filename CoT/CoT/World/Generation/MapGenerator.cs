@@ -9,13 +9,12 @@ namespace CoT
 {
     class MapGenerator
     {
-        public int MapWidth { get; set; } = 120;
-        public int MapHeight { get; set; } = 120;
-        public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 10);
-        public RangeInt RoomWidthRange { get; set; } = new RangeInt(7, 15);
-        public RangeInt RoomHeightRange { get; set; } = new RangeInt(7, 15);
-        public RangeInt CorridorLengthRange { get; set; } = new RangeInt(5, 10);
-
+        public int MapWidth { get; set; } = 150;
+        public int MapHeight { get; set; } = 150;
+        public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 15);
+        public RangeInt RoomWidthRange { get; set; } = new RangeInt(10, 20);
+        public RangeInt RoomHeightRange { get; set; } = new RangeInt(10, 15);
+        public RangeInt CorridorLengthRange { get; set; } = new RangeInt(10, 15);
 
         public Room[] Rooms { get; set; }
         public Corridor[] Corridors { get; set; }
@@ -38,18 +37,18 @@ namespace CoT
             Rooms = new Room[RoomCountRange.Random];
             Corridors = new Corridor[Rooms.Length - 1];
 
-            Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20);
+            Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight);
             Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, true);
 
             PlayerStartPosition = new Vector2(Rooms[0].Position.X + 1, Rooms[0].Position.Y);
 
             for (int i = 1; i < Rooms.Length; i++)
             {
-                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20, Corridors[i - 1]);
+                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, Corridors[i - 1]);
 
                 if (i < Corridors.Length)
                 {
-                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth - 20, MapHeight - 20, false);
+                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, false);
                 }
             }
 
@@ -64,44 +63,11 @@ namespace CoT
                     for (int k = 0; k < room.Height; k++)
                     {
                         int yPos = room.Position.Y + k;
-
-                        if (yPos >= MapHeight)
-                        {
-                            yPos = MapHeight - 1;
-
-                            if (xPos >= MapWidth)
-                            {
-                                xPos = MapWidth - 1;
-
-                            }
-                        }
-                        if (xPos >= MapWidth)
-                        {
-                            xPos = MapWidth - 1;
-
-                        }
-                        if (yPos <= 0)
-                        {
-                            yPos++;
-
-                            if (xPos <= 0)
-                            {
-                                xPos++;
-                            }
-                        }
-                        if (xPos <= 0)
-                        {
-                            xPos++;
-                        }
-
                         MapData[xPos, yPos] = "tile1";
-
-
-
-
                     }
                 }
             }
+
 
             for (int i = 0; i < Corridors.Length; i++)
             {
@@ -115,37 +81,24 @@ namespace CoT
                     switch (corridor.Direction)
                     {
                         case Direction.North:
-                            yPos += j;
+                            yPos -= j;
                             break;
                         case Direction.East:
                             xPos += j;
                             break;
                         case Direction.South:
-                            yPos -= j;
+                            yPos += j;
                             break;
                         case Direction.West:
                             xPos -= j;
                             break;
                     }
 
-                    if (yPos > MapHeight - 1)
-                    {
-                        yPos = MapHeight - 1;
-                    }
-                    if (xPos > MapWidth - 1)
-                    {
-                        xPos = MapWidth - 1;
-                    }
-                    if (yPos <= 0)
-                    {
-                        yPos += 2;
-                    }
-                    if (xPos > MapWidth - 1)
-                    {
-                        xPos += 2;
-                    }
-
                     MapData[xPos, yPos] = "tile1";
+                    MapData[xPos + 1, yPos] = "tile1";
+                    MapData[xPos - 1, yPos] = "tile1";
+                    MapData[xPos, yPos + 1] = "tile1";
+                    MapData[xPos, yPos - 1] = "tile1";
                 }
             }
 
@@ -153,19 +106,54 @@ namespace CoT
             {
                 for (int j = 0; j < MapData.GetLength(1); j++)
                 {
-                    if (MapData[i, j] == "tile2")
+                    try
                     {
-                        try
+                        if (MapData[i, j] == "tile1")
                         {
-                            if (MapData[i + 1, j] == "tile1" || MapData[i - 1, j] == "tile1" || MapData[i, j + 1] == "tile1" || MapData[i, j - 1] == "tile1")
+                            if (MapData[i + 1, j] == "tile2")
                             {
-                                MapData[i, j] = "tile3";
+                                MapData[i + 1, j] = "tile3";
+                            }
+
+                            if (MapData[i - 1, j] == "tile2")
+                            {
+                                MapData[i - 1, j] = "tile3";
+                            }
+
+                            if (MapData[i, j + 1] == "tile2")
+                            {
+                                MapData[i, j + 1] = "tile3";
+                            }
+
+                            if (MapData[i, j - 1] == "tile2")
+                            {
+                                MapData[i, j - 1] = "tile3";
+                            }
+
+                            if (MapData[i + 1, j + 1] == "tile2")
+                            {
+                                MapData[i + 1, j + 1] = "tile3";
+                            }
+
+                            if (MapData[i - 1, j - 1] == "tile2")
+                            {
+                                MapData[i - 1, j - 1] = "tile3";
+                            }
+
+                            if (MapData[i + 1, j - 1] == "tile2")
+                            {
+                                MapData[i + 1, j - 1] = "tile3";
+                            }
+
+                            if (MapData[i - 1, j + 1] == "tile2")
+                            {
+                                MapData[i - 1, j + 1] = "tile3";
                             }
                         }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
                     }
                 }
             }
