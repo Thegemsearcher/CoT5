@@ -17,7 +17,7 @@ namespace CoT
         private int maxHP, currentHP;
         private float percent = 1;
         private Rectangle drawBox, backgroundBox;
-
+        public float Scale { get; set; }
         public HealthBar(int maxHP, Vector2 size, Vector2 position)
         {
             Position = position;
@@ -27,18 +27,20 @@ namespace CoT
             hpState = Color.Green;
             drawBox = new Rectangle((int) position.X ,(int)position.Y,(int)size.X * (int)percent, (int)size.Y);
             backgroundBox = new Rectangle((int)position.X - 1, (int)position.Y - 1, (int)size.X * (int)percent + 2, (int)size.Y + 2);
+            Scale = 1;
         }
         public void UpdateHP(int hp, int maxHealth)
         {
-            drawBox.X = (int)Position.X;
-            drawBox.Y = (int)Position.Y;
-            backgroundBox.X = (int)Position.X - 1;
-            backgroundBox.Y = (int)Position.Y - 1;
+            drawBox.X = (int)(Position.X);
+            drawBox.Y = (int)(Position.Y);
+            backgroundBox.X = (int)(Position.X) - 1;
+            backgroundBox.Y = (int)(Position.Y) - 1;
+            backgroundBox.Width = (int)(size.X * Scale) + 2;
 
             maxHP = maxHealth;
             currentHP = hp;
             percent = (float)hp / (float)maxHP;
-            drawBox.Width = (int)(size.X * percent);
+            drawBox.Width = (int)(size.X * percent * Scale);
 
             if (percent < 0.3)
             {

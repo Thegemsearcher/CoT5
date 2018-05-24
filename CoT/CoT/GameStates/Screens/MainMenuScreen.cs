@@ -111,7 +111,7 @@ namespace CoT
 
 
             spriteBatch.Draw(ResourceManager.Get<Texture2D>("cot"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
-            spriteBatch.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Crypt of Traitors", new Vector2(Game1.ScreenWidth / 5f, Game1.ScreenHeight / 15f), Color.Red, 0f, Vector2.Zero, 10f, SpriteEffects.None, 1f);
+            //spriteBatch.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Crypt of Traitors", new Vector2(Game1.ScreenWidth / 5f, Game1.ScreenHeight / 15f), Color.Red, 0f, Vector2.Zero, 8f, SpriteEffects.None, 1f);
             base.DrawUserInterface(spriteBatch);
         }
     }

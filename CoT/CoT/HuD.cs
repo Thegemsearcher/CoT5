@@ -69,7 +69,8 @@ namespace CoT
             }
             if (gameObject is Enemy enemy)
             {
-                enemy.HpBar.Position = enemy.Position.WorldToScreen() + hpBarOffset;
+                enemy.HpBar.Position = enemy.Position.WorldToScreen() + (hpBarOffset * Camera.ScaleInput);
+                enemy.HpBar.Scale = Camera.ScaleInput;
                 enemy.HpBar.UpdateHP(enemy.Stats.Health, enemy.Stats.MaxHealth);
             }
             if (gameObject is Item i){
