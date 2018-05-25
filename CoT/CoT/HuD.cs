@@ -103,6 +103,7 @@ namespace CoT
             {
                 sb.DrawString(font, "RIGHT CLICK to use", textAtMouse, Color.Yellow, 0, new Vector2(0, 0), 0.6f, SpriteEffects.None, 0.8f);
             }
+            sb.DrawString(font, "Level: " + Game1.Level, new Vector2(100, 10), Color.Yellow, 0, new Vector2(0, 0), 0.8f, SpriteEffects.None, 0.8f);
         }
         public void PickUpInstruction()
         {

@@ -11,6 +11,7 @@ namespace CoT
     {
         public int MapWidth { get; set; } = 150;
         public int MapHeight { get; set; } = 150;
+        int safetyEdge = 20;
         public RangeInt RoomCountRange { get; set; } = new RangeInt(10, 15);
         public RangeInt RoomWidthRange { get; set; } = new RangeInt(10, 20);
         public RangeInt RoomHeightRange { get; set; } = new RangeInt(10, 15);
@@ -38,17 +39,17 @@ namespace CoT
             Corridors = new Corridor[Rooms.Length - 1];
 
             Rooms[0] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight);
-            Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, true);
+            Corridors[0] = new Corridor().Create(Rooms[0], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth - safetyEdge, MapHeight - safetyEdge, true);
 
             PlayerStartPosition = new Vector2(Rooms[0].Position.X + 1, Rooms[0].Position.Y);
 
             for (int i = 1; i < Rooms.Length; i++)
             {
-                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, Corridors[i - 1]);
+                Rooms[i] = new Room().Create(RoomWidthRange, RoomHeightRange, MapWidth - safetyEdge, MapHeight - safetyEdge, Corridors[i - 1]);
 
                 if (i < Corridors.Length)
                 {
-                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth, MapHeight, false);
+                    Corridors[i] = new Corridor().Create(Rooms[i], CorridorLengthRange, RoomWidthRange, RoomHeightRange, MapWidth - safetyEdge, MapHeight - safetyEdge, false);
                 }
             }
 

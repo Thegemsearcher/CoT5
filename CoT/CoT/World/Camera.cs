@@ -52,7 +52,7 @@ namespace CoT
                     MathHelper.Max(topLeft.X, MathHelper.Max(topRight.X, MathHelper.Max(bottomLeft.X, bottomRight.X))),
                     MathHelper.Max(topLeft.Y, MathHelper.Max(topRight.Y, MathHelper.Max(bottomLeft.Y, bottomRight.Y))));
 
-                return new Rectangle((int)min.X - 200, (int)min.Y - 200, (int)(max.X - min.X) + 200, (int)(max.Y - min.Y) + 200);
+                return new Rectangle((int)min.X - 300, (int)min.Y - 300, (int)(max.X - min.X) + 300, (int)(max.Y - min.Y) + 300);
             }
         }
 

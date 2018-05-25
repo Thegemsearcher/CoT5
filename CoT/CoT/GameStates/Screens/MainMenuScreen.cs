@@ -34,6 +34,7 @@ namespace CoT
             };
             playButton.Up += (s, a) =>
             {
+                Game1.Level = 1;
                 ScreenManager.ChangeScreen(new GameplayScreen(false));
             };
             Grid.Widgets.Add(playButton);
