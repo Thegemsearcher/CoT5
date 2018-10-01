@@ -19,8 +19,11 @@ namespace CoT
         public int verticalTileSlotSize;
         public bool isInBag, dragMode;
 
-        public Item(Spritesheet texture, Vector2 position, Rectangle sourceRectangle, bool putInBag) : base(texture, position)
+        public Item(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag) : base(spritesheet, position)
         {
+            spritesheet.SetFrameCount(new Point(1, 1));
+            spritesheet.Interval = 100;
+
             if (putInBag == true)
                 Pickup();
             else

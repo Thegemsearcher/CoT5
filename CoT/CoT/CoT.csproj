@@ -46,6 +46,7 @@
     <Compile Include="GameObjects\Creatures\Treent.cs" />
     <Compile Include="GameObjects\Inventory.cs" />
     <Compile Include="GameObjects\InventoryTile.cs" />
+    <Compile Include="GameObjects\Items\Equipment.cs" />
     <Compile Include="GameObjects\Items\Potion.cs" />
     <Compile Include="GameObjects\WorldObject.cs" />
     <Compile Include="GameStates\Screens\GameplayScreen.cs" />

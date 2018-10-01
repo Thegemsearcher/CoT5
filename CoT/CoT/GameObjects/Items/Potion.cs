@@ -20,9 +20,6 @@ namespace CoT
 
         public Potion(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag, PotionType potionType) : base(spritesheet, position, sourceRectangle, putInBag)
         {
-            spritesheet.SetFrameCount(new Point(1, 1));
-            spritesheet.Interval = 100;
-
             texItem = ResourceManager.Get<Texture2D>("potionSheet");
             verticalTileSlotSize = 1;
             currentPotionType = potionType;
