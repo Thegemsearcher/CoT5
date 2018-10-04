@@ -187,7 +187,7 @@ namespace CoT
 
             float angle = (float)Math.Atan2(direction.Y, direction.X);
             float pi8 = (float)Math.PI / 8;
-
+           
             if (angle > -pi8 && angle < pi8)
             {
                 facingDirection = FacingDirection.East;
@@ -220,6 +220,7 @@ namespace CoT
             {
                 facingDirection = FacingDirection.NorthWest;
             }
+            //beräknar ut riktning på creature
 
 
             if (GetType() == typeof(Player))

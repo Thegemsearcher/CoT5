@@ -9,33 +9,37 @@ using Microsoft.Xna.Framework.Graphics;
 using Button = Myra.Graphics2D.UI.Button;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace CoT.GameStates.Screens
+namespace CoT
 {
     public class PauseMenuScreen : GameScreen
     {
-        public PauseMenuScreen(bool isPopup) : base(isPopup)
+        bool isDead;
+        public PauseMenuScreen(bool isPopup, bool isDead) : base(isPopup)
         {
+            this.isDead = isDead;
         }
 
         public override void Load()
         {
-            Button resumeButton = new Button
+            if (!isDead)
             {
-                Text = "Resume",
-                TextColor = Color.Red,
-                PaddingLeft = 20,
-                PaddingRight = 20,
-                PaddingBottom = 10,
-                PaddingTop = 10,
-                GridPositionX = 0,
-                GridPositionY = 1
-            };
-            resumeButton.Up += (s, a) =>
-            {
-                ScreenManager.RemoveScreen(this);
-            };
-            Grid.Widgets.Add(resumeButton);
-
+                Button resumeButton = new Button
+                {
+                    Text = "Resume",
+                    TextColor = Color.Red,
+                    PaddingLeft = 20,
+                    PaddingRight = 20,
+                    PaddingBottom = 10,
+                    PaddingTop = 10,
+                    GridPositionX = 0,
+                    GridPositionY = 1
+                };
+                resumeButton.Up += (s, a) =>
+                {
+                    ScreenManager.RemoveScreen(this);
+                };
+                Grid.Widgets.Add(resumeButton);
+            }
             Button exitButton = new Button
             {
                 Text = "Exit to menu",

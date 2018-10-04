@@ -34,7 +34,7 @@ namespace CoT.GameObjects
                 Creature c = CreatureManager.Instance.Creatures[i];
                 if (c is Player)
                 {
-                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y)).Intersects(Hitbox) && GetType().Name == "WorldObject")
+                    if (new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y) * c.Scale).Intersects(Hitbox) && GetType().Name == "WorldObject")
                     {
                         if (LayerDepth > c.LayerDepth)
                         {
@@ -60,6 +60,8 @@ namespace CoT.GameObjects
         {
             if (GameDebugger.Debug)
             {
+                Player c = GameplayScreen.Instance.Player;
+                sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new FloatRectangle(c.Position, new Vector2(c.Spritesheet.SourceRectangle.Size.X, c.Spritesheet.SourceRectangle.Size.Y) * c.Scale), null, Color.White * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 1f);
                 sb.Draw(ResourceManager.Get<Texture2D>("rectangle"), new FloatRectangle(Position + DepthSortingOffset, new Vector2(10, 10)), null, Color.White * 0.5f, Rotation, Vector2.Zero, SpriteEffects.None, 1f);
                 sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Depth: " + LayerDepth, Position + DepthSortingOffset, Color.LightGreen, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }

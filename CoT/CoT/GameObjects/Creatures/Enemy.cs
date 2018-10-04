@@ -30,7 +30,7 @@ namespace CoT
 
         public bool DetectPlayer()
         {
-            if (!hasAggro && (Vector2.Distance(Player.Position + Player.Center, Position + Center) <= aggroRange) && VisionRange(Position + Center, Player.Position + Player.Center))
+            if (!hasAggro && (Vector2.Distance(Player.Position + Player.Center, Position + Center) <= aggroRange)/* && VisionRange(Position + Center, Player.Position + Player.Center)*/)
             {
                 return hasAggro = true;
             } else if (!hasAggro)
@@ -41,31 +41,31 @@ namespace CoT
 
         #region bresenham algoritm
 
-        public bool VisionRange(Vector2 start,Vector2 finish)
-        {
-            Vector2 cartesianTileWorldPos = new Vector2(0, 0);
-            List<Vector2> vision = BresenhamLine(start, finish);
-            Tile t;
-            foreach (Vector2 pos in vision)
-            {
-                cartesianTileWorldPos.X = pos.X / Map.TileSize.Y;
-                cartesianTileWorldPos.Y = pos.Y / Map.TileSize.Y;
-                Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
-                for (int i = 0; i < Map.TileMap.GetLength(0); i++)
-                {
-                    for (int j = 0; j < Map.TileMap.GetLength(1); j++)
-                    {
-                        t = Map.TileMap[i, j];
-                        if (isometricScreenTile == new Point(i, j))
-                        {
-                            if (t.TileType == TileType.Collision)
-                                return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
+        //public bool VisionRange(Vector2 start,Vector2 finish)
+        //{
+        //    Vector2 cartesianTileWorldPos = new Vector2(0, 0);
+        //    List<Vector2> vision = BresenhamLine(start, finish);
+        //    Tile t;
+        //    foreach (Vector2 pos in vision)
+        //    {
+        //        cartesianTileWorldPos.X = pos.X / Map.TileSize.Y;
+        //        cartesianTileWorldPos.Y = pos.Y / Map.TileSize.Y;
+        //        Point isometricScreenTile = (cartesianTileWorldPos.ToCartesian() + new Vector2(-0.5f, 0.5f)).ToPoint();
+        //        for (int i = 0; i < Map.TileMap.GetLength(0); i++)
+        //        {
+        //            for (int j = 0; j < Map.TileMap.GetLength(1); j++)
+        //            {
+        //                t = Map.TileMap[i, j];
+        //                if (isometricScreenTile == new Point(i, j))
+        //                {
+        //                    if (t.TileType == TileType.Collision)
+        //                        return false;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
         #endregion
 
         public override void Update()

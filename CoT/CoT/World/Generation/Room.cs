@@ -19,7 +19,6 @@ namespace CoT
 
         }
 
-
         public Room Create(RangeInt widthRange, RangeInt heightRange, int mapWidth, int mapHeight)
         {
             Width = widthRange.Random;
@@ -34,25 +33,25 @@ namespace CoT
             Width = widthRange.Random;
             Height = heightRange.Random;
 
-            switch (corridor.Direction)
+            switch (corridor.Direction) // 0 bör vara 1 för vi lägger väggar och minus 1 på max.
             {
                 case Direction.North:
-                    Height = MathHelper.Clamp(Height, 1, mapHeight - corridor.EndPosition.Y);
-                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 1, corridor.EndPosition.X), 0, mapWidth - Width), corridor.EndPosition.Y);
+                    Height = MathHelper.Clamp(Height, 3, corridor.EndPosition.Y);
+                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 2, corridor.EndPosition.X - 1), 3, mapWidth - Width - 3), corridor.EndPosition.Y - Height + 1);
                     break;
                 case Direction.East:
-                    Width = MathHelper.Clamp(Width, 1, mapWidth - corridor.EndPosition.X);
-                    Position = new Point(corridor.EndPosition.X, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 1, corridor.EndPosition.Y), 0, mapHeight - Height));
+                    Width = MathHelper.Clamp(Width, 3, mapWidth - corridor.EndPosition.X);
+                    Position = new Point(corridor.EndPosition.X, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 2, corridor.EndPosition.Y - 1), 3, mapHeight - Height - 3));
                     break;
                 case Direction.South:
 
-                    Height = MathHelper.Clamp(Height, 1, corridor.EndPosition.Y);
-                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 1, corridor.EndPosition.X), 0, mapWidth - Width), corridor.EndPosition.Y - Height + 1);
+                    Height = MathHelper.Clamp(Height, 3, mapHeight - corridor.EndPosition.Y);
+                    Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 2, corridor.EndPosition.X - 1), 3, mapWidth - Width - 3), corridor.EndPosition.Y);
                     break;
                 case Direction.West:
 
-                    Width = MathHelper.Clamp(Width, 1, corridor.EndPosition.X);
-                    Position = new Point(corridor.EndPosition.X - Width + 1, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 1, corridor.EndPosition.Y), 0, mapHeight - Height));
+                    Width = MathHelper.Clamp(Width, 3, corridor.EndPosition.X);
+                    Position = new Point(corridor.EndPosition.X - Width + 1, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 2, corridor.EndPosition.Y - 1), 3, mapHeight - Height - 3));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -62,3 +61,28 @@ namespace CoT
         }
     }
 }
+
+
+//switch (corridor.Direction) // 0 bör vara 1 för vi lägger väggar och minus 1 på max.
+//{
+//case Direction.North:
+//Height = MathHelper.Clamp(Height, 0, corridor.EndPosition.Y);
+//Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 2, corridor.EndPosition.X - 1), 3, mapWidth - Width - 3), corridor.EndPosition.Y - Height + 1);
+//break;
+//case Direction.East:
+//Width = MathHelper.Clamp(Width, 3, mapWidth - corridor.EndPosition.X);
+//Position = new Point(corridor.EndPosition.X, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 2, corridor.EndPosition.Y - 1), 3, mapHeight - Height - 3));
+//break;
+//case Direction.South:
+
+//Height = MathHelper.Clamp(Height, 3, mapHeight - corridor.EndPosition.Y);
+//Position = new Point(MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.X - Width + 2, corridor.EndPosition.X - 1), 3, mapWidth - Width - 3), corridor.EndPosition.Y);
+//break;
+//case Direction.West:
+
+//Width = MathHelper.Clamp(Width, 3, corridor.EndPosition.X);
+//Position = new Point(corridor.EndPosition.X - Width + 1, MathHelper.Clamp(Game1.Random.Next(corridor.EndPosition.Y - Height + 2, corridor.EndPosition.Y - 1), 3, mapHeight - Height - 3));
+//break;
+//default:
+//throw new ArgumentOutOfRangeException();
+//}

@@ -19,7 +19,8 @@ namespace CoT
         private bool castingFireBall = false;
         private Projectile fireBall = null;
         private HealthBar hpBar;
-        public bool CanFireBall { get; set; }
+        public int CanFireBall { get; set; }
+        private bool playAttackAnimation;
         public float SpeedBoostTimer { get; set; }
         enum PlayerState 
         {
@@ -48,10 +49,10 @@ namespace CoT
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
-            CanFireBall = false;
+            CanFireBall = 0;
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
-            hpBar = new HealthBar(stats.MaxHealth, new Vector2(10, 10));
+            hpBar = new HealthBar(stats.MaxHealth, new Vector2(200, 25), new Vector2(50,50));
         }
 
         public override void Update()
@@ -92,7 +93,7 @@ namespace CoT
                 }
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.D1) && Input.LastKeyboard.IsKeyUp(Keys.D1) && CanFireBall)
+            if (Input.CurrentKeyboard.IsKeyDown(Keys.D1) && Input.LastKeyboard.IsKeyUp(Keys.D1) && CanFireBall > 0)
             {
                 if (castingFireBall)
                     castingFireBall = false;
@@ -153,19 +154,21 @@ namespace CoT
             InputAttack();
             UpdateVariables();
         }
-        //public override void Die()
-        //{
-        //    deathTimeTotal = 10;
-        //    ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
-        //    deathTimer++;
-        //    if (deathTimer > deathTimeTotal)
-        //    {
-        //        deathTimer = 0;
-        //        Remove = true;
-        //        ////ScreenManager.ChangeScreen(new MainMenuScreen(false));
-        //        //ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
-        //    }
-        //}
+        public override void Die()
+        {
+            deathTimeTotal = 10;
+            ParticleManager.CreateStandard(Position + Center, Helper.RandomDirection(), Color.Orange);
+            deathTimer++;
+            if (deathTimer > deathTimeTotal)
+            {
+                deathTimer = 0;
+                Remove = true;
+                ////ScreenManager.ChangeScreen(new MainMenuScreen(false));
+                //ScreenManager.Instance.ChangeScreen(new MainMenuScreen(false));
+                //CreatureManager.Instance.Creatures.Clear();
+                ScreenManager.Instance.AddScreen(new PauseMenuScreen(true, true));
+            }
+        }
         private void PathMoving()
         {
             path = Pathing(targetPos);
@@ -195,7 +198,7 @@ namespace CoT
                 {
                     FireBall();
                     castingFireBall = false;
-                    CanFireBall = false;
+                    CanFireBall--;
                     return;
                 }
                 else
@@ -204,6 +207,8 @@ namespace CoT
                     DecideEnemiesInRange(attackDirection);
                 }
                 currentPlayerState = PlayerState.Attacking;
+                playAttackAnimation = true;
+
 
                 for (int i = 0; i < 20; i++)
                 {
@@ -363,7 +368,7 @@ namespace CoT
 
         public void Animation()
         {
-            if (currentPlayerState != PlayerState.Idle)
+            if (currentPlayerState != PlayerState.Idle && currentPlayerState != PlayerState.Attacking)
             {
                 switch (facingDirection)
                 {
@@ -401,10 +406,27 @@ namespace CoT
                         break;
                 }
             }
-            else
+            else if (currentPlayerState == PlayerState.Idle && !playAttackAnimation)
             {
                 Spritesheet.SetFrameCount(new Point(5, 1));
                 Spritesheet.SetCurrentFrame(0);
+            }
+
+            if (playAttackAnimation)
+            {
+                Spritesheet.SetFrameCount(new Point(5, 10));
+                Spritesheet.SetCurrentFrame(45);
+                Spritesheet.Interval = 50;
+
+                if (Spritesheet.CurrentFrame >= 49)
+                {
+                    playAttackAnimation = false;
+                }
+            }
+
+            if (!playAttackAnimation)
+            {
+                Spritesheet.Interval = 100;
             }
         }
 
