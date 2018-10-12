@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoT.GameObjects.Creatures
+namespace CoT//.GameObjects.Creatures
 {
-    class Treent : Enemy
+    public class Treent : Enemy
     {
         public Treent(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             attackRange = 100;
-            aggroRange = 1000;
+            aggroRange = 600;
             speed = 100f;
         }
 

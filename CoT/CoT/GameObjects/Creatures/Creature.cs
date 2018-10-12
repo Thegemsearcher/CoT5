@@ -10,7 +10,6 @@ using RoyT.AStar;
 
 namespace CoT
 {
-
     public class Creature : WorldObject
     {
         protected enum FacingDirection
@@ -166,7 +165,11 @@ namespace CoT
                 if (attacker.Stats.Attack - Stats.Defense >= 0)
                 {
                     Stats.Health -= (attacker.Stats.Attack - Stats.Defense);
-                    invulnerable = true;
+                    //invulnerable = true;
+                    if (this is Treent || this is Imp)
+                    {
+                        SoundManager.Instance.PlaySound("treentHurt1", 0.5f, 0.0f, 0.0f);
+                    }
                 }
             } 
         }
@@ -177,6 +180,10 @@ namespace CoT
             {
                 deathTimer = 0;
                 Remove = true;
+                if (this is Treent || this is Imp)
+                {
+                    SoundManager.Instance.PlaySound("treentDeath1", 0.5f, 0.0f, 0.0f);
+                }
             }
         }
 

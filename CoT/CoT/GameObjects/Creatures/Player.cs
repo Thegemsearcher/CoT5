@@ -22,6 +22,8 @@ namespace CoT
         public int CanFireBall { get; set; }
         private bool playAttackAnimation;
         public float SpeedBoostTimer { get; set; }
+        public float OverhealDegradeInterval { get; set; }
+        public float OverhealDegradeTimer { get; set; }
         enum PlayerState 
         {
             Idle,
@@ -49,10 +51,11 @@ namespace CoT
             bottomHitBox = new FloatRectangle(new Vector2(Position.X, Position.Y + (int)(spritesheet.SourceRectangle.Height * 0.90 * Scale)),
                 new Vector2(spritesheet.SourceRectangle.Width * Scale, (spritesheet.SourceRectangle.Height * Scale) / 10));
 
+            OverhealDegradeInterval = 300f;
             CanFireBall = 0;
             spritesheet.SetFrameCount(new Point(5, 1));
             spritesheet.Interval = 100;
-            hpBar = new HealthBar(stats.MaxHealth, new Vector2(200, 25), new Vector2(50,50));
+            hpBar = new HealthBar(stats.MaxHealth, 0.6f/*new Vector2(200, 25)*/, new Vector2(50,50));
         }
 
         public override void Update()
@@ -63,6 +66,17 @@ namespace CoT
                 Map = GameplayScreen.Instance.Map;
                 Grid = Map.Grid;
                 currentPlayerState = PlayerState.Idle;
+            }
+
+
+            if (Stats.Health > Stats.MaxHealth)
+            {
+                if (OverhealDegradeTimer <= 0f)
+                {
+                    Stats.Health -= 1;
+                    OverhealDegradeTimer = OverhealDegradeInterval;
+                }
+                OverhealDegradeTimer -= (float)Time.GameTime.ElapsedGameTime.TotalMilliseconds;
             }
             hpBar.UpdateHP(Stats.Health, Stats.MaxHealth);
             base.Update();
@@ -154,6 +168,7 @@ namespace CoT
             InputAttack();
             UpdateVariables();
         }
+
         public override void Die()
         {
             deathTimeTotal = 10;
@@ -169,6 +184,7 @@ namespace CoT
                 ScreenManager.Instance.AddScreen(new PauseMenuScreen(true, true));
             }
         }
+
         private void PathMoving()
         {
             path = Pathing(targetPos);
@@ -194,28 +210,34 @@ namespace CoT
             if (!Inventory.Instance.IsActive || Inventory.Instance.IsActive && !Inventory.rectMain.Contains(Input.CurrentMousePosition))
                 if (Input.IsLeftClickPressed && currentPlayerState != PlayerState.Attacking)
                 {
-                if (castingFireBall == true)
-                {
-                    FireBall();
-                    castingFireBall = false;
-                    CanFireBall--;
-                    return;
-                }
-                else
-                {
-                    attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
-                    DecideEnemiesInRange(attackDirection);
-                }
-                currentPlayerState = PlayerState.Attacking;
-                playAttackAnimation = true;
+                    if (castingFireBall == true)
+                    {
+                       FireBall();
+                        castingFireBall = false;
+                       CanFireBall--;
+                       return;
+                    }
+                    else
+                    {
+                        attackDirection = GetDirection(Position + Center, Input.CurrentMousePosition.ScreenToWorld());
+                        DecideEnemiesInRange(attackDirection);
+                    }
+                    currentPlayerState = PlayerState.Attacking;
+                    playAttackAnimation = true;
 
 
-                for (int i = 0; i < 20; i++)
-                {
-                    ParticleManager.CreateStandard(Position + Center + attackDirection * 80, attackDirection + Helper.RandomDirection(), Color.BlueViolet, 1000, 3f, 0.5f);
-                }
+                    for (int i = 0; i < 20; i++)
+                    {
+                        ParticleManager.CreateStandard(Position + Center + attackDirection * 80, attackDirection + Helper.RandomDirection(), Color.BlueViolet, 1000, 3f, 0.5f);
+                    }
 
-                Camera.ScreenShake(0.1f, 10);
+                    Random random = new Random();
+                    if (random.Next(1, 3) == 1)
+                        SoundManager.Instance.PlaySound("swing1", 0.5f, 0.0f, 0.0f);
+                    else
+                        SoundManager.Instance.PlaySound("swing2", 0.5f, 0.0f, 0.0f);
+
+                    Camera.ScreenShake(0.1f, 10);
                 }
         }
 

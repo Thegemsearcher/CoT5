@@ -27,7 +27,7 @@ namespace CoT
         public Imp(Spritesheet spritesheet, Vector2 position, Vector2 groundPositionOffset, Vector2 depthSortingOffset, Stats stats, Map map, Grid grid, Player player) : base(spritesheet, position, groundPositionOffset, depthSortingOffset, stats, map, grid, player)
         {
             attackRange = 500;
-            aggroRange = 1200;
+            aggroRange = 600;
             speed = 160f;
             isAttacking = false;
             Color = Color.Red;
@@ -78,6 +78,13 @@ namespace CoT
                     {
                         DamageToPlayer();
                         toRemove.Add(proj);
+
+                        Random random = new Random();
+                        if (random.Next(1, 3) == 1)
+                            SoundManager.Instance.PlaySound("fireballHit1", 0.5f, 0.0f, 0.0f);
+                        else
+                            SoundManager.Instance.PlaySound("fireballHit2", 0.5f, 0.0f, 0.0f);
+
                     }
                     Vector2 cartesianTileWorldPos = new Vector2(0, 0);
                     cartesianTileWorldPos.X = proj.Position.X / Map.TileSize.Y;
@@ -94,6 +101,7 @@ namespace CoT
                                 if (t.TileType == TileType.Collision)
                                 {
                                     toRemove.Add(proj);
+                                    SoundManager.Instance.PlaySound("fireballMiss", 0.5f, 0.0f, 0.0f);
                                 }
                             }
                         }
@@ -173,6 +181,7 @@ namespace CoT
                 proj.Owner = this;
                 proj.LayerDepth = 1F;
                 attackProj.Add(proj);
+                SoundManager.Instance.PlaySound("fireballCast1", 0.5f, 0.0f, 0.0f);
             }
         }
     }

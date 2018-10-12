@@ -4,20 +4,25 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace CoT
 {
-    public class Item : GameObject
+    public abstract class Item : GameObject
     {
+        public enum ItemType { EquipmentItem, PotionItem };
         //protected Texture2D texItemDrop, texItemInv;
-        protected Texture2D texItem;
+        public Texture2D texItem;
+        protected Rectangle rectCurrentSprite, rectFirstSprite;
         public Rectangle rectItemDrop, rectItemInv, sourceRectSprite, oldRectBeforeDrag;
-
+        public string itemName, itemDescription;
+        
         public int verticalTileSlotSize;
-        public bool isInBag, dragMode;
+        public int identityRange = 200;
+        public bool isInBag, dragMode, isInIdentityRange;
 
         public Item(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag) : base(spritesheet, position)
         {
@@ -31,6 +36,7 @@ namespace CoT
 
             dragMode = false;
         }
+
 
         public virtual void Pickup()
         {
@@ -81,7 +87,11 @@ namespace CoT
             {
                 rectItemDrop.X = (int)player.GroundPosition.X;
                 rectItemDrop.Y = (int)player.GroundPosition.Y;
+                this.LayerDepth = player.LayerDepth;
             }
+
+            if (this is Potion)
+                SoundManager.Instance.PlaySound("dropPotion", 0.8f, 0.0f, 0.0f);
         }
 
         public virtual void Drag()
@@ -98,6 +108,10 @@ namespace CoT
                     {
                         rectItemInv = tile.rectangle;
                         draggedToEmptyTile = true;
+
+                        if (this is Potion)
+                            SoundManager.Instance.PlaySound("invPotion", 0.5f, 0.0f, 0.0f);
+
                         break;
                     }
                 }
@@ -106,7 +120,7 @@ namespace CoT
                     Drop();
                 else if (!draggedToEmptyTile)
                     rectItemInv = oldRectBeforeDrag;
-
+                
                 dragMode = false;
             }
         }
@@ -123,7 +137,8 @@ namespace CoT
         {
             base.Update();
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.S)
+            if (GameDebugger.Debug
+                && Input.CurrentKeyboard.IsKeyDown(Keys.S)
                 && Input.LastKeyboard.IsKeyUp(Keys.S)
                 && rectItemDrop.Contains(Input.CurrentMousePosition.ScreenToWorld())
                 && !isInBag) 
@@ -142,8 +157,7 @@ namespace CoT
                 IsActive = false;
             }
 
-            if (Input.CurrentKeyboard.IsKeyDown(Keys.F)
-                && Input.LastKeyboard.IsKeyUp(Keys.F)
+            if (Input.IsRightClickPressed
                 && rectItemInv.Contains(Input.CurrentMousePosition)
                 && isInBag
                 && Inventory.Instance.IsActive)
@@ -157,15 +171,40 @@ namespace CoT
             {
                 dragMode = true;
                 oldRectBeforeDrag = rectItemInv;
+                //SoundManager.Instance.PlaySound("invGrab", 0.5f, 0.0f, 0.0f);
             }
 
             if (dragMode)
                 Drag();
+
+            foreach (Creature player in CreatureManager.Instance.Creatures.OfType<Player>())
+            {
+                if (rectItemDrop.Contains(Input.CurrentMousePosition.ScreenToWorld())
+                    && rectItemDrop.Intersects(player.Hitbox)
+                    && Input.IsRightClickPressed
+                    && !isInBag)
+                {
+                    Console.WriteLine("Detected Pickup Attempt");
+                    Pickup();
+                }
+
+                if (Vector2.Distance(player.Position + player.Center, new Vector2(rectItemDrop.X + rectItemDrop.Width / 2, rectItemDrop.Y + rectItemDrop.Height / 2)) <= identityRange)
+                    isInIdentityRange = true;
+                else
+                    isInIdentityRange = false;
+            }
         }
 
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
+
+            if (!isInBag)
+                sb.Draw(texItem, rectItemDrop, rectCurrentSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, LayerDepth + 0.1f);
+            if (isInIdentityRange && !isInBag)
+            {
+                sb.DrawString(ResourceManager.Get<SpriteFont>("font1"), itemName, new Vector2(rectItemDrop.X, rectItemDrop.Y), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 1f);
+            }
         }
     }
 }

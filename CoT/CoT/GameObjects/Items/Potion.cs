@@ -11,11 +11,8 @@ namespace CoT
 {
     public class Potion : Item
     {
-
         public enum PotionType { HealthSmall, HealthMedium, HealthLarge, SpeedPotion, FireBall }
         public PotionType currentPotionType;
-
-        private Rectangle rectCurrentSprite, rectFirstSprite;
         private int currentSpriteID = 0, spriteUpdateDelay = 50, spriteUpdateDelayCounter = 0;
 
         public Potion(Spritesheet spritesheet, Vector2 position, Rectangle sourceRectangle, bool putInBag, PotionType potionType) : base(spritesheet, position, sourceRectangle, putInBag)
@@ -28,18 +25,28 @@ namespace CoT
             switch (currentPotionType)
             {
                 case PotionType.HealthSmall:
+                    itemName = "Potion of Minor Health";
+                    itemDescription = "Heals the player 20 points of health.";
                     sourceRectSprite = new Rectangle(24, 120, 24, 24);
                     break;
                 case PotionType.HealthMedium:
+                    itemName = "Potion of Moderate Health";
+                    itemDescription = "Heals the player 40 points of health.";
                     sourceRectSprite = new Rectangle(240, 120, 24, 24);
                     break;
                 case PotionType.HealthLarge:
+                    itemName = "Potion of Potent Health";
+                    itemDescription = "Heals the player 80 points of health.";
                     sourceRectSprite = new Rectangle(240, 264, 24, 24);
                     break;
                 case PotionType.SpeedPotion:
+                    itemName = "Potion of Swiftness";
+                    itemDescription = "Grants the player 2x walking\nspeed for 10 seconds.";
                     sourceRectSprite = new Rectangle(24, 168, 24, 24);
                     break;
                 case PotionType.FireBall:
+                    itemName = "Elixir of Fireball";
+                    itemDescription = "Grants the player a single\nfireball charge to fire.";
                     sourceRectSprite = new Rectangle(24, 48, 24, 24);
                     break;
                 default:
@@ -96,7 +103,7 @@ namespace CoT
                     consumptionAllowed = RestoredHealth(80);
                     break;
                 case PotionType.SpeedPotion:
-                    GameplayScreen.Instance.Player.SpeedBoostTimer += 10;
+                    GameplayScreen.Instance.Player.SpeedBoostTimer = 10;
                     break;
                 case PotionType.FireBall:
                     if (GameplayScreen.Instance.Player.CanFireBall > 0)
@@ -108,6 +115,7 @@ namespace CoT
             if (consumptionAllowed)
             {
                 IsActive = false;
+                SoundManager.Instance.PlaySound("drinkPotion", 0.8f, 0.0f, 0.0f);
             }
         }
 
@@ -118,17 +126,17 @@ namespace CoT
 
             bool isConsumed = true;
 
-            if (health >= maxHealth)
+            if (health >= maxHealth * 2)
             {
                 isConsumed = false;
-                Console.WriteLine("health is already full or overhealed");
+                Console.WriteLine("health is already fully overhealed");
             }
             else
             {
                 Console.WriteLine("old: " + health);
                 health += nrOfHealth;
-                if (health > maxHealth)
-                    health = maxHealth;
+                if (health > maxHealth * 2)
+                    health = maxHealth * 2;
                 Console.WriteLine("new: " + health);
             }
 
@@ -140,9 +148,6 @@ namespace CoT
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
-
-            if (!isInBag)
-                sb.Draw(texItem, rectItemDrop, rectCurrentSprite, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         }
     }
 }

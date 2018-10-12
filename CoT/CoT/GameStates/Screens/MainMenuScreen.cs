@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.BitmapFonts;
 using Myra;
 using Button = Myra.Graphics2D.UI.Button;
@@ -73,6 +74,8 @@ namespace CoT
 
             ContentManager content = Game1.Game.Content;
             ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("crypt of traitors crop"), "cot");
+            ResourceManager.RegisterResource<Song>(content.Load<Song>("DiabloIntro"), "DiabloIntro");
+            SoundManager.Instance.PlaySong("DiabloIntro");
             GameManager.Instance.Penumbra.Enabled = false;
             base.Load();
         }
@@ -108,8 +111,8 @@ namespace CoT
 
         public override void DrawUserInterface(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.Get<Texture2D>("cot"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
-            spriteBatch.DrawString(ResourceManager.Get<SpriteFont>("font1"), "Crypt of Traitors", new Vector2(Game1.ScreenWidth / 5f, Game1.ScreenHeight / 15f), Color.White, 0f, Vector2.Zero, 10f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(ResourceManager.Get<Texture2D>("cot"), new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), null, Color.Gray, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
+            spriteBatch.DrawString(ResourceManager.Get<SpriteFont>("titlefont"), "Crypt of Traitors", new Vector2(Game1.ScreenWidth / 5f, Game1.ScreenHeight / 15f), Color.DarkRed * 0.8f, 0f, Vector2.Zero, 1.1f, SpriteEffects.None, 1f);
             base.DrawUserInterface(spriteBatch);
         }
     }

@@ -79,6 +79,7 @@ namespace CoT
             ResourceManager.RegisterResource(TextureCreator.CreateRectangleTexture(new Point(160, 80)), "rectangle");
             ResourceManager.RegisterResource(Game1.Game.Content.Load<Texture2D>("lightMask"), "lightMask");
             ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("font1"), "font1");
+            ResourceManager.RegisterResource(Game1.Game.Content.Load<SpriteFont>("titlefont"), "titlefont");
             Managers.ForEach(x => x.LoadContent());
         }
         

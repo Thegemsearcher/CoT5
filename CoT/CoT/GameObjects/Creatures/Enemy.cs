@@ -95,8 +95,20 @@ namespace CoT
                 attackTimer++;
                 if (attackTimer == 5)
                 {
-                    for (int i = 0; i< 10; i++)
+                    for (int i = 0; i < 10; i++)
+                    {
                         ParticleManager.CreateStandard(Position + Center, (Player.Position + Player.Center) - (Position + Center), Color.Green, 200, 2, 0.3f);
+                    }
+                        
+
+                    if (this is Treent)
+                    {
+                        Random random = new Random();
+                        if (random.Next(1, 3) == 1)
+                            SoundManager.Instance.PlaySound("acidCast1", 0.5f, 0.0f, 0.0f);
+                        else
+                            SoundManager.Instance.PlaySound("acidCast2", 0.5f, 0.0f, 0.0f);
+                    }
                 }
                 if (attackTimer == 35)
                 {
@@ -123,6 +135,11 @@ namespace CoT
                     //ParticleManager.Instance.Particles.Add(new Particle("lightMask", Player.Position,
                     //    new Rectangle(0, 0, ResourceManager.Get<Texture2D>("lightMask").Width, ResourceManager.Get<Texture2D>("lightMask").Height),
                     //    Helper.RandomDirection(), 300f, 2f, Color.Red, 0f, 0.3f));
+                }
+
+                if (this is Treent)
+                {
+                        SoundManager.Instance.PlaySound("acidHit1", 0.5f, 0.0f, 0.0f);
                 }
 
                 Camera.ScreenShake(0.15f, 20);

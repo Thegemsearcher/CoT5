@@ -6,11 +6,13 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using CoT.GameObjects.Creatures;
+//using CoT.GameObjects.Creatures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace CoT
 {
@@ -22,6 +24,7 @@ namespace CoT
         public Map Map { get; set; }
         public Player Player { get; set; }
         bool assetsHaveBeenLoaded = false;
+        int level = 1;
 
         public GameplayScreen(bool isPopup) : base(isPopup)
         {
@@ -54,21 +57,54 @@ namespace CoT
 
         public override void Load()
         {
+            #region Resources
 
+            ContentManager content = Game1.Game.Content;
 
-                ContentManager content = Game1.Game.Content;
-                ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
-                ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("player1"), "player1");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("treent"), "treent");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("tree"), "tree");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stone"), "stone");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("playerAnimation2"), "playerAnimation");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("wall"), "wall");
-                ResourceManager.RegisterResource<Texture2D>(content.Load<Texture2D>("potions"), "potionSheet");
+            #region Textures
+            ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile1"), "tile1"); // 160x80 textur
+            ResourceManager.RegisterResource(content.Load<Texture2D>("isometricTile2"), "tile2"); // 160x80 textur
+            ResourceManager.RegisterResource(content.Load<Texture2D>("player1"), "player1");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("treent"), "treent");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("tree"), "tree");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("stone"), "stone");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("stationary animation sheet"), "stationaryPCSheet");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("playerAnimation2"), "playerAnimation");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("wall"), "wall");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("potions"), "potionSheet");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("pixelarthealthbar_empty"), "healthbarframe");
+            ResourceManager.RegisterResource(content.Load<Texture2D>("pixelarthealthbar_status"), "healthbarticks");
+            #endregion
+
+            #region Backgroundtracks
+            ResourceManager.RegisterResource(content.Load<Song>("DiabloDungeon"), "DiabloDungeon");
+            #endregion
+
+            #region Soundeffects
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("fball"), "fireballMiss");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("fbolt1"), "fireballHit1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("fbolt2"), "fireballHit2");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("firimp1"), "fireballCast1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("firimp2"), "fireballCast2");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("acids1"), "acidCast1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("acids2"), "acidCast2");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("bspirit"), "acidHit1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("shielfkd"), "treentHurt1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("barrel"), "treentDeath1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("swing"), "swing1");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("swing2"), "swing2");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("invgrab"), "invGrab");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("invpot"), "invPotion");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("flippot"), "dropPotion");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("caldron"), "drinkPotion");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("sarca"), "invOpen");
+            ResourceManager.RegisterResource(content.Load<SoundEffect>("sarcb"), "invClose");
+            #endregion
+
+            #endregion
+
             //Inventory = new Inventory(new Spritesheet("", new Point(1, 1), new Rectangle(1, 1, 1, 1), Vector2.Zero));
-                Inventory = new Inventory(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)), Vector2.Zero);
+            Inventory = new Inventory(new Spritesheet("potionSheet", new Point(0, 0), new Rectangle(0, 0, 1, 1)), Vector2.Zero);
 
             //Map = new Map(new Point(160, 80)).Load("Map1.dat");
             //worldCreator = new WorldCreator(Map);
@@ -90,9 +126,10 @@ namespace CoT
             Map["tile2"] = new Tile(TileType.Water, new Spritesheet("tile2", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             Map["tile3"] = new Tile(TileType.Collision, new Spritesheet("tile1", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
             Map["tile4"] = new Tile(TileType.Teleport, new Spritesheet("rectangle", new Point(0, 0), new Rectangle(0, 0, 160, 80)));
+            SoundManager.Instance.PlaySong("DiabloDungeon");
             //Map.Create(new Point(100, 100)).Save("Map1.dat", false).Load("Map1.dat");
 
-            
+
             MapGenerator generation = new MapGenerator();
 
             Map.Create(generation.MapData).Save("Map1.dat", false).Load("Map1.dat");
@@ -122,14 +159,14 @@ namespace CoT
                 int r = Game1.Random.Next(1, 3);
                 Room room = generation.Rooms[i];
 
-                if (r == 1)
+                if (r != 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10,3 * i, i * 10), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(15 * level, 8 * level, 15 * level), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(10 * level, 3 * level, 10 * level), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
            
@@ -160,7 +197,7 @@ namespace CoT
             //Player = new Player(new Spritesheet("playerAnimation", new Point(5, 1), new Rectangle(0, 0, 100, 100)), generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y, new Vector2(0, 60), new Vector2(0, 0), new Stats(100, 100, 100), Map, Map.Grid, Player);
             Player.Position = generation.PlayerStartPosition.ToIsometric() * Map.TileSize.Y;
             CreatureManager.Instance.Creatures.Add(Player);
-
+            level += 1;
 
             for (int i = 1; i < generation.Rooms.Length; i++)
             {
@@ -169,12 +206,12 @@ namespace CoT
 
                 if (r == 1)
                 {
-                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, 3 * i, i * 10), Map, Map.Grid, Player);
+                    Treent treent = new Treent(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(15 * level, 8 * level, 15 * level), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(treent);
                 }
                 else
                 {
-                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(i * 10, i, i * 5), Map, Map.Grid, Player);
+                    Imp enemyImp = new Imp(new Spritesheet("treent", new Point(1, 1), new Rectangle(0, 0, 1300, 1500)), new Vector2(room.Position.X + 1, room.Position.Y).ToIsometric() * Map.TileSize.Y, new Vector2(0, 750 * 0.1f), new Vector2(70, 140), new Stats(10 * level, 3 * level, 10 * level), Map, Map.Grid, Player);
                     CreatureManager.Instance.Creatures.Add(enemyImp);
                 }
             }
